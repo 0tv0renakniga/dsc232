@@ -1,0 +1,105 @@
+(gentle upbeat music) (air whooshing) - Hi. Today we're going to talk in some detail about latency throughput and how they relate to
+the memory hierarchy. So, we talked about latency
+and throughput before using this example. So, suppose that you have people that are buying some product in a store waiting to check out, okay? So there is, there's various queues that people are waiting
+in in order to check out. And part of the time necessarily, they will use, they will wait on queue, and part of the time they will wait for the cashier to do her work. So, the latency is the time
+between joining the line and leaving the cashier, okay? So, that's the total
+time for both of these. And throughput is a different measure. It measures, if you look
+at the store as a whole, how many people are leaving
+the store per minute, okay? So, that's the throughput. The minimal latency is the time that you spend in the cashier, right? So, that time cannot be reduced further if you have some number of items that will take some amount of time. And the customer cares about latency. So the customer, from the
+customer's point of view, waiting in line is a waste of time, right? They'd rather just go to the cashier and pay for their stuff and go. From the store, most of the
+interest is in the throughput. So, the store cares about
+how many people can be served or can pay in a minute, let's say. And they care also about
+latency, but to a smaller degree because latency just
+means that the customers are happier or not as happy. But the main thing for the store itself is just how many people
+go through and pay. So let's define, let's
+give some definitions. So in general, not in a store,
+but in a general system, latency is the total
+time to process one unit from start to end, okay? From start to finish. All of that time. Throughput is the number of units that you can process in one minute. Right, so they seem very closely related and one is tempted to ask, "Is throughput just one over latency? If I can process 10 things per minute, does that mean that I wait for each, the latency for each
+element is six seconds?" Right? And that's not really the case. And we will see why. Okay, so let's imagine the
+following system that is, the story is that we have
+some guy that has a food truck and they need to have water to sell to people in the food truck. So, what they do is they
+go in the morning to Costco and they purchase a
+large number of bottles. Let's say, each case has
+some 32 bottles in it, and they buy two cases, okay? So to do that, to buy the bottles and bring them to their truck and drive the truck to
+where it should stand, that takes a significant amount of time. However, it is worthwhile
+because each bottle is pretty cheap in this setup, right? You have 10 cents per bottle
+when you buy the water in bulk. Later on, this food truck
+with the water bottles in it is serving customers. And now, let's look at the
+point of view of the customer. From the point of view of the customer if they want to buy a water
+bottle, it will maybe take them about half a minute to pay
+for a water bottle and get it. And for that, they're willing to pay a dollar per bottle, right? Rather than the 10 cents. So, they're getting very low latency and the truck is supporting
+this low latency. So, you can think about the water, this water that is stored
+is water that is stored close to the customer or a cache where we cache our water bottles so that they're ready
+for customers to buy. So, if we now look at the units, the different units have
+different latencies. So, if the unit is a
+package of 32 water bottles, this big package that we buy in Costco, then the latency is pretty long, right? It takes about two hours
+to get these water bottles from Costco to the place
+where we wanna sell them. So, the throughput in this
+case is the number of packages sold in one Costco per hour, okay? So that can be, we can
+view that as a throughput and maybe buy 20, maybe people overall buy 20 packages of 32 bottles. So in this case, the throughput is much higher than the latency, right? The latency is about one over the latency. The latency is about two hours. But in one hour, Costco sells 20 packets. So, you have high level of parallelism and the throughput is much,
+much higher than the latency. On the other hand, if we
+look at the single bottle, then the latency is the time that it takes from requesting a bottle to
+having the bottle in your hand which is maybe about half a minute. And the throughput is
+really the number of people that come and wanna buy
+a water bottle, okay? So, maybe that's 10 per hour. That's a reasonable number. So in this case, the throughput
+is much, much smaller than one over the latency. The latency is pretty fast,
+you get it in half a minute, but the number of people
+that come and buy them, that's separated by 10 by 6
+minutes, 10 times an hour. And so it's actually the
+throughput is much lower than one over the latency. So, you see that things can be much lower. The throughput can be much
+lower than the latency if the serving time is
+just a fraction of the time between customers and
+it can be much higher if the serving time,
+which is here two hours is much larger than the time
+between selling packets. If Costco sells 20 packets,
+of these big packets per hour, then every about three
+minutes, they sell a packet. But so again, this three
+minutes is much shorter than the time that it actually takes to process this water bottles. Okay, so this is maybe a
+nice story, but in fact, it's highly related to how
+things are done in a computer. What things are done in bulk. What things are done in small units. So suppose that we read
+data from disk, okay? And the data is stored in blocks like this but the data that is the part that we care about is just these two bytes, okay? So, the latency of reading the block can be as high as 10 millisecond, and that's because you need
+to move the disk reading head to a different location and
+that takes mechanical movement, and it takes at least 10 millisecond. But instead of reading one byte, we're going to, once we
+are in the right place, we're going to read the whole block, okay? It's not going to cost us much more to read the whole block
+versus to read just two bytes. So, the question then become, "Is all of the data in the block useful?" Right? If it was just these two elements, then it's not very useful, right? We basically have waited
+this 10 millisecond and now we got only two bytes. So the throughput here is, so the latency is 10 millisecond
+which is very, very slow. If we had one byte for each
+read, then we would have about a hundred bites
+per second throughput which is extremely low. In fact, the throughput is about a hundred megabyte per second. And that is because once
+you're in the right place you read actually the whole block and the blocks are organized in cylinders. And so these cylinders, you're basically, you can read the whole cylinder
+without moving the head. So, that gives you the speed
+of 100 megabyte per second. Okay? So, here we see something similar to what we saw with the water bottles. We see that by buying in bulk, by moving things in bulk, we can gain but we need to make sure that we actually make use of
+this bulk in an efficient way. So, now I'm going to
+tell you about caching which is basically the general method for achieving low latency
+by predicting access. So, when do we need low latency? When we have an interaction like interacting with
+our cell phone or laptop. Or when we play games online. Or when we check for a flight. We don't want to wait
+there for three minutes to see when exactly is the flight. Or anything interactive, anything in which we're basically typing
+or touching the screen. And we want a reaction from the computer. So, latency in this context, the required latency is
+at most 100 millisecond. So, a 10th of a second is what we perceive as pretty much instantaneous reaction. When do we need high throughput? That's in a very different
+kind of situation. When we have a large
+amount of data to process. Let's say 50 terabyte. We care about throughput, the number of seconds
+to process one terabyte. We don't care about latency,
+processing one record. It doesn't matter to us. If taking, processing one
+terabyte takes let's say a minute, we do not care if the
+first byte of this terabyte takes 10 seconds to process, right? That's all kind of inside. It doesn't matter to us. So, here's an example. Let's say that we transfer 50
+terabyte data to the cloud. So, on a regular home
+line the upload speed would be six megabyte per
+second, megabit per second. And so, that's about six to
+eight megabyte per second. 6/8, 6 over 8 megabyte per second. And that if you just calculate
+how long it will take you to move this one terabyte, it
+will take you about 771 days, which is about two years. So, it's not really a practical solution. So, suppose you have a faster line. In the university here, we have lines of typically a hundred megabit per second and that would reduce the
+time significantly to 46 days. 46 days is still kind of a long time. For a dedicated fiber, you
+can get pretty good speed. You can get maybe the whole
+moving of the data is 11 hours. However, having dedicated
+fiber is a big investment. If the type that I'm talking about here, it can cost 10 to $100,000 per year, okay? So, you don't do it for like one terabyte that you want to do. You want to use it if you
+constantly need to move terabytes from one point to another. So, it turns out that there is actually a cheap and fast option, and that is to send
+the data through FedEx. And unless you think that I'm just giving some kind of funny anecdote,
+no, this is actually a service that is provided by AWS
+which is called Snowball, in which you get a disk in the mail and you put into it up
+to 50 terabyte of data and then you put it back
+in the mail and send it. So, here's a situation where the latency, the time that it take to send
+something is like 24 hours, but the throughput is massive, right? It basically is 50 terabyte in 24 hours. Even our fiber line could not do that. So, to summarize this part. When providing interactive experience, we care more about
+latency than throughput. When processing terabytes of data, we care more about throughput
+than about latency. Transmitting a terabyte
+through the internet is a slow and expensive thing. And sending it physically
+on a truck using FedEx is often much more effective.

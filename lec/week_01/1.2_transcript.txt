@@ -1,0 +1,85 @@
+(bright music) - Okay, I'd like to tell you
+some about the difference between data science and data engineering. So, data science, which is the
+main subject of this course, is about building models. So, you get data and you're
+trying to build a model that would represent this data and capture the important aspect of it. And that would be used to
+answer some scientific question or some business question. So, you as a data scientist,
+are going to present it to people that are not data scientists but are domain experts. What you use is your tools are tools from statistics and machine learning. Those are the basic tools that you use. And what you expect is that
+when you have the data, it's available to you
+in an easy to use format and that the software for analyzing it will run quickly on that data. You will do your part to
+make the software efficient, but the basic infrastructure is usually not part of
+your responsibility. On the other hand, you
+have the data engineers that are becoming more and more important. And their job is to actually
+create the infrastructure on which you can run your software and that stores your data. They uses their basic tools, things like relational
+databases, streaming, cloud computing, things of that type. And we will cover only
+a little bit about it just so that you can
+talk with a data engineer in a meaningful way, but a
+course on data engineering truly would be a separate
+course from this. So, what we will cover is
+the Hadoop File System. That's a general way of having a distributed file
+system that is redundant. Data partitioning and partition balancing, which is part of what you do in Spark in order to make use of this
+distributed data system. Caching and persistence, and checkpointing. So, all of these are things that interface between you and the
+underlying infrastructure. But we will not cover the
+details of the infrastructure. So, things like data cleaning, Spark Server configuration
+and optimization. So, you need detailed understanding about how the Spark System is organized so that you can optimize
+it for a particular need. And creating scalable pipelines, which is when you take
+your code for data analysis and bring it into production, so that it can run on the
+business side in a regular way by people that are not data
+scientists or data engineers. And containerization is a methodology for packaging software and data, so that you can run it, you
+can move it like a container, and you can move it
+from one infrastructure to another infrastructure without worrying about
+the internal details. Okay, so the way that the communication between the data scientist
+and the data engineer works is that we have data models. So, we have standard ways to store and communicate and process data. And those basically, this is the language by which we communicate
+with the data engineers to make data available for
+us in the relevant way. So, we're going to talk
+about three data models. The first one is the matrix. And the matrix is just an array of values, so it's something that
+you're familiar with if you ever used NumPy or MATLAB. The relation or table
+which is data structure used in relational databases, which tends to be very
+efficient if you're storing it very large amounts of data on disk. And then, we have an kind
+of a combination of the two, which is called DataFrames and is not exactly clear and
+well-established data model, but it is becoming more and
+more popular in various setups. And so, it kind of takes
+some of the properties of the matrix and some of the properties of relations and tables. So, to start with matrices. So, what is a matrix? Matrix is basically a
+rectangle of numbers, okay? And all the numbers have the same type, so they are like all floats or all in 16 or something like that. And you can do various
+operations on a matrix. You can transpose it, which is
+one of the basic operations. You exchange the rows for
+columns and columns for rows. And you can perform algebraic operations, you can add matrices,
+you can multiply matrices to generate new matrices. So, it's really a mathematical object that allows you to do a lot
+of different linear algebra. And typically, this kind of dataset is stored in the memory
+of one computer, okay? This is the pre-big data setup where you take all of the
+data that you want to analyze, you put it in the memory of one computer and you process it. In big data, you usually cannot do that. You cannot put all of
+the data in one machine, so that's where the matrices
+reach problem point. Tables are in a way similar, they're also a rectangle of values. However, in a table, a row is basically an entity. It's like one of your customers or one of the cars you
+have for the company. And the columns are
+properties of that, okay? And so, the columns, all of the column has
+to be of the same type, it can be a string, it can be an integer, it can be something else, but they all have to be the same type. But across different columns, they can have different types, okay? So, a schema is basically a definition of a set of tables and how
+they're related to each other. And that schema is basically the way that a person using relational databases would describe the whole
+collection of data. So, it's multiple tables, and they sometimes share columns or sometimes they have keys
+to each other and so on. So, keys is a special column that is basically, you can think about it as an identifier for a
+row, the name of the row, the ID of the row, so that
+this ID can be mentioned in other tables and point
+to that particular row. And there is a language that goes with this relational database. The most common language is SQL. And the SQL allows you to describe what part of the data you want and the machinery underneath
+it will get you that data. So, SQL is a kind of programming language, but it's programming
+language that is declarative, so it basically just
+says, here is what I want, not how to get it. And the main power of relational databases is that the data that is
+stored in a relational database can be very, very large, okay? The amount of time that it takes to get to a particular record
+or a set of records is small. You don't have to read
+all of the big file, all of the table into
+memory, you can do things just with the keys and
+pointers and indices to get to the relevant parts. So, why do we use databases? In principal, we can do the
+same in Python or C or MATLAB, but only if they fit in memory, okay? Only if the data fits in memory does it make sense to do
+it in these languages. And the database can span many computers, many disks on many computers, so it can basically store
+much larger amount of data. And reading the data into the machine is much faster than if
+you read a flat file. Finally, let's talk about DataFrames. So, DataFrames is a blend. There are a blend of ideas from tables and ideas from matrices. And originally, it was
+defined by statisticians in the language S and
+then in the language R. And what you have is a table
+with named rows and columns, but only columns have types, okay? So, the columns have types, and so the types are
+preserved along the column. And a little bit of the problem with this is that if you are
+really a database person, DataFrames are not completely consistent according to the tables that you'd have. So, two popular implementations of DataFrames for data science. One is pandas, you might
+be familiar with already. And the other is inside Spark, there is also DataFrames and those are DataFrames that
+are intended to be on disk, so they're intended to
+make use of the fact that you can store things on disk and then access them efficiently. So, to summarize, data
+science is data analytics using large complex data that
+doesn't fit in one computer. Data engineering is the
+making of the infrastructure that makes it possible to do data science. Matrices are the basic data
+structure for linear algebra, Neural Networks, and tables are the basic data structure for relational databases. And DataFrames are
+essentially a compromise. Okay, so that's a little bit of a view about what is data engineering and how it relates to data science and what are the data models that are used for this communication between data engineering and data science. See you next time.

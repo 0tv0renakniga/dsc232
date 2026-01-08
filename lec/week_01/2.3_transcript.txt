@@ -1,0 +1,29 @@
+(gentle music) - So we now come to combine
+the things that we talked about caching and locality and so on and see how it works in the
+context of the computer. So the memory hierarchy is such that real systems have several
+levels of storage types. At the top of the hierarchy, you have small and fast storage
+that is close to the CPU. At the bottom of the hierarchy you have things like disk that are large, but slow and are further from the CPU. Caching is used to transfer data between neighboring
+levels of the hierarchy. So to the programmer and the compiler they don't need to know
+how this caching works. The whole caching hierarchy
+works as an abstraction and that makes the programmer think as if there is just very
+large and fast storage. But the performance actually depends on locality of the program's memory access as we talked about them. So here is an example of
+computer architecture. Here you have the CPU, and inside the CPU there is some memory, very fast memory for storing
+commands instructions here or data. And that is the fastest
+part of the whole hierarchy. The next level is an L2 cache that is faster than general memory, but slower than these registers. And then you have the main memory and finally you have disk. Okay? So what you see is as you go
+from the fast and very small, 32 to 256 kilobyte, you go through the hierarchy, you get larger and larger storage, but at the price of being
+more and more slow, okay? So here it is, nanoseconds, and here it is, milliseconds. At the next level we have multiple computers and they're all connected
+through an ethernet cable. And so they form one compute cluster. And what we talk about locality
+and caching in this case, when we have the storage, the memory storage, or the disk storage we share it across the computers. And the locality is when the data resides on the computer that needs to process it. So the price is paid when some data that resides
+here needs to be processed by some computer that is here, then you need to pass ring
+through the ethernet cable, which is relatively slow. And caching, what we talked about before about caching is now replaced with
+something called shuffling. And the abstraction that we will get to when we talk about spark is the spark RDD. So the spark RDD will
+serve as an abstraction that makes us think that
+all of this is one computer and we don't need to worry
+about where things are stored. Here's some summary,
+probably a little out of date about the different sizes that you can get and their latency from 300 picosecond to 2 to 10 millisecond, and their total size and the block size. So as you remember, for
+sequential locality, we use blocks in the cache so
+that we can get the advantage of a whole block of data
+that we read at once. So we see that in terms of size, there is twelve orders of magnitude from the very small to the very big and six order of magnitude
+in terms of speed. Okay, so to summarize this part the memory hierarchy is
+combining storage banks with different latencies and clusters are multiple
+computers connected by ethernet that share their storage.

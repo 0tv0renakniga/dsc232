@@ -1,0 +1,118 @@
+(bright music) - Okay, so let's now see
+how these ideas of latency, throughput and caching can be used in the context of an
+actual computer system. So, computer system, as you might know, is made out of a CPU, the
+central processing unit, and storage, okay? And the main thing that we
+need to know about storage at this point is that it's basically a long sequence of addresses going from maybe zero to 999, okay? So, something like that. And what we want to do is
+do a very simple operation which is multiply A and B and put the result in a variable called C. So, A and B are in memory,
+and C will be in the memory. Okay. So, here is A, and here is B. And we read A into the memory. We read B from the memory into the CPU. We take the product to calculate C, and then we take C and we write it back into another location in the memory, okay? So, that's the operation. Now let's think about the
+latencies that are involved, okay? So, we're going to read A, then read B, then multiply A and B and get the results C,
+and then write C, okay? So, these operations happen in order and let's see what are their latencies? So, I just wrote here,
+Latency 1, Latency 2, Latency 3, Latency 4, okay? One cannot start before
+the previous ended. So, what we find out when we
+look at big data especially is that most of the latency is in these reading from the
+memory and writing to memory. And this part is relatively small. Okay. So, why does writing and reading
+from memory take so long? Well, it's not a uniform thing. Some systems can write
+and read very quickly, some of them much more slowly. That's based on essentially
+the technology used for the memory, so storage type. So, you have main memory. You have let's say, a spinning disk, and you have maybe a remote computer. So, when you are using Google Drive or something like that, the memory, the disk that you're using is some other place and
+that that is going to be the longest latency, okay? So, these go from low latency. So, this is low latency, medium latency and long latency. Throughput is another matter. Okay, so to summarize, the major source of
+latency in data analysis is reading and writing to storage. So, you write some big
+statistical analysis, most of the time spent is reading data and then writing the results. Different types of storage offer different latencies, capacity, so how much they can store, and price. And big data analytics
+revolves around methods for organizing the storage
+and the computation in a way that maximizes speed
+while minimizes the cost. And when I say here maximizing the speed, I mean throughput, okay? So, how much data can
+we process per minute? So, now let's see, in
+terms of storage locality, how we can organize the
+computer at different levels in order to give you low
+latency and high throughput. So, we're going to talk about caching. So, here, we're just looking again, into the latency, size and
+price of computer memory. And so, we need to balance these things. So we can buy, let's say for $10, either a fast and small memory or we can buy a slow
+but large memory, okay? So, small and fast would be something that would be, for instance,
+inside the CPU itself. Inside the CPU, it has some memory sometimes called registers
+or register bank, and those are much, much faster than the RAM or the main memory. Okay, and now the question is how do we get to use
+the fast and small one most of the time so that it hides the latency of the slow and large one? So, here is the basic idea. What you do is you put in between the CPU and the large and slow memory, you put something that is called a cache. Very similar to the cache that we had with the water bottles being
+in the food truck, okay? So, what we have is that there are some memory addresses here, this memory is physically
+inside the CPU, for instance, and then what we have is basically copies of elements from the memory, we have them stored close by, okay? So, these are close by and this
+is close by and so on, okay? The other elements, they are just not available
+in the cache, okay? So, the cache is just a
+kind of a little collection, a small collection of
+data from the main memory. So, we have that 12 is 12, 67 to 67. Okay, so how does that help us? The CPU is executing a program. The program as you write it is not aware at all of cache
+or the memory hierarchy. It's not being made available to you because if it was made available to you, it would make programming so much harder. So, you just think about the big memory when you write the program. And what you hope is, what
+you try to design outside is to make sure that most of the time what you need is in the cache, okay? So, that is what is called a cache hit. So, suppose we want to process element 67, then the cache will actually
+intercept this request and say, "Oh, I have 67 right here. You don't need to go all
+the way to Costco." Okay? So, you can just get this 67 from here and that's going to be much, much faster, maybe a hundred times faster. A cache miss, on the other hand, is where you pay for doing this trick. And that is suppose that
+the CPU that your program wants to read location 47 and location 47 is not in the cache, so you have to get it
+actually from memory. But wait, this is not
+even the first problem. The first problem is to make
+some space in the cache, right? So, the cache is usually completely full with things from the past and you need to remove
+something in order to make space for the cache, for the new element. So, what you do is you
+choose which bite to drop. And let's say that you
+choose this bite, okay? You chose 67 to drop, okay? So, if you choose 67, now you're
+faced with another problem, which is that maybe the CPU actually change that 67
+to, let's say, 71, okay? So, now this is 71, but this is still 67. So before you remove this,
+before you empty this place, you have to write back the 71 into the location of
+that cell in main memory. And so, this is what is done here, okay? And now you have this
+empty space that you made and now you can put this
+space into this space 47. And now, 47 can be read by the CPU, okay? So, what you see is that
+you have a situation where if you have most of
+the time you hit the cache, you can have very low latency, but when you miss the cache, then you have much bigger
+latency than you would've had, even if just going to the memory, right? You need to basically potentially
+write something to memory and then read something from memory and then you can continue, okay? So, what intuitively you want to happen is you want to somehow try to make sure that most of the time the
+cache hits are what happens. Okay, so to summarize this part, cache is much faster than main memory. A cache hit happens when the needed value is already in the cache, and the cache miss, it's
+when it's not in the cache. If there is no space in the cache, which is usually the case,
+then you need to make space. And if it's dirty, so
+meaning that if this location in the cache has been actually changed, then you need to actually write
+that part back into memory. So, cache miss, the latency is much bigger than cache miss. Okay, this is a mistake. So, cache miss, the latency
+is much bigger than cache hit. All right, so we talked about caching and how caching can potentially help the computer run faster by reducing the access to slow memory. Now we're going to talk about locality, which is the kind of property
+that you have in a program that allows caching to work well. So, it's not something
+that is a requirement, it's more of a general
+heuristic, if you will, that basically tells you,
+okay, if a program does this and then it will do this
+and it will do this. And so, I can use that pattern to predict which elements will be used very frequently and
+keep them in the cache. Okay, so access locality. The cache is effective if
+most of the accesses are hit. And we call that cache hit rate is high. So cache hit rate is
+something that is used a lot in the lingo for this kind of thing. And the cache effectiveness
+depends on patterns or statistics of memory access, right? So, you wanna capture something
+that happens in programs in terms of memory access, even if people are not completely aware that that's what they're doing. So, we have two types of access. One is called temporal
+locality and that's basically when we say there is one
+variable, one location in memory that we're using very, very frequently. Like for instance, if we have a for loop, then the index of the for loop has high temporal locality. You basically access i to increment it like every cycle of the for loop. So, this i should be in cache. Then, the second one is spatial locality, which is multiple accesses
+to nearby addresses, not to the same address,
+but to address close to it in a short time period. So, let me give you examples. So, here is temporal locality. Suppose the task is you
+want to compute the function f theta x on many xs, x1, x2, up to xn. Theta is a parameter vector, okay? S, it's, let's say, the weights
+in the neural network, okay? So, those are things that do not change or do not change very quickly. But in this case, they don't change at all because we're talking about using, applying the neural network
+rather than learning, okay? So, the parameter theta are needed at each iteration
+of the computation. And so, if theta fits in cache, then you can just put
+theta inside the cache and every time that you need theta, it will be just there waiting for you. If theta does not fit in cache, then you're going to have
+the program all of a sudden, fall off a cliff because what will happen is that every loop, it can't
+get to all of theta at once, so it needs to read some
+into the cache, use it, then read another part
+into the cache and use it. So, it's kind of a critical phenomena, if you want your theta
+to fit in the cache, if it's slightly beyond the cache, then you pay a very big price. Okay, so temporal locality
+is repeated access to the same memory location. What is spatial locality? The spatial locality
+is, here is an example. Suppose that we have,
+again, this long sequence of elements, x1, x2 up to xn and we're looking at the square difference between xi and xi plus one, okay? And we wanna sum all of those. You can think about this, about storing the x1 to xn. Before we talked about the parameters, now the data itself, we're storing it. So, if you use a linked list,
+then you get poor locality. And if you get an indexed array,
+then you get good locality. So, that might be a little
+bit much to understand, so let's go and look at
+picture explaining that. So, here is linked list. So, what does that mean? It means that the element
+one points to element two, element two to element three, element three to element four, four to five and five to six, okay? And what we see is that
+these are the pages, these are the units at which
+the cache operates, okay? So, the cache operates
+by reading or writing a bunch of locations, not
+just one location, okay? And so, what do we see? We see that as we go
+through this sequence, we're basically touching
+On each one of these pages maybe multiple time. So, if we traverse them,
+then we hit all four pages. And suppose that our cache
+itself can hold just two pages, then we will need to write pages out, read pages in and so on. It will cost us a long time, it will make the latency significant. Here is, on the other hand,
+organizing the data in an array. So, in an array, all of the
+data is just sequential, one memory location after the other, okay? So, that's the way that it is. There's no pointers. It's just based on calculating the individual location of each element. And so in this case, if
+we go through the elements to make our computation, we just need to hit page one and page two. And if we have two pages in cache, that means that we have
+one cache miss here, then another cache miss
+here, and we're done, okay? So, that would work much faster. And so, that basically
+tells you that linked lists for very large amounts of
+data is a very bad idea because it basically makes the computer go back and forth and back and forth to find the relevant data. So, to summarize. Caching is effective when
+memory access is local. We can have temporal locality, accessing the same location many times in a short period of time. Or we can have spatial locality, accessing close by locations many times in a short period of time, okay? So, we go close by locations
+instead of the same location. The hardware and compilers
+have a symbiotic relationship in this regard. Basically, the hardware is designed so that the compiler will generate, so that it basically has
+the compiler work well, work fast and have low cache miss. And on the other hand, the
+writers of the compilers are trying to make themselves work well for the most
+popular hardware, okay? So, both of these things are
+kind of evolving over time and they have a symbiotic relationship.

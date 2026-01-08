@@ -1,0 +1,76 @@
+(upbeat music) (air whooshing) - We're now going to talk
+about heavy tail distributions. Heavy tail distributions
+are not usually something that you learn when you learn basic probability and statistics, but in the context of computers,
+they're very important. So let's think about the caching effect on sequential computation. So let's say that these markers
+here are when we have a hit. So it's a very short
+response, like one nanosecond. And here we have a cache miss. This is time. And here we have a cache miss, and that takes 100 nanoseconds, so much, much longer
+than the cache misses. And luckily cache misses
+occur only 1% of the time. Okay, so 1% of the time we
+have to pay 100 nanosecond, but most of the time
+we need one nanosecond, 100 nanosecond versus one nanosecond. So here is the time, again,
+that we have running this way. And what we have is we
+have many, many hits, many hits, hits, hits, hits,
+hits, and then we have a miss, and then we have another bunch of hits and then a miss, and continuing with hits. So we have just two
+misses in this sequence and it definitely affects
+the amount of time that it takes us to execute, but it is balanced well with
+the rest of the computation. So the expected time per access
+is two nanosecond, right? So one nanosecond in one case, 100 nanosecond in the other case. If you average them out,
+you get two nanosecond. And the time to complete the whole process is about 2 times n, n is the number of accesses that we have, plus minus 6 times square
+root nanosecond times sigma. Okay, so this is just
+a regular calculation of the mean and standard
+deviation of the sequence. And so we have that the standard
+deviation is 10 nanosecond. So relative to the whole
+length of what we have, it is not very big. So if n is 1 million, then what we get is a total
+time is about 2 million for the average 2 nanosecond, and then plus 60,000, plus minus 60,000, which
+is one standard deviation. So 60,000 relative to 2
+million is very small, and we are pretty happy
+with what we have working. On the other hand, suppose that we have parallel computation. So we have our many
+computers and we're trying to essentially do the
+same kind of computation, but now distributed across the computers. Okay? What you immediately see
+is that, in this case, when you have a miss,
+it creates a big effect on the parallel processing, right? Because most of the time, we
+can finish what we are doing in let's say 10 nanosecond but sometimes it takes us
+more than 100 nanosecond. And the problem is that we have to wait for everybody to finish before we can say that
+the processing is done. So expected time per
+access is 2 nanosecond. The time to complete n accesses is 2n plus 6 square root of n time sigma. Suppose that we have a 100 CPUs, we then have about n equal 1000 per core. And so what we get is 1000 plus minus 380. Okay, so 380 is now much
+bigger relative to the 1000. But is this really right? Is this the right computation? It still seems reasonably short. You know, we can tolerate that. But it isn't right actually, because the computation that we did here, this computation depends on the sum having a normal distribution, or approximately a normal
+distribution, but it doesn't. It has one element that
+has probability 99% that has length 1, and then
+1% that have length 100. So it's not really a
+very good approximation by the normal distribution. All right, so in this case, the normal distribution is
+just not a good approximation. And this is a situation where we call it, distribution where the extreme
+values are much more likely than the normal, are called
+heavy tail distribution. So the tail of the distribution, if we think about it as here is one part and here is another part, so maybe the normal approximation would be something like this. But it's a very bad approximation because we have an element
+that is, let's say, at 100 that has some significant probability. So how can we see this long
+tail distribution in practice? So suppose that we have
+this setting as we were, that we have 1 nanosecond
+occurs 99% of the time and 100 nanosecond 1% of the time, the expected latency is indeed
+1.99 or about 2 nanosecond and the standard deviation is 10. However, if you now draw this
+1 nanosecond here for the mean plus minus 10, for the standard deviation of the normal distribution, you see that the probability of the 100 is much, much smaller than 1%. So this is kind of hard
+to see in this plot because this distribution
+that we're trying to model, here, this distribution that
+is like 99% here and 1% here, is a point-mass distribution. It's not a density distribution, so it's hard to compare. So instead, what we want to do is we want to compare the
+cumulative distribution function. Okay, so here we have 1 minus the cumulative
+distribution function, and we have the 1 minus for
+the normal distribution, and then we have the one for the two-point mass distribution. Okay, so at least now we are
+working in the same space. We're talking about probabilities. Okay. But it's still hard to
+see the difference, right? So are these two really
+different from each other, right? It's not clear from this plot. So in order to see that, we need to use log of the probabilities. So we need to basically
+be much more sensitive when we're close to zero, and this is how we do that. Okay, so now we have 1 minus
+CDF using the semi-log plot. Okay, so the probability is logarithmic, and the latency is, again, just linear. And what we have is,
+we have the point here and the point here for the
+point-mass distribution, and then we have this for
+the normal distribution. And now it is very, very clear
+that the probability of this, which is about 1 out of 100, is much, much bigger than
+the probability of the tail of the normal distribution, which is about 10 to the minus
+20 or something like that. Right? It goes way, way below. So now we can see that there is really
+a very big difference. And this point here, there's just 1%, we get 100 nanosecond is an outlier relative to the normal distribution. So this is the light exponential tail. So this is what we call the light tailed. And this is the heavy tailed. So to summarize, a distribution has heavy tails if the probability of outliers is much, much higher than
+the probability that you get if you assume the normal distribution. So you can calculate the mean
+and the standard deviation. It's just that the standard
+deviation doesn't give you a lot of information about
+what is the distribution. Even if the distribution is heavy tailed, you can't use the estimate
+that says the value is about the expected value plus minus k times the standard deviation, which is a very common estimate to use. And heavy tail distributions
+are very common in the memory hierarchy because most of the time you get hits and then some of the times you get misses and some smaller fraction
+of the time you get a miss followed by a miss, followed by a miss, so several levels of the hierarchy. And because a miss is a rare
+but expensive operation, you get this problem. Okay, so I'll see you
+in the next video. Bye.

@@ -1,0 +1,571 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code Snippet
+% LaTeX Template
+% Version 1.0 (14/2/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Velimir Gayevskiy (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+%----------------------------------------------------------------------------------------
+\usepackage{enumerate}
+\usepackage{listings} % Required for inserting code snippets
+\usepackage[usenames,dvipsnames]{color} % Required for specifying custom colors and referring to colors by name
+
+\definecolor{DarkGreen}{rgb}{0.0,0.4,0.0} % Comment color
+\definecolor{highlight}{RGB}{255,251,204} % Code highlight color
+
+\lstdefinestyle{Style1}{ % Define a style for your code snippet, multiple definitions can be made if, for example, you wish to insert multiple code snippets using different programming languages into one document
+language=Python, % Detects keywords, comments, strings, functions, etc for the language specified
+backgroundcolor=\color{highlight}, % Set the background color for the snippet - useful for highlighting
+basicstyle=\footnotesize\ttfamily, % The default font size and style of the code
+breakatwhitespace=false, % If true, only allows line breaks at white space
+breaklines=true, % Automatic line breaking (prevents code from protruding outside the box)
+captionpos=b, % Sets the caption position: b for bottom; t for top
+commentstyle=\usefont{T1}{pcr}{m}{sl}\color{DarkGreen}, % Style of comments within the code - dark green courier font
+deletekeywords={}, % If you want to delete any keywords from the current language separate them by commas
+%escapeinside={\%}, % This allows you to escape to LaTeX using the character in the bracket
+firstnumber=1, % Line numbers begin at line 1
+frame=single, % Frame around the code box, value can be: none, leftline, topline, bottomline, lines, single, shadowbox
+frameround=tttt, % Rounds the corners of the frame for the top left, top right, bottom left and bottom right positions
+keywordstyle=\color{Blue}\bf, % Functions are bold and blue
+morekeywords={}, % Add any functions no included by default here separated by commas
+numbers=left, % Location of line numbers, can take the values of: none, left, right
+numbersep=10pt, % Distance of line numbers from the code box
+numberstyle=\tiny\color{Gray}, % Style used for line numbers
+rulecolor=\color{black}, % Frame border color
+showstringspaces=false, % Don't put marks in string spaces
+showtabs=false, % Display tabs in the code as lines
+stepnumber=5, % The step distance between line numbers, i.e. how often will lines be numbered
+stringstyle=\color{Purple}, % Strings are purple
+tabsize=4, % Number of spaces per tab in the code
+}
+
+% set title
+\title{DSC 232R: Big Data Analytics Using Spark \\ Winter 2026 \\ Week 1} 
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+% section 1 
+%----------------------------------------------------------------------------------------
+
+\section{Topic: Introduction to Big Data Using Spark}
+
+%----------------------------------------------------------------------------------------
+% section 1.1
+%----------------------------------------------------------------------------------------
+\subsection{What is Data Science}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{Definition:} Data Science is defined as \textit{rational decision making} using data to make decisions that are useful and profitable. It combines "Data" (collection from sensors, logs, etc.) and "Science" (hypothesis testing and verification).
+    \item \textbf{Types of Decisions:}
+    \begin{itemize}
+        \item \textbf{Big Decisions:} Strategic, high-stakes decisions involving deliberation by people.
+        \begin{itemize}
+            \item \textit{Examples:} Is city water safe?, Federal interest rate hikes, Infrastructure changes (adding lanes).
+        \end{itemize}
+        \item \textbf{Small Decisions:} Tactical, automated, high-volume decisions made without human intervention.
+        \begin{itemize}
+            \item \textit{Examples:} Ad selection (Google), Movie recommendations (Netflix), Loan approvals, Ramp metering (traffic lights on highway on-ramps).
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Ingredients of Data Science:}
+    \begin{enumerate}
+        \item \textbf{Math:} Linear Algebra, Probability, Statistics.
+        \item \textbf{Machine Learning:} Algorithms to build flexible models.
+        \item \textbf{Software Development:} Implementing at scale.
+        \item \textbf{Domain Knowledge:} Understanding the specific science of the problem (e.g., Traffic Flow theory).
+    \end{enumerate}
+    \item \textbf{Case Study: Caltrans PeMS (Performance Measurement System):}
+    \begin{itemize}
+        \item \textbf{Data Collection:} ~45,000 magnetic loop detectors in CA highways.
+        \item \textbf{Measurements:}
+        \begin{itemize}
+            \item \textit{Flow:} Number of cars per unit time.
+            \item \textit{Occupancy:} Fraction of time a car is over the loop.
+        \end{itemize}
+        \item \textbf{Traffic Theory (The Fundamental Diagram):} Relationship between \textit{Density} (cars/mile) and \textit{Flow}.
+        \begin{itemize}
+            \item Low Density $\rightarrow$ High Speed, increasing Flow.
+            \item Peak Flow $\rightarrow$ Optimal capacity.
+            \item High Density (Traffic Jam) $\rightarrow$ Low Speed, decreasing Flow.
+        \end{itemize}
+        \item \textbf{Analysis Techniques:} Uses PCA (Principal Component Analysis) to identify traffic profiles (e.g., AM vs PM peaks).
+    \end{itemize}
+\end{itemize}
+%----------------------------------------------------------------------------------------
+% section 1.2 
+%----------------------------------------------------------------------------------------
+\subsection{Data Engineering and Data Science}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{Roles:}
+    \begin{itemize}
+        \item \textbf{Data Scientist:} Builds models, answers business questions, uses Stats/ML. Expects data availability and fast computation.
+        \item \textbf{Data Engineer:} Builds the infrastructure (databases, streaming, cloud, pipelines) that supports the data scientist.
+    \end{itemize}
+    \item \textbf{Course Scope (Data Engineering Topics):}
+    \begin{itemize}
+        \item \textbf{Covered:} Hadoop File System (HDFS), Data Partitioning, Caching/Persistence, Checkpointing.
+        \item \textbf{Not Covered:} Data Cleaning, Spark Server Optimization, Containerization.
+    \end{itemize}
+    \item \textbf{Data Models (The Interface):}
+    \begin{enumerate}
+        \item \textbf{Matrix (Linear Algebra):}
+        \begin{itemize}
+            \item Rectangle of numbers (all same type).
+            \item Supports transposition, addition, multiplication.
+            \item \textit{Limitation:} Typically must fit in the memory of \textbf{one} computer.
+        \end{itemize}
+        \item \textbf{Relation/Table (Relational Databases):}
+        \begin{itemize}
+            \item Rows = Tuples (Entities), Columns = Properties (Attributes).
+            \item Columns have types, but types can differ across columns.
+            \item \textit{Scale:} Can span many disks/computers; uses indices for fast retrieval without loading everything into memory.
+        \end{itemize}
+        \item \textbf{DataFrame (The Hybrid):}
+        \begin{itemize}
+            \item Blend of Matrix and Table concepts (popularized by R/S/Pandas).
+            \item Ordered, named rows and columns.
+            \item \textbf{Spark DataFrames:} Designed to reside on disk and support distributed processing (unlike standard in-memory matrices).
+        \end{itemize}
+    \end{enumerate}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% section 1.3
+%----------------------------------------------------------------------------------------
+\subsection{Speeding Up Data Processing}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{Two Primary Optimization Methods:}
+    \begin{enumerate}
+        \item \textbf{Fast Libraries (Vectorization):} Replacing explicit Python loops with calls to optimized libraries (e.g., NumPy).
+        \item \textbf{Throughput vs. Latency:} Optimizing for volume rather than individual speed.
+    \end{enumerate}
+    \item \textbf{Throughput vs. Latency Definitions:}
+    \begin{itemize}
+        \item \textbf{Latency:} Time to process a single item from start to finish.
+        \begin{itemize}
+            \item \textit{Analogy:} Time spent waiting in a grocery line.
+            \item \textit{Parallelism:} Does NOT improve latency (adding 100 cashiers doesn't make \textit{your} checkout faster).
+            \item \textit{Critical for:} Gaming, High-Frequency Trading.
+        \end{itemize}
+        \item \textbf{Throughput:} Amount of data processed per unit time (e.g., bytes/sec).
+        \begin{itemize}
+            \item \textit{Analogy:} Total customers exiting the store per hour.
+            \item \textit{Parallelism:} DOES improve throughput (100 cashiers process 100x more people).
+            \item \textit{Critical for:} Data Science and Big Data processing.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{The Big Data Bottleneck:}
+    \begin{itemize}
+        \item Bottleneck is usually \textbf{Disk I/O} (Moving data Disk $\to$ Memory), not CPU speed.
+        \item \textit{Example:} Processing 1TB of data.
+        \begin{itemize}
+            \item Single Machine (200MB/s): $\sim$1.4 hours.
+            \item 100 Machines (Parallel): $\sim$50 seconds.
+        \end{itemize}
+        \item \textbf{Solution:} MapReduce/Spark organize this parallel processing on unreliable clusters.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Juypter Notebook Content: Numpy vs Pure Python}
+\begin{itemize}
+    \item \textbf{The Experiment:} Matrix Multiplication ($A \times B$) of size $100 \times 100$.
+    \item \textbf{Results:}
+    \begin{itemize}
+        \item \textbf{NumPy:} $\sim$0.4 ms (uses optimized C/Fortran libraries).
+        \item \textbf{Pure Python:} $\sim$500 ms (uses nested loops).
+        \item \textbf{Speedup:} NumPy is $\sim$1000x faster for this size.
+    \end{itemize}
+    \item \textbf{Under the Hood:}
+    \begin{itemize}
+        \item NumPy relies on \textbf{LAPACK} (Linear Algebra PACKage).
+        \item Written in \textbf{Fortran} (released 1992).
+        \item Highly optimized for vector/matrix operations.
+    \end{itemize}
+    \item \textbf{Scaling Behavior:}
+    \begin{itemize}
+        \item \textbf{Small Matrices ($< 10 \times 10$):} No significant advantage (overhead dominates).
+        \item \textbf{Large Matrices ($300 \times 300$):} NumPy is $\sim$10,000x faster.
+    \end{itemize}
+\end{itemize}
+
+\newpage
+%----------------------------------------------------------------------------------------
+% section 2
+%----------------------------------------------------------------------------------------
+\section{Topic: Memory Hierarchy}
+
+%----------------------------------------------------------------------------------------
+% section 2.1 
+%----------------------------------------------------------------------------------------
+\subsection{Latency Throughput and Memory Hierarchy}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{Definitions:}
+    \begin{itemize}
+        \item \textbf{Latency:} The total time to process one single unit from start to finish. (Analogy: Time waiting in line + checkout).
+        \item \textbf{Throughput:} The number of units processed per unit of time. (Analogy: Customers exiting the store per hour).
+        \item \textbf{Key Insight:} Throughput is \textbf{not} necessarily 1 Latency.
+        \begin{itemize}
+            \item \textit{Example:} A store with no lines has low latency (fast checkout), but if nobody visits, throughput is near zero.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Analogy: Costco (Wholesale) vs. Retail:}
+    \begin{itemize}
+        \item \textbf{Wholesale (Batch Processing):} High Latency (2 hours to drive truck), but massive Throughput (transferring 1000s of bottles). This is the Big Data approach.
+        \item \textbf{Retail (Random Access):} Low Latency (30 seconds to grab a bottle), but low Throughput (one bottle at a time). This is the Interactive approach.
+    \end{itemize}
+    \item \textbf{Hard Disk Mechanics:}
+    \begin{itemize}
+        \item \textbf{Seek Time (Latency):} $\sim$10ms to physically move the read head.
+        \item \textbf{Sequential Read (Throughput):} $\sim$100 MB/s once the head is in position.
+        \item \textbf{The Trap of Random Access:} Reading 1 byte randomly requires the full 10ms seek time.
+        \begin{itemize}
+            \item Result: Throughput drops to $\sim$100 Bytes/sec.
+            \item Solution: Always read in \textbf{blocks} (Sequential Access) to amortize the seek cost.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Data Transfer at Scale (AWS Snowball):}
+    \begin{itemize}
+        \item Transferring 50TB over a 100Mbps university line takes $\sim$46 days.
+        \item Transferring 50TB via \textbf{AWS Snowball} (physical shipping via FedEx) takes $\sim$24 hours.
+        \item \textbf{Lesson:} For massive data, physical transport (high latency) offers superior throughput compared to network transfer.
+    \end{itemize}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% section 2.2 
+%----------------------------------------------------------------------------------------
+\subsection{Storage Latency}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{The Basic Operation ($C = A \times B$):}
+    \begin{itemize}
+        \item Requires 4 distinct steps, each adding to total latency:
+        \begin{enumerate}
+            \item Read $A$ from Storage (High Latency).
+            \item Read $B$ from Storage (High Latency).
+            \item Compute $A \times B$ in CPU (Low Latency).
+            \item Write $C$ to Storage (High Latency).
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf{The Bottleneck:}
+    \begin{itemize}
+        \item In Big Data analysis, the majority of execution time is spent on \textbf{Steps 1, 2, and 4} (Storage I/O).
+        \item The actual computation (Step 3) is negligible compared to data movement.
+    \end{itemize}
+    \item \textbf{Storage Hierarchy:}
+    \begin{itemize}
+        \item Different storage types offer different trade-offs between Latency, Capacity, and Price.
+        \item \textbf{Low Latency:} Main Memory (RAM).
+        \item \textbf{Medium Latency:} Spinning Disk.
+        \item \textbf{High Latency:} Remote Computer / Cloud Storage.
+    \end{itemize}
+    \item \textbf{Goal of Big Data Systems:} Organize storage and computation to maximize Throughput (processing speed) while minimizing Cost.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% section 2.3 
+%----------------------------------------------------------------------------------------
+\subsection{Memory Hierarchy}
+\subsubsection{Lecture Content}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{The Hierarchy Levels:}
+    \begin{enumerate}
+        \item \textbf{CPU Registers:} Fastest ($\sim300$ ps), Smallest ($\sim1$ KB).
+        \item \textbf{L1/L2/L3 Cache:} Fast ($\sim1-20$ ns), Small ($\sim64$ KB - $4$ MB).
+        \item \textbf{Main Memory (RAM):} Moderate ($\sim100$ ns), Moderate Size ($\sim16$ GB).
+        \item \textbf{Disk Storage:} Slow ($\sim10$ ms), Huge Size ($\sim16$ TB). \textit{Note: 6 orders of magnitude slower than CPU!}
+        \item \textbf{Network (Cluster):} Slowest, Massive Scale ($10+$ PB).
+    \end{enumerate}
+    \item \textbf{The Abstraction:}
+    \begin{itemize}
+        \item Hardware presents memory as a single, large, flat array.
+        \item Performance relies on \textbf{Locality}: The hardware automatically moves frequently accessed data to the faster levels.
+    \end{itemize}
+    \item \textbf{Cluster Computing (Spark Context):}
+    \begin{itemize}
+        \item Extends the hierarchy via \textbf{Ethernet}.
+        \item \textbf{Locality Rule:} Compute data on the node where it resides to avoid network latency.
+        \item \textbf{Shuffling:} The cluster equivalent of moving data between levels (expensive).
+        \item \textbf{Spark RDD:} The abstraction that makes a cluster look like a single computer's memory.
+    \end{itemize}
+\end{itemize}
+%----------------------------------------------------------------------------------------
+% section 2.4 
+%----------------------------------------------------------------------------------------
+\subsection{Heavy Tail Distributions}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{The Problem:} Memory is 1-Dimensional (linear addresses), but Matrices are 2-Dimensional. We must flatten 2D data into 1D storage.
+    \item \textbf{Two Standards:}
+    \begin{enumerate}
+        \item \textbf{Row-Major Order:} Consecutive elements of a \textbf{row} are stored together.
+        \begin{itemize}
+            \item \textit{Used by:} C, C++, Python, \textbf{NumPy}.
+            \item \textit{Traversal:} Fast to iterate row-by-row (inner loop on columns).
+        \end{itemize}
+        \item \textbf{Column-Major Order:} Consecutive elements of a \textbf{column} are stored together.
+        \begin{itemize}
+            \item \textit{Used by:} Fortran, MATLAB, R, Spark (often, due to Scala/JVM).
+            \item \textit{Traversal:} Fast to iterate column-by-column (inner loop on rows).
+        \end{itemize}
+    \end{enumerate}
+    \item \textbf{Performance Impact:} Traversing a Row-Major array in Column order (or vice versa) breaks \textbf{Spatial Locality}.
+    \begin{itemize}
+        \item The CPU fetches a cache line, uses 1 value, and discards the rest.
+        \item Result: Massive increase in Cache Misses and execution time.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Juypter Notebook Content: Row vs Col Major}
+\begin{itemize}
+    \item \textbf{The Experiment:} Summing elements of a $10k \times 10k$ NumPy matrix.
+    \item \textbf{Results:}
+    \begin{itemize}
+        \item \textbf{Row Traversal (Good Locality):} $\sim$8 seconds.
+        \item \textbf{Column Traversal (Bad Locality):} $\sim$100-200 seconds.
+        \item \textbf{Factor:} 10x - 20x slowdown purely due to memory access patterns.
+    \end{itemize}
+    \item \textbf{Key Takeaway:} Always match your iteration order to the language's storage layout. For NumPy, iterate over rows first.
+\end{itemize}
+
+\subsubsection{Juypter Notebook Content: Measuring Performance of Memory Hierarchy}
+\begin{itemize}
+    \item \textbf{The Experiment:} Accessing random indices in arrays of increasing size ($1$KB to $1$GB).
+    \item \textbf{The Staircase Graph:}
+    \begin{itemize}
+        \item \textbf{Step 1 (L1 Cache):} Sizes $< 32$KB. Latency $\sim 0.5$ ns.
+        \item \textbf{Step 2 (L2 Cache):} Sizes $32$KB - $256$KB. Latency $\sim 2-5$ ns.
+        \item \textbf{Step 3 (L3 Cache):} Sizes $256$KB - $6$MB. Latency $\sim 10$ ns.
+        \item \textbf{Step 4 (Main Memory):} Sizes $> 10$MB. Latency $\sim 100$ ns.
+    \end{itemize}
+    \item \textbf{Conclusion:} You can physically "see" the cache sizes of a computer by measuring access latency spikes.
+\end{itemize}
+
+\subsubsection{Juypter Notebook Content: A More Accurate Measure of Memory Poke Latency}
+\begin{itemize}
+    \item \textbf{The Measurement Problem:} A naive loop `for i in range(n): x = A[i]` measures both the memory access AND the loop overhead (Python logic, index increment).
+    \item \textbf{The Solution (Loop Unrolling):}
+    \begin{itemize}
+        \item Perform many accesses inside a single loop iteration.
+        \item Code: `sum += A[i] + A[i+1] + ... + A[i+9]`
+    \end{itemize}
+    \item \textbf{Effect:} Amortizes the loop overhead across many operations, bringing the measured time closer to the true hardware latency (approx 1 ns for L1 vs 3-4 ns naive).
+\end{itemize}
+
+\newpage
+
+%----------------------------------------------------------------------------------------
+% Exam Traps Section
+%----------------------------------------------------------------------------------------
+\section{Exam Traps: Danger Zone}
+\begin{itemize}
+    \item \textbf{The Definition Trap:} Data Science is not just "analyzing data"; the professor explicitly defines it as \textit{rational decision making} (Big vs. Small decisions).
+    \item \textbf{The Traffic Graph Trap:} Higher density does \textbf{not} always mean higher flow. After the "critical density" peak, increasing density \textit{decreases} flow (Traffic Jam).
+    \item \textbf{The "Matrix" Trap:} Matrices are homogeneous (numbers only) and must fit in \textbf{one} computer's memory. If the data is 50TB or has mixed types (strings/ints), it's a Table or DataFrame, not a Matrix.
+    \item \textbf{The Parallelism Limit:} Parallelism improves \textbf{Throughput} (total volume), but it rarely improves \textbf{Latency} (time for one unit). Adding 100 computers won't make a single network request 100x faster.
+    \item \textbf{The "Dirty" Penalty:} A cache miss is bad. A cache miss on a \textbf{dirty} block is worse because you pay double the latency: 1) Write the old dirty data to RAM, 2) Read the new data from RAM.
+    \item \textbf{Language Defaults:} NumPy is \textbf{Row-Major}. Iterating column-by-column kills performance (10-20x slower) because it breaks spatial locality.
+    \item \textbf{The Bottleneck Reality:} In Big Data, the bottleneck is almost always \textbf{Disk I/O} (moving data), not CPU speed. "Faster Math" doesn't help if the CPU is waiting for data.
+\end{itemize}
+
+\newpage
+%----------------------------------------------------------------------------------------
+% Practice Quiz Section
+%----------------------------------------------------------------------------------------
+\section{Practice Quiz}
+
+% Question 1
+\subsection*{Question 1}
+\subsubsection*{The Spatial Locality Check}
+Which operation benefits most from \textbf{Spatial Locality}?
+\begin{enumerate}[a]
+    \item Updating a single global sum variable 1,000 times.
+    \item Reading every element of a 10,000-element integer array.
+    \item Traversing a binary tree with 10,000 nodes allocated randomly in memory.
+    \item Calculating a factorial using recursion.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item \textbf{Spatial Locality} refers to accessing memory addresses that are \textit{contiguous} (next to each other).
+    \item An array is stored contiguously in memory. Loading the first element likely loads the next 64 bytes (Cache Line) automatically, making subsequent reads nearly instant.
+    \item Option A is \textit{Temporal} Locality (same address). Option C has poor locality (random pointers).
+\end{itemize}
+
+% Question 2
+\subsection*{Question 2}
+\subsubsection*{Traffic Flow Theory}
+According to the Fundamental Diagram of Traffic, what happens when density exceeds the critical peak?
+\begin{enumerate}[a]
+    \item Flow remains constant at maximum capacity.
+    \item Flow increases linearly with density.
+    \item Flow decreases as velocity drops significantly.
+    \item Throughput increases, but Latency decreases.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Beyond the peak density, cars are too close to move fast. The drop in speed outweighs the increase in density, causing a traffic jam where flow (throughput) drops.
+\end{itemize}
+
+% Question 3
+\subsection*{Question 3}
+\subsubsection*{Data Models}
+Which Data Model is characterized by having named columns, heterogeneous types (different types for different columns), and is designed to scale across many disks?
+\begin{enumerate}[a]
+    \item Matrix
+    \item Relation (Table)
+    \item Vector
+    \item Tensor
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Matrices are homogeneous and memory-bound. Tables (Relations) allow different types per column and use indices to scale to massive sizes on disk.
+\end{itemize}
+
+% Question 4
+\subsection*{Question 4}
+\subsubsection*{Latency vs. Throughput}
+You need to transfer 50TB of data. Option A (Fiber Optic) takes 11 hours. Option B (AWS Snowball/FedEx) takes 24 hours. Which statement is true?
+\begin{enumerate}[a]
+    \item Option A has higher Latency and higher Throughput.
+    \item Option B has higher Latency, but could have higher Throughput if data size increases to 100TB.
+    \item Option A is always preferred because Latency is lower.
+    \item Throughput is identical because the data size is the same.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Physical transport (Snowball) has a fixed high latency (24h travel time) but massive bandwidth. If you scaled to 100TB, Fiber would take 22 hours, while the truck still takes 24 hours, making the throughput comparison dependent on volume.
+\end{itemize}
+
+% Question 5
+\subsection*{Question 5}
+\subsubsection{NumPy Speed}
+Why is NumPy matrix multiplication ($\sim$1ms) vastly faster than a pure Python implementation ($\sim$500ms) for a $100 \times 100$ matrix?
+\begin{enumerate}[a]
+    \item NumPy uses GPU acceleration automatically.
+    \item NumPy uses a specialized C++ compiler at runtime.
+    \item NumPy calls optimized Fortran libraries (LAPACK).
+    \item NumPy avoids memory storage by streaming data.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item NumPy relies on BLAS/LAPACK libraries, originally written in Fortran (1992), which are highly optimized for vector operations.
+\end{itemize}
+
+% Question 6
+\subsection*{Question 6}
+\subsubsection*{Cache Miss Penalty}
+In the context of the Memory Hierarchy, what is a "Dirty Eviction"?
+\begin{enumerate}[a]
+    \item Removing data that has been corrupted.
+    \item Removing data that was read but never used.
+    \item Evicting a cache block that has been modified, requiring a write-back to RAM.
+    \item Clearing the cache to prevent security leaks.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item If the CPU modified a value in the cache ("dirty"), that value must be saved to main memory before the cache slot can be reused. This doubles the latency penalty.
+\end{itemize}
+
+\newpage
+% Question 7
+\subsection*{Question 7}
+\subsubsection*{Row vs. Column Major}
+You are iterating through a standard NumPy array using a nested loop. To maximize performance, which index should be in the \textbf{inner} loop?
+\begin{enumerate}[a]
+    \item The Row index (iterate top-down).
+    \item The Column index (iterate left-right).
+    \item It does not matter for NumPy.
+    \item It depends on the size of the array.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item NumPy is \textbf{Row-Major}. Elements in the same row are stored next to each other. Iterating along the column index (moving left-to-right across a row) accesses contiguous memory, maximizing spatial locality.
+\end{itemize}
+
+% Question 8
+\subsection*{Question 8}
+\subsubsection*{Hierarchy Scale}
+Approximately how much slower is a Random Disk Access compared to a Main Memory (RAM) Access?
+\begin{enumerate}[a]
+    \item 10x
+    \item 100x
+    \item 1,000x
+    \item 100,000x (5 orders of magnitude)
+\end{enumerate}
+
+\subsubsection*{Answer: D}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item RAM access is $\sim$100 nanoseconds. Disk seek is $\sim$10 milliseconds. $10ms = 10,000,000ns$. The difference is roughly 5-6 orders of magnitude ($10^5$).
+\end{itemize}
+
+\newpage
+
+% Question 9
+\subsection*{Question 9}
+\subsubsection*{Big Data Latency Chain}
+When calculating $C = A \times B$ on a dataset larger than memory, which step dominates the execution time?
+\begin{enumerate}[a]
+    \item Computing the product in the ALU.
+    \item Reading A and B from Disk.
+    \item Allocating memory variables.
+    \item The operating system scheduler.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item In Big Data, the bottleneck is moving data from slow storage (Disk) to fast memory. The CPU spends most of its time waiting for data (I/O Bound).
+\end{itemize}
+
+% Question 10
+\subsection*{Question 10}
+\subsubsection*{Data Structures}
+Why does a Linked List generally exhibit poor performance compared to an Array for large sequential scans?
+\begin{enumerate}[a]
+    \item Linked Lists have $O(N^2)$ access time.
+    \item Linked Lists use more memory for integers.
+    \item Linked List nodes are scattered in memory, causing frequent Cache Misses.
+    \item Arrays are always cached in L1 by default.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Linked list nodes are allocated dynamically and linked via pointers, scattering them across memory pages. Traversing them requires loading many different pages, whereas an Array loads many elements in a single page (Spatial Locality).
+\end{itemize}
+
+\end{document}
