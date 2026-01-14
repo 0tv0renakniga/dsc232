@@ -6,7 +6,7 @@
 ---
 
 ### Stages
-#### Stage 0: Project Initilazation
+#### **COMPLETE** Stage 0: Project Initilazation
 - **Goal: prepare the conceptual foundation and technical plan.**
     - 0.1 Finalize scientific framing
         - Define your overarching question:
@@ -24,7 +24,7 @@
 
 ---
 
-#### Stage 1: Abstract, Group, Data Description
+#### **COMPLETE** Stage 1: Abstract, Group, Data Description
 - **Goal: Produce a polished abstract and statement of work.**
     - 1.1 Draft short dataset descriptions
         - Identify:
@@ -44,26 +44,18 @@
             - Why Spark/HPC is necessary
     - 1.4 Submit via Gradescope
 
-#### Stage 2: Local Feasibility Phase 1 (Polars + 1 Region)
-- **Goal: “Quick and dirty” exploration to help your team see the dataset and verify feasibility.**
-    - 2.1 Download small dataset slice
-        - Choose one region (e.g., lat 20–40°, lon 150–200°).
-        - Download 1–2 months of SST and chlorophyll.
-        - Save in local directory.
-    - 2.2 Inspect raw NetCDF/HDF5 files
-        - Open files using xarray.
-        - Print dimensions, variables, coordinates.
-        - Check time stamps align (they won’t — this is part of your feasibility finding).
-            - what do papers say? 
-            - look for existing info 
-    - 2.3 Chunk data for Polars
-        - Convert xarray → pandas/Polars by flattening to a tidy DataFrame:
-            - columns: [lat, lon, time, SST, chlorophyll]
-        - Use Polars to check:
-            - data types
-            - missing values
-            - sanity checks (min/max ranges)
-            - row counts
+#### **COMPLETE** Stage 2: Local Feasibility Phase 1 (Data Audit & Daily Resolution Check)
+- **Goal: Verify if Daily data is usable despite cloud cover.**
+    - [x] **2.1 Download small dataset slice**
+        - Selected Region: North Pacific (Lat 20–40°, Lon -160 to -140°).
+        - **Pivot:** Switched from 8-Day Averages to **Daily** VIIRS files to capture high-frequency events.
+    - [x] **2.2 Inspect Raw Files (xarray)**
+        - Confirmed NetCDF structure (Dimensions: time, lat, lon).
+        - Identified "NaN" issue: Daily optical data is ~90% missing due to clouds.
+    - [x] **2.3 Flatten to Table (Pandas)**
+        - Instead of Polars, we used `xarray.to_dataframe()` to flatten the grid.
+        - **Result:** ~13k valid observations found in Jan 2020 sample (6-7% retention).
+        - **Feasibility Verdict:** Enough data exists in clear-sky pixels to train models.
     - 2.4 Produce basic visualizations
         - 2D map of SST
         - 2D map of chlorophyll
@@ -72,7 +64,7 @@
         - You answer the question: “Is this data workable? Are patterns visible?”
         - Save plots for Milestone 2.
 
-#### Stage 3: Local Feasibility Phase 2 (Dask + partial pipeline)
+#### **COMPLETE** Stage 3: Local Feasibility Phase 2 (Dask + partial pipeline)
 - **Goal: Build a medium-scale prototype that mirrors future SDSC pipeline.**
     - 3.1 Expand dataset
         - Increase to 3–6 months
@@ -121,7 +113,7 @@
 - **Description: Milestone 2...**
 
 ### Stages
-#### Stage 4: Data Exploration + Preprocessing Setup
+#### **COMPLETE** Stage 4: Data Exploration + Preprocessing Setup
 - **Goal: Provide plots,  explanations, and GitHub structure.**
     - 4.1 Add notebook showing full exploration
         - Include:
@@ -140,7 +132,16 @@
         - Push small parquet files
         - Update README with data exploration section
     - Submit link
-#### Stage 5: SDSC HPC Pre‑Scaling Prep
+- Note: no notebooks(.ipynb) just scripts right now
+
+#### Stage 4.5: Migration to Spark ML
+- **Goal:** Scale the Scikit-Learn baseline to the full dataset using PySpark.
+    - [ ] **Load Parquet in Spark:** Read the `training_data.parquet` generated in Phase 2 into a Spark DataFrame.
+    - [ ] **Vector Assembly:** Convert features (`sst`, `lat`, `lon`) into Spark's required `Vector` format.
+    - [ ] **Distributed Training:** Re-train the Random Forest and GBT models using the Spark cluster.
+    - [ ] **Compare:** Does Spark match the Scikit-Learn baseline accuracy?
+  
+#### **COMPLETE** Stage 5: SDSC HPC Pre‑Scaling Prep
 - **Goal: Get ready for HPC before access is granted.**
     - 5.1 Modularize your preprocessing code
         - Split into clear functions:
@@ -167,11 +168,13 @@
         - Using your local Dask setup:
             - Combine SST + chlorophyll + ice
             - Produce final tidy parquet files
-    - 6.2 Train K-Means model
+    - 6.2 Train Random Forest Regressor
+        - note: 1 month result using sklearn over pacific ($R^{2}=0.81$)
         - Choose number of clusters using silhouette
         - Interpret clusters
         - Map cluster labels back onto the ocean
         - Document patterns (tropics, poles, etc.)
+
     - 6.3 Evaluate underfitting/overfitting
         - K-Means doesn’t “fit” traditionally, so you explain cluster separability and silhouette score
         - Include interpretation
