@@ -1,7 +1,3 @@
-Thanks Randall — I can absolutely adapt this outline to your **GRACE/GRACE‑FO + ICESat‑2 ML fusion project** while preserving the structure, tone, and workflow of your original ocean‑biology outline. Below is a clean, re‑written version that maps everything one‑to‑one into the ice‑sheet mass‑change domain.
-
-No tables. No line‑number citations. No requirement to read any documents.
-
 ---
 
 # **Project: Machine Learning Fusion of ICESat‑2 Elevation Change and GRACE Mass Change**  
@@ -13,13 +9,15 @@ No tables. No line‑number citations. No requirement to read any documents.
 This project integrates two major NASA datasets — GRACE/GRACE‑FO mascon gravity fields and ICESat‑2 ATL06 land‑ice elevation tracks — into a unified ML‑ready dataset processed through a scalable workflow (local feasibility → SDSC → Spark ML). All data are standard scientific NetCDF/HDF5 and reprocessed into Parquet for large‑scale analysis.
 
 ### **1. GRACE/GRACE‑FO RL06.2 Mascons (CSR) — Monthly Mass Change**  
+- url: [GRACE](https://grace.jpl.nasa.gov/data/get-data/jpl_global_mascons/)
 - Monthly mass‑anomaly fields for 2002–2024  
 - Global 0.5° mascon grid  
 - Includes standard geophysical corrections  
 - Used as the *target variable* for supervised ML  
 - Source: CSR Mascon RL06.2 archive (NetCDF)
 
-### **2. ICESat‑2 ATL06 — Land Ice Height (Track‑Level)**  
+### **2. ICESat‑2 ATL06 — Land Ice Height (Track‑Level)**
+- url: [ICESat-2](https://nsidc.org/data/atl06/versions/7)
 - High‑precision surface elevation from photon‑counting lidar  
 - 2018–present  
 - Sub‑100 m along‑track resolution  
