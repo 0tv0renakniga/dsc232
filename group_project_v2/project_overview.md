@@ -1,6 +1,4 @@
----
-
-# **Project: Machine Learning Fusion of ICESat‑2 Elevation Change and GRACE Mass Change**  
+# **Project: Machine Learning Fusion of ICESat-2 Elevation Change and GRACE Mass Change**  
 **Predicting Ice‑Sheet Mass Balance and Subglacial Hydrology from Satellite Altimetry and Gravimetry**
 
 ---
