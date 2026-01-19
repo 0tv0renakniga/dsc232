@@ -101,7 +101,15 @@ tabsize=4, % Number of spaces per tab in the code
     \item \textbf{Spark vs. Hadoop:}
     \begin{itemize}
         \item \textbf{Hadoop MapReduce:} writes to Disk after every step (High Latency).
+        \begin{itemize}
+            \item Imagine a relay race where Runner A runs their lap, but instead of handing a baton to Runner B, they must stop, carve the message into a stone tablet (Disk), and drop it on the ground. Runner B must then pick up the stone, read it, and start running.
+            \item Why High Latency? Disk I/O is 100x slower than RAM. Writing intermediate steps to disk kills performance.
+        \end{itemize}
         \item \textbf{Spark:} keeps data in Memory (RAM) between steps (Low Latency).
+        \begin{itemize}
+            \item Runner A runs their lap and hands a lightweight baton (Data in RAM) directly to Runner B
+            \item Why Low Latency? No disk writing between steps. The data stays "alive" in memory as it transforms 
+        \end{itemize}
     \end{itemize}
 \end{itemize}
 
@@ -117,11 +125,16 @@ tabsize=4, % Number of spaces per tab in the code
         \begin{itemize}
             \item \textit{Examples:} \texttt{map}, \texttt{filter}, \texttt{flatMap}, \texttt{sample}.
             \item \textit{Behavior:} Spark does NOTHING when these lines are run. It builds a DAG (Directed Acyclic Graph).
+            \item When you write data.map(...) or data.filter(...), you are just drawing blueprints.
+            \item Spark says: "Okay, noted. If we ever build this house, I'll filter out the bad bricks."
+            \item Reality: Zero data is processed. Spark just adds a node to the DAG (Directed Acyclic Graph), which is essentially the "To-Do List."
         \end{itemize}
         \item \textbf{Actions (Eager):} Triggers execution. Returns a result to the Driver.
         \begin{itemize}
             \item \textit{Examples:} \texttt{collect}, \texttt{count}, \texttt{reduce}, \texttt{take}, \texttt{saveAsTextFile}.
             \item \textit{Behavior:} Spark optimizes the DAG and launches tasks on the cluster.
+            \item When you write data.count() or data.collect(), the Boss walks in and says: "I need the keys to the house NOW."
+            \item Reality: Spark looks at the DAG, optimizes it (e.g., combines 3 maps into 1), and physically launches tasks on the cluster to process the data and return the result.
         \end{itemize}
     \end{enumerate}
     \item \textbf{Pipelining (Fusion):}
@@ -166,6 +179,33 @@ tabsize=4, % Number of spaces per tab in the code
         \item Operations that require moving data between partitions (by key) cause a "Shuffle".
         \item This breaks the pipeline and defines a "Stage Boundary".
         \item \textit{Shuffle Ops:} \texttt{reduceByKey}, \texttt{groupByKey}, \texttt{join}, \texttt{repartition}.
+    \end{itemize}
+    \item \textbf{Example} You have a list of words on Node A: [("apple", 1), ("apple", 1), ("apple", 1)]
+    \begin{itemize}
+        \item groupByKey (The "Dumb" Mover):
+        \begin{itemize}
+            \item Node A says: "I need to send ALL apple data to the Reducer node."
+            \item It sends ("apple", 1), ("apple", 1), ("apple", 1) over the network.
+            \item Network Cost: 3 items sent.
+            \item Reducer Risk: The reducer receives a massive list [1, 1, 1, 1...]. If "apple" appears 1 billion times, the Reducer runs out of RAM trying to hold the list. (OOM Error).
+        \end{itemize}
+        \item reduceByKey (The "Smart" Mover):
+        \begin{itemize}
+            \item Node A says: "Wait, I can sum these myself first (Map-Side Combine)."
+            \item It computes 1+1+1 = 3 locally.
+            \item It sends only ("apple", 3) over the network.
+            \item Network Cost: 1 item sent.
+            \item Reducer Win: The reducer receives pre-summed totals. Fast, low RAM.
+        \end{itemize}
+        \item The Shuffle and Stage Boundaries:
+        \begin{itemize}
+            \item Why it breaks the pipeline: Imagine a factory line.
+            \item map is a worker painting the car door.
+            \item filter is a worker checking the paint.
+            \item These can happen in a line (Pipeline).
+            \item Shuffle (reduceByKey) is assembly. You cannot assemble the car until ALL parts (doors, wheels, engines) arrive from ALL different factories.
+            \item The "Shuffle" is a Barrier. No worker can proceed to Stage 2 until Stage 1 is 100\% complete and data has been exchanged.
+        \end{itemize}
     \end{itemize}
 \end{itemize}
 
