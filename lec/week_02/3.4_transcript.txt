@@ -1,0 +1,72 @@
+- ♪ Music ♪ - Hi. In the previous videos I told you about the map use operation and I told you about the R D D. So those are the
+distributed data structure that that are used at
+the basic unit in Spark. That's the basic type of data structure. It is done now to start
+to see what we can do with R D D and how we operate on. So the first thing I'd like
+to talk about is chaining. Chaining is a way to
+combine different operation into a sequence that is
+executed or a pipeline. So suppose that we want
+to compute something like the sum of the
+squares of some variables. And the elements Xi are already
+stored for us in an R D D. So we're going to first create the R D D. So what we're going to
+do is create a list zero one, two three, and
+then call the operation paralyzed to create the R D D called B. So we have two waves of chaining these two operations X squared taking the square of every
+element and then taking the sum One way is the sequential
+chaining where we say that squares is an R D D that is equal to B dot map of lambda,
+X goes to X square. Okay? And then we take
+squares, that's new R D D and we take the operation
+reduce on that square. Okay? So, we take the operation reduce and then we get the
+final result which is 14. Okay? We have a different
+way of writing this which is called cascaded and that's just to not create
+this intermediate R D D but simply to perform a map operation on B and then perform a reduce on the result without
+giving the result any name. Okay? So that's sometimes
+a more succinct way to write things. Now the important thing to realize that both things mean
+exactly the same thing. So even though it seems to us that as we're writing it that
+things are written sequentially so they would be executed sequentially that is not the case. Though they're going to be executed in an order that is determined
+by the spark system. The difference is really that in this case the R D D is anonymous, right? So the R D D in the middle
+doesn't have a name. We can't refer to it. So let's talk about the execution. So first let's think about the
+execution that would happen in a standard map produced
+system that did not spark that did not parallel system. So the way that it'll happen is that we first perform the map then we store the resulting result in an R D D that is in memory and then we're going to perform a review on that new R D D, okay? The disadvantages are two. The first one is that to
+store the intermediate result requires memory space. Now that might not seem
+very consequential when you have four elements, but suppose that you had 40 million elements, okay? Then having another intermediate array for the intermediate result
+would cost significant amount in terms of memory. And the other is that we're using two scan
+to perform this operation. So first we're scanning
+everything in order to square everything, and then
+we're scanning another time in order to add the result. And it would be nicer if we
+could just do it in one scan because you remember in
+locality of computation if we can just use the same locations the sequential locations
+as efficiently as possible then we run faster in terms
+of a very large dataset. Okay? So the pipelined
+execution that performs is taking the whole computation
+in a single pass. So for each element in B you first compute the square
+and then you enter the square as an input to the reduced operation. So the reduce operation is happening at the same time as the, okay. So the advantages are two. First it uses less memory intermediate results are not stored cause they're immediately
+consumed by the reduce and it's faster because it's only one pass through the R D D. So this kind of evaluation
+that we're talking about here is often referred
+to as lazy evaluation. So the word lazy is because we get the first
+command that what we should do and we literally do nothing,
+we just put this command in a kind of program plan that of what we're going to do when
+we will do something, right? So rather than executing
+things immediately we basically say, "No let's
+more more operations accumulate and then we can execute
+all of them at once and we'll do it more efficiently." So that is what is called
+here the execution plan. That the central idea in
+spark where you take chunks of code and you basically
+combine them together into a single thing to be executed and then you send this thing to the workers to execute it
+on different parts of the data. Okay? So there's more you can
+read about laser evaluation and execution plan when
+you follow this link. Okay? So let's talk about
+an instructive mistake something that we're writing in Spark that seems logical enough, but in fact doesn't do what
+we expect it to do. So we have here something
+that we paralyzed this list one one two and we want to calculate
+the sum of the squares. So we say, okay, we are going to reduce X and Y to x squared plus y squared. That seems logical enough, right? Because if we just had these
+two elements that indeed would give us the right result,
+but we have three elements. So what would happen if
+we have three element? So the first operation would be on this pair one, one, okay? So this pair over here, and replacing that with the one square
+plus one squared is two. Okay? And then the second
+operation on this pair, two two which is the two that we got from the first pair and the
+two that is written right here. Then we get the final
+result. That is eight. And this is not the right answer, right? One square plus one square
+plus two squared is six. Okay? So the, the problem is that we are not really
+thinking about this operation as an operation that
+needs to be executable in any order of of thing, right? So the intermediate results
+are going to be stored in this X, So you don't want
+to square this result.

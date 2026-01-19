@@ -1,0 +1,107 @@
+- Hi. Today, we're going to
+consider actual program that is used using the Spark system. And, that program is called Word Count. And, it is one of the
+most standard examples of map reduce. Okay so, it's kind of like a
+"hello world" of map reduce. Okay so, what does this word count task consist of? We're getting a text, basically, words separated
+by spaces, commas or other, other submission point. And then, we output a list of the words that appear in the document and how many times each word appears, starting from the most common and ending with the least common. Okay so, that's what we want to do and this the idea is to
+do it on a large text, so that you can really benefit from using the parallelism of Spark. Okay so, we're going to
+use more particular input but really, this would be beneficial when you're talking about
+doing it, let's say, for all of AP news wire
+or something like that. Okay so, first of all,
+we need to open the file and that is creating an RDD that acts at the conduit
+for reading the file. The file is open at that point, but nothing is really read out of the file because as we said,
+execution in spark is lazy. So, you wait until you
+actually need some result before you start reading. So, here is the, the command. So, we say the text file which is going to be an RDD,
+is spark context text file and then, it gets the path
+and the file on it, okay. And that's what it, it generated, generate an RDD and it
+doesn't take a lot of time because it doesn't really read anything. It just sets up the path. Okay so, how are we
+going to do the counting? We're going to split the line by spaces. So, we're going to have
+each word be an element in in the new RDD that is
+now just made word by word and then, each word we're going to append to it at the end, one. So we're going to have a pair,
+a value, a key value pair where the key is the word and the value is, essentially, the number of times that this word appears. But right now, we're just for each word we just put the number one, okay. And then, we're going to use that the the reduced by key to count these words. Okay so here is basically
+the, the whole program. It has a set of operation. As we remember, these
+operations don't necessarily get executed one by one as you read them. They just become a plan. And so, the first one is that we take the text file and
+we do a flat map operation. So, we basically create
+the flat map operation will create a list of lists. Okay. So, an RDD of lists. So this, from each line in the text, it creates a list of word and, and then, we're going to combine all of these lists
+together into one big RDD where each element is one word. Then, we're going to do
+some kind of cleanup. So, we're going to basically
+filter all the words that are empty, that are
+just the empty string. How do this come about? Because if we have multiple spaces, split will generate elements
+that are just empty. Okay so, we don't want those. So, we just filter
+those, filter those out. We just keep the one that are not empty. Then, we take that RDD and we map each word into the pair where word plus one, word and one, okay, just a pair where word is
+a key and one is the value. And now, we do the main operation which is reduced by key to do summation. So for each word, we're going
+to sum all of these ones. Each one appears with a
+pair with, with that key. And so, summing them
+all together will just give us the number of code, okay? So, this is the whole program, okay. And, and this point, it doesn't really yet, take a lot of time to execute because it's still just a plan. So, we can see this plan by using command that that to show us the plan. We can see the plan before
+we actually execute it. And the, the plan corresponds to the RDDs that we have as named and also to intermediate result. So for instance, look at words
+and not empty and key value. Those are three different RDDs. They're basically part of
+the same step of execution which we call a stage. Okay so here is the,
+the the, the whole plan. And, the plan essentially
+starts at the bottom. So here is, here is the
+part that where we opened where we created the, the link to the, to the file. So this says, okay, here is that this file that we're going to read. And then here we have that, we do the partitioning. So we do the, the, the splitting and then, we go and we do the reduce by, reduce by key. And, what you see is that
+these steps over here, they're all done. They're all correspond to the
+same step of the execution. So, they're just names that are the same step of the execution. Okay and then until we get to the top, that is basically the,
+the end of the plan. So the plan goes from the bottom, all the way to the top. Okay. So, the execution is forced when we do simple operation that, that requires us to get a number. So if we say, if we say that on this counts RDD plan,
+we just want to do count, we want to know how many
+different words there are. Well, if we want to know how
+many different words there are, we actually have to do
+this whole operation of combining the words and generating the, the word and count appears. Okay. So even though this
+is a very simple operation, it's a count operation. It actually takes a significant
+amount of time, okay. Still not huge amount of time,
+but almost a second. Okay. And then, this operation is generating the sum which is the total number of work, okay. So these are the two, two
+things that we're generating. And, and in that sense, we, we are done. Okay so, so this, running this has generated here just
+nine different word. The total word is nine. So this is because, because I didn't run the
+notebook in the right way. So, when you write the
+notebook in the right way, this will be more like 30,000
+or something like that. Okay so, we finished our
+first real pyspark program. And, here are some things that we learned. So, an RDD is distributed immutable array. It is a core data structure in Spark. You can't operate on the
+data on the RDD directly only through Transformations and Actions. What I was saying, I call this
+acting behind the curtain. Okay. So you are here, the
+data is behind the curtain and you can only indirectly operate on it. So, Transformations
+transform one RDD to another. Actions output the results
+to your jupyter notebook or to the head node. Computations that you do after actions, do not use the Spark resources. So, if you basically did an
+action and you get the result on your head node, then
+you're not really using Spark. So, lazy execution is that
+RDD operations are added to an execution plan that is executed only
+when you need the result. Okay so when we did the count, that actually caused the, the, the whole plan to to, to operate. And then, there is implicit and explicit caching used to
+save intermediate results. So you can explicitly say,
+I want to cache this part or sometimes Spark would
+say, I can't really continue from here unless I have
+the, the actual results. So, I'm going to do implicit cache. Okay so, we did half the job, but there's another half that we wanna do which is to find the, the
+most common word. Okay so, the RDD had thirty-three
+thousand three hundred and one pairs of the form word count. And, and we want to find the five
+most frequent words, okay. We just want to see on our string, on our, on our screen, the, the, the which are the five most common words and how many times each
+one of them appear. Okay so, we're going to
+talk about two method, just to kind of emphasize what Spark, pure Spark is and what not pure Spark. And so the first method is,
+we are not going to use Spark, we're going to use collect. We're going to get all of
+the counts into our machine and then, we're going to
+just do everything locally. The method two is the pure Spark. We're going to do collect or some kind of action at the very end, but everything is going
+to be done before the end. It's going to be done behind the screen. And, that's the preferred way because it scaled better
+to larger dataset. Okay. So here is the, the naive method. You collect the RDD into the driver node. So basically, you just get C. That is the, that, that, that is all
+of the counts collected. And so now, we have them
+as a list of pairs in the, in the head node. And so now, we can basically
+just do what we need to do in Python. Okay so, we take C and
+we sort it according to the second element, element number one. And so that's basically
+source them from the most, from the biggest to the, to from the, no, from the smallest to the biggest. And then, we're going to
+print the last five element in this pair. And here, they are. The word, "the" appeared 13,000 times, the words, "Of" appeared 65, a thousand, six thousand times and so on. Okay. And, that didn't take a lot of time for us because it's at the
+end, a pretty small set. So, so Python can deal
+with it with no problem. However, want to show you the way that you would do it if you didn't want to pass this whole
+dictionary, this whole list, key value pair, list with the words and the count, you wanted to, to do that sorting on the Spark side and then, just take the five largest ones. Okay so here, I'm just
+repeating what we did before. We, we cleaned and mapped
+the data to word one. okay. Then, we counted the
+occurrence of each word. That's counts. And now, we're going to take counts and we're not going to collect it but instead, we're going to, to, to sort it in Spark. But, we want to sort according to key that the operation that we have and the key is right now, the word. So what we do is, we just
+replace for each pair, we replace word count by count word. I can just replace the order. Okay so reverse counts is basically, maps X to maps the X to a reverse order X one, and then X data. So, it's the count and
+then the word. Okay. And then, then once we have it this way, we can just use sort by key. Okay. So, that basically sorts
+all of the elements but now, by the count
+and not by the words. Okay. So, here is the full
+execution part, a plan for this. So, you can see that they're
+kind of leveled here. So, these are the levels that
+are executed together. Right. So, once you reach this kind of jump that basically means that actually, the, the Spark did the work. And then, these are all collected and then this is doing the work. So this, these kind of things, these, these steps are called stages. So, stage is basically a
+collection of operation that are done together. Okay so to get to the final results, we just do the operation take five. So that doesn't bring us the whole RDD, but it just brings us
+the top five elements. And these top five elements are basically, these things, okay. So in this case it, the difference in execution time is not
+really very different. But if it was, as I said,
+instead of just Moby Dick, it would be the AP news
+wire for the last 10 years. And, that's probably millions of words than such an operation doing it in the Spark side would be faster. Okay so, we showed two ways of finding
+the most common words. The first is collecting and
+sorting at the head node. But, that does not scale. That does not scale because as I said, basically it depends
+on the amount of speed and memory that you have in the head node. And then, we have the way of
+using RDDs for everything. Okay. So, I'll see you next time.

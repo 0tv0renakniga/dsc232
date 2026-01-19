@@ -1,0 +1,123 @@
+(light airy music) - [Instructor] So let's
+start looking into map reduce and how we use it. So what is the idea of map reduce? The idea is to achieve locality. You remember locality as we talked about memory access by
+being oblivious to order. Okay? So we want to give the
+compiler essentially the opportunity to be efficient and make things local by telling by having the software not over
+specify what it wants to do. Okay? So this minimizes cache misses and allows us to compute things in parallel on multiple computers without too much dependence
+between the computers. So as a programmer, the
+important thing is we don't need to know how
+all this is achieved. This is achieved underneath what we see by the Spark operating
+system and runtime system and this allows us to
+write software that can run on multiple different types of hardware. So what is the approach? We're going to write code that expresses the desired end result. Okay, so the desired end result without specifying how
+exactly to get there. Okay? So that is what's going
+to give the compiler the freedom to do things more efficiently. So map reduce performs
+operations on a raise without specifying the
+order of the computation and spark will optimize the
+order of the computation on the fly as it sees what
+resources are available what CPUs are available. Okay, so let's start
+with the map operation which is a very, very simple operation. We want to, we have a list of values 0, 1, 2, 3 and we want to
+compute the square of each item. So we want to get a new list, 0, 1, 4,9. So each element here is
+related to one element here but we don't really care about what order this would be executed. So how do we write that
+in traditional Python? We can write it in the following way here. So basically we define a list and then for every element in our input
+list we append i squared. So notice that here we're
+defining the loop to go from the first to the
+last element in the list. So we are defining an order we can also write it in this way but it doesn't really make a
+difference to the execution. Again, we're just running it from the first element
+till the last element. On the other hand in map reduce we write
+something like this. We say here is the operation map and the parameter to the
+operation is this function, sorry up to here that maps X to X times X. Okay, so that's the operation
+and we want to do that on L. We're not saying anything about the order in which to execute it. So here is compute form first to the last and here the computation
+order is not specified. Okay, so that leaves it makes it possible to
+run some of the computation on one computer and some
+of it on another computer. Reduce is an operation that reduces a list into a single number or single element. So here we have a list of 3, 1, 5, 7 and we
+want to compute the sum. Okay? So this is 16 is the sum
+of these four elements. So again, we have two ways to do it. This is a little tongue in cheek. This is basically just, we
+have an operation called sum. So it does it, but if we really want to look
+into our own implementation we have again a loop
+that goes from the first to the last element in L and
+adds that element into I. Okay, so one by one here
+we have the map reduce way of operating it, which is to to map every two elements X
+and Y into their sum X plus Y. Okay? But how to order what to how to organize these different sums. We don't say this is just a binary sum and we somehow want it to
+operate on all of the list and make it smaller until
+it becomes one element. So again, this is with an order specified and here the computation
+order is not specified. Okay? And then we can do map plus reduce. So we can say that the
+list is elements 0, 1, 2, 3 and we want to compute
+the sum of the squares. So first we want to map every element to its square and then we
+want to sum them, okay? So again, look at the differences between how you would do
+it in a regular Python code versus how you would
+do it using map reduce. So in the regular Python code we have this summation
+variable S that we're going to add the elements to. We go through the elements
+in the list in the loop from the first to the
+last and every time we add to S this I times I,
+or we can write it as a as a sum of reduction
+of list comprehension. Okay? So that's the way to do it traditionally. In map reduce we write it more abstractly. We just say we want to reduce something and this something is a
+map of the list, okay? So we take every element in
+the list, map it to i squared and then we perform reduce on that summation, on that result, okay? At what order these things
+are going to be done we don't say anything about it. So here we compute from
+first to last in order and here computation
+order is not specified. So you get the theme. So basically the idea
+is I'm going to tell you what I want to compute but I'm not going to tell you anything about the order so that you
+can optimize it in real time. So this is what we call
+immediate execution. So the every command is executed as it is being read
+essentially after compilation. And here there is no execution. This is basically we're
+just saying this is our plan for what we want to compute and we haven't necessarily
+computed anything yet. So order independence. So the result of the map
+are reduced, must depend must not depend on the order must not depend on the order because if it does depend on the
+order, then we don't know then then what we will get
+out is not deterministic. So here is something that
+we can look at summation. So in summation there is no relationship there's no dependence on the order. So what we get here is
+that in the loop order in the regular python order,
+we first add five and seven we get 12, we add to that
+three, we get 15, we add one we get 16 and we get three, we get 19. But we can do things in a different order. So for instance here we're
+going to start by adding seven and three to get 10 in the
+same time we can add one and three to get four, right? So those are different
+summation can be done the two can be done in parallel. Then we can add the 10
+and the four to get 14. And finally we add to it five to get 19. So the result, the 19 is the
+same independent of the order. And that's important because we want to be able
+to optimize the execution in any way that we want. Okay? Suppose that we wanted to do in a similar way the difference. So we could write a a reduced command that
+would take differences but then we are not guaranteed
+to get the same results in different runs. So here is the order that
+you get in Python five minus seven is minus two,
+minus three is minus five minus one is minus six, and
+minus three is minus nine. Okay? On the other hand, if we
+take a different order seven minus three is four,
+one minus three is minus two four minus minus two is six and
+five minus six is minus one. So here we got minus nine
+and here we got minus one. So that basically means
+that reduce cannot work with differences, okay? We have to do something else. If we want to do differences for instance we can use positive and
+negative numbers and then just adding them
+would simulate differences. Okay? So let's look at how
+to compute the average. So the average is reduce
+of lambda of A and B of A plus B over two. So that seems reasonable
+enough if you have two variables, two numbers A and B. If you take A plus B over two,
+that gives you the average. But what happens if we do
+this reduce on a longer list? So let's say that the data
+is one and two and three the average we know is two. But now if we do the the map reduce we get one plus two over two. That gives us 1.5. We add to that three you get 4.5 and divided
+by two we get 2.25. So we don't get the right answer, right? So even though this seems like
+the right way to do things it isn't. So let me show you what is
+the right way to do things. Okay? So here is the the right way to do it. Basically what you do is you do a map of X to X comma one, right? So you just basically map
+each X to the pair X comma one and then you do the
+reduce operation where you get these pairs. P one is a pair and P
+two is a pair and you add the first part and you add the second part and that's the result. Okay? So what is going on here? At the end of that we get a
+pair, which is a sum and a count and we take the ratio to get the average. Okay, so let's see an example. So suppose we are trying to
+do the average of one and two and three again, and we are doing this map of Lambda X two X one. So all we get is one
+comma one, two comma one, and three comma one, okay? Now If we look at the reduce,
+what does that do? So basically what we get is that this one is added to this one and it added to this two
+and is added to this three. So that gives us six here and then these ones are
+added and they give us three. So what are these ones? These ones are simply the count
+of the number of elements. As we go through the reduce we are counting the number of elements and we're computing there some and at the end we have the sum and the count of everything
+and we can just take the ratio. Okay, so this requires a
+little bit more thought in order to do it in the correct way. So map reduce can work on it. So why is order independence so important? Again, computation order can be chosen by the compiler optimizer. So suppose you don't
+have just one CPU working on doing your summation. Suppose it's a summation
+of a billion elements and you want to summit using 100 CPUs then each CPU is going
+to do some of the work. And so you're not sure at which
+order things will be done. This allows parallel computation. And so modern hardware is
+something that we want to use parallel computation because there's so many
+cores in any laptop. However, it's not easy to program, right? Because you need to think
+about how exactly the the computation is going to be broken up. map reduce. The solution is to abstract
+it to say I don't really care at what order you will do things. Okay, so map reduce the programmer exposes to the compiler opportunities
+for parallel computation because I'm not telling you
+exactly at what order to do and you can choose the order that is best. So spark and map reduce. So map reduce is a system that
+has existed for a long time. It's kind of a programming
+abstraction, but in big data it is comes
+two main systems, Hadoop which was the older system and Spark which is the system that
+we're going to learn. Okay, so I'll see you next time.

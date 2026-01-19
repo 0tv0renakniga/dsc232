@@ -1,0 +1,117 @@
+(lively music) - So in the previous video, I told you about some
+operations that you can do with Spark and RDDs and how
+these operations fit together. What I want to do this time is dig deeper into how you can make these
+things really run fast, right? Because the whole point of
+Spark is that you can run things on cluster of computers
+and get the results therefore significantly faster. If you run Spark on your own computer, there is very little point
+in general in doing that. Okay. So we're going to talk
+about execution plans, lazy evaluation, and caching. We haven't really talked about caching. We talked a little bit
+about execution plans and lazy evaluation, but I think it's worthwhile to dig deeper. And I recommend that you review this. So this is a notebook that
+you should have access to. And there is much more
+information in the notebook than what I will be talking about. And I think it's really important that you go and review that
+notebook, play with it, until you feel like you really
+understand what is going on. Of course, ask question
+whenever you don't understand. Okay, so the task we're
+going to do is a task that we talked about before. It's calculating the sum of square, and the standard or busy way to do this is to calculate the square of
+each element in the RDD, then sum the squares, and
+then you get the result, okay? This requires storing all
+of the intermediate results, and that is a big disadvantage,
+as we will see in a minute. Okay, so here is a visualization of busy evaluation. We have this RDD initially and then we run a square
+operation, a map square, and we get this new RDD, okay? that has the squares or
+the square of each element. Then we run the reduce operation, which basically takes all of
+the elements in the second RDD, in the intermediate RDD, and then calculates the
+sum and we get the result. Okay, so that is a disadvantage. First, because we are calculating, we're storing this intermediate result, which doubles the amount
+of memory that we need. And the second is that we
+pass through the data once to calculate the squares and then we pass through
+the data a second time to calculate the sum. So the idea of lazy evaluation is to postpone computing the square
+until the result is needed. So when you get the command
+through the map of squares, you actually don't do anything. You don't need to store
+any intermediate result. And you scan through the
+data once rather than twice. So let's see how that works. We start at the beginning of this RDD. And then we square 2 to get
+4, we square 5 to get 25, and then we sum these two
+elements, and get 29, okay? Now this second RDD is
+not really materialized. We're not storing all of
+these intermediate results. I'm just showing them
+here for illustration. So here we have the third element. We take the -6 and we take the square root to 36, and then we take the 36, add it to the 29, and get the 65, okay? And now we can forget about the 36, as we forgot about the previous element. So let's do some experiment
+to see how this works in practice. So we're going to create an
+RDD with 1 million elements to demonstrate the effects
+of lazy evaluation. So we basically just take the range, zero to 1 million minus 1, range 1 million; and we parallelize it to create an RDD. This is not really a very big RDD, but it would suffice for demonstration. Okay, now we're going
+to define an operation that we are going to use for map, okay? So map, if you just square,
+is a very tiny operation, takes very, very little time, so redoing that operation is not costly. But I want an operation
+that is relatively costly. So I just called it
+taketime to indicate that. And it just does some computation that is not really very important, but it basically calculate the cosine of all of the numbers
+between zero and 99, okay? So just something to do, and then it returns the cosine of the element that you
+got with any (inaudible). So nothing really smart here, it's just a way to waste time. Okay? So if we calculate the time
+that it take, that's here, about 44.3 microsecond, nanosecond. So I always get these things confused. So to help me, I have here
+a little table to remind you that one second is 1,000 millisecond. One millisecond is 1,000 microsecond. and one microsecond is 1,000 nanosecond. So basically, second is
+a billion nanosecond. Many, many, many nanoseconds in a second. And in the clock rate, that we typically have three
+gigahertz in modern computers, it means that one cycle takes
+1/3 of nanosecond, okay? So it basically means that we can execute, we have 3 billion operations per second. Now, the single execution
+of taketime takes about 25 microsecond, right 25 microseconds. So that's about 75,000 clock cycle. Okay, so here is the map operation. We basically say, Interm is R.map of lambda x and taketime x, okay? So on each x in each one
+of the million elements we do the taketime operation, and this is the amount
+of time that it took. That is very, very little, right? 24 microsecond is just about the time that it takes to compute this once, to compute taketime once. So how come it is so fast, right? I mean, what we expected is
+maybe something like 25 second. How come it is so fast? The previous took about 29 microsecond. Here it took actually 24 microsecond. And this is because no
+computation was done, okay? So this is a manifestation
+of the lazy execution. Got an operation. The operation might be quite expensive, but we haven't done it. So therefore, that finished very quickly. Okay? So you can actually read
+out the execution plan that you have right now in the system, the R, the RDD R, and the Interm, intermediate RDD both can be written out and this is the description
+of the steps that they're saying. So this is an explicit way of saying, "This is what we are going to do when this map is going to be executed. Okay? So we can think
+about it in this way: We can have an RDD and this RDD, this RDD might have been
+already materialized, and this, then we run on it a Map time and then we're going
+to run on it a reduce. And then at the end, we're
+going to have a number. Okay? So this is the pipeline of what we are doing. So this whole thing, from parallelized map and
+reduce is the pipeline. We haven't reached the reduce step. Okay? So here is the execution. So the reduce command needs
+to output an actual number. That it cannot say, "Oh, I will
+calculate something later." Therefore, we have to actually operate and this is what happened. So we take the intermediate RDD and take an operation reduce
+that just sums the result. And then we see that
+what this takes in terms of Wall time is 2.61 second, okay? So this still is fast, right? Because we expected 25 second and what we got is something more like 3 second or 2 second. Why is that? Well, one reason is because we
+actually have on my computer 4 workers, we have 4 core.
+And so each core is a CPU. And the other is that actually
+the measurement that they did of how long it takes to run taketime is an overestimate because there's more
+things happening in Python that cost significant amount of time that is not really the time
+that the cover of time take. But still it takes time,
+it takes 2 1/2 second. Okay? So what do we see here? We saw that we have this plan
+that is being accumulated as we write the command and
+only when we need to execute in order to generate something, then it actually takes the computation. That's the lazy computation. Now, the problem with
+the lazy computation is that sometimes we actually
+need the intermediate results for other calculations. Okay, so it might be that
+this intermediate results of taking the squares over
+the square of every element is actually something that
+later we would want to use and it would be costly to redo it, right? So that's the idea, the idea that helps with that
+is what's called caching. Okay? So here's the intermediate result. And now we do a different
+command on it, filter. And what we see is that the
+amount of time that it took to do filter is significant and the reason is because
+it actually executed all of the map command again, right? Because the intermediate
+results were not held anywhere and so we paid this price of recalculating the intermediate result. So a lot of what you do as
+a programmer in Spark is that you basically say, "Okay, which parts of the
+calculation do I need to store or to cache and which
+parts I can just let go and not materialize them?" Okay, so the price of not materializing, the numbers here, not
+exactly the right ones, but the runtime is similar
+to that of the reduce, right? That's because we needed
+to calculate things twice. The intermediate result in
+Interm have not been saved in memory. So it's kind of interesting to just think about it for a minute. What is Interm? Interm is just a plan to
+calculate something, right? So it's a plan to calculate the squares. It is not an actual
+storage of the squares. So it's an RDD that has not
+been materialized, okay? So it needs to be recomputed
+whenever it's needed. So two seconds might not be a big issue, but let's say it's an hour,
+then it starts to be an issue. Okay, so what we have right now is just this kind of pipeline. So we have this pipeline going into here and then we have another
+pipeline that basically goes to here and this pipeline
+requires us to recompute this map. Okay, so what we want to do is to cache intermediate results. We sometimes want to keep
+this intermediate results so that we don't need to recalculate them, and this will reduce the
+running time at the cost of requiring more memory, right? Because now we're back to
+storing intermediate things. So we can decide which
+pieces we want to store or otherwise we just don't
+store them and recalculate them. So there is a command
+for doing exactly that and it's called cache. But the surprising, a little
+bit strange things about it, it's not really immediately storing, it's just planning to store. So when you write the command cache, it's really a plan to cache. It's part of the lazy plan. Okay? So if I'm writing this, I have R.map, Interm is R.map taketime and then this is cache, cache. But it doesn't take much more time. Okay? So when does it take time? It will take the time when it
+is actually executing. Okay? So we put here a cache,
+right after the Map, and once we will calculate the Map, we will basically store the
+intermediate result in the cache and then we can take the cache and quickly calculate
+the reduce or the filter or anything else that we might want to do. So here is the plan to cache and you can read the
+details of the plan here. Not going to do that. And now we're going to
+actually create the cache. Okay? So now that we do a reduce, that takes a significant amount of time. But this time is now amortized. So we basically materialize
+the intermediate result. So we're not going to need to
+pay this amount of time again. And now we're going to
+use the cache. Okay? So what we see is now we are
+basically doing the exact same command as before:
+Interm.filter, okay? And then we see that the time that it took is 169 millisecond instead of, like, two second. Okay? So that's basically a demonstration of the utility of a cache. Okay, so to summarize evaluation plan, Spark uses lazy evaluation
+to save time and space. When the same RDD is needed as input for several computations, it can be better to keep it in memory, and this is also called caching. Okay. So I'll see you next time.

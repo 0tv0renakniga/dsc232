@@ -1,0 +1,121 @@
+(lighthearted music) (screen whooshing) - Okay, so before we get into Spark, I think it's useful to have
+a little bit of history of this kind of highly parallel
+and affordable computing. So non-affordable, high,
+very fast computing has been around, usually
+called supercomputing. And supercomputers,
+there're a list of names of such famous computers, Cray, Deep Blue, Blue Gene, and they are machines that
+use very specialized hardware to achieve a particular type
+of computation efficiently. And because they use specialized hardware, specialized chips, they're very expensive, because chips, their
+price depends very much on how many of them are being used. So those are used only in
+that very specialized setup and those are created to make progress on very important highly
+compute intensive problems. On the other hand, we have
+what are called data centers. So this is a picture of data center on the outside and this is on the inside. You see that there're racks
+and racks of computers. These computers are pretty much standard kind of commodity computers. And this is what is actually
+called the cloud, right? So when we do our
+computation in the cloud, when we use TikTok or we use Gmail, all of these things are being
+done in data centers, okay? So those are collections
+of commodity computers. So the computers that are in these centers are nothing special. They are more or less the
+same as the kind of computers that you would have as
+a workstation at home. And their main property
+is that they are cheap and that they can do a lot of computation compared to their price. So the thing that makes
+these data centers powerful is that you don't have one
+or two or 100 computers but rather you have maybe
+hundreds of thousands of computers in such a center. And that's why these
+centers look like this. It's really a factory of computing and usually the factory
+is put next to a river or some other way of cooling because these computers
+create so much heat that needs to be taken out somewhere. So this is something that is
+used to provide computation for large and small organizations and we're all using them all
+the time in our daily life. So it's computation as a commodity. It's like you have electricity
+coming into your home, you have water, you maybe have gas. This is another type of commodity that comes into your home and
+provides you with computation. So how did this get started? The start of it was in Google in 2003, where Larry Page and Sergey
+Brin, the founders of Google, were looking for a method
+to store very large files on multiple commodity computers. So they were already collecting
+large amounts of data and it was not cost-effective to store them in super large
+and powerful computers. They wanted to use the computers that were around used by
+people as workstations. So how do you do that? You take each file and
+assume it's big file, let's say gigabytes, and you break it into fixed-size chunks. Okay, let's say 256 kilobyte. And then each chunk you store on multiple chunk servers, okay? So you now think about your
+many commodity computers as basically each one storing a collection of chunks unrelated to what this computer is specifically designed to do. And the locations of the chunks are managed by a master node. So there is someplace in this cluster, that there is a head node. And that head node knows for
+each chunk from each file where it is actually stored. So it looks something like this. It's called, it was
+called Google File System and now it's called
+the Hadoop File System. The files are broken into chunks, okay? So each file here is
+broken into two chunks. And then you make several copies from each chunk, okay? So you have a file 1, chunk 2, and then another copy for file 1, chunk 2. So you have multiple
+copies of the same data. Soon we'll see why. And so now you basically
+have all of the information that was on the original files
+but broken up into pieces and copied multiple times. And now you distribute the files, okay? So you have your master node that basically is going to
+know where each chunk is, and you're going to take
+each one of the chunks and put it on randomly selected computers. Okay, so now everything
+is stored somewhere, but it's like a hologram. It's like every piece
+is at a random place. So it's only the master that knows how to put them together. Okay, so what are the properties of this? First and most important, this is used commodity hardware. So you're using computers that are cheap. You have locality because you have data
+stored next to a CPU. So every piece of data is stored somewhere in this distributed system
+and it's close to some CPU that can immediately
+access it and work on it. You have redundancy, so
+you have the same piece of information, the same chunk, you have copies in multiple machines. And you have a simple abstraction, okay? So to you when you're working on the Hadoop File System, it just looks like a regular file systems. There are files and directories and sub-directories and so on. You don't need to worry about all of the different distributed chunks that is going on underneath. And you get redundancy. So that has to do with having
+multiple copies of each chunk. Suppose that a particular
+chunk server here crashed or some hardware problem
+or software problem, doesn't matter, but it's
+no longer accessible. Well, you don't need to worry about it in terms of the computation because every chunk that is here, you have another copy
+of it on another machine that is still working, okay? So you can basically just say, okay, the computation I was doing
+on this chunk server is dead. I lost that computation. But I still have the
+data that is the input so I can start this junk
+server to work on it. And when you have 100,000
+computers in a data center, you have invariably,
+at any moment of time, hundreds of computers
+that are crashed, okay? So you basically or constantly need to kind of replace these computers. But this is done in a
+very transparent way. You just take this computer out, you put a new computer that is blank, and then the system knows how to populate that new computer with chunks so that it has its own part of
+the universe of file chunks. Locality is the other part which you get from the same piece. So suppose that you want
+to do some computation such as sum all of the
+elements in file 1, okay? So you have the elements in file 1, you have one here, you
+have the second chunk here, you have one here, and you
+have another piece here, and then you have one here, okay? So a bad solution would be to say, okay, this chunk server
+should calculate the sum of everything that it has, okay? Then you'll have to compute
+this sum and then this sum, and sum these things together. But you can instead have
+this one, let's change the, so you have this one
+be summed on this chunk and the chunk 2 for file 1, this one, be done on this machine. So they can work in parallel. And then as a result, you get the computation be done
+in half the amount of time. Okay, so MapReduce is what we're going to talk about in Spark. So what we have in HDFS
+is a storage abstraction. It's basically a storage abstraction. This storage abstraction
+lets us access files as if they were in one place. And the underlying system takes care of the distribution. MapReduce is a computation
+abstraction that works well with this distributed
+file system abstraction. So now we are going to have
+a computation language, a computation method that
+works very well with the HDFS and which allows us to
+basically compute things, write our program in a simple way, and have it automatically be distributed and running on many computers to reduce the amount of time. Okay, so it allows the programmer to specify parallel computation without knowing how the
+hardware is organized. And this is super important. Why? Because you don't want
+to write your program for a specific hardware, then it would mean that
+every new hardware, every new cluster that you want to use, you have to tweak various
+parameters inside your software. This software basically, this approach gives you an abstraction. You don't know what is
+happening at the lowest level, but you can basically still
+give efficient commands to the computer and they will be executed according to the particular hardware. So we will describe MapReduce using Spark in a later section. So what is Spark? So it was developed in
+2014 by Matei Zaharia. And Hadoop is the older system. It uses a file system to do
+the distribution storage. The Spark shares memory. So you have, instead of
+sharing spaces on disks, you share memories. And so that is much faster and you can do computation
+in a much faster way. And that's what we will be using. Okay, so what is the cloud? The cloud is a common
+name for data centers. What is better, cloud
+or your local computer? It's really a question
+about renting versus buying. If you get computational
+resources on the cloud, you usually pay per hour of use. So you don't have to pay
+the whole cost of the thing. But if you need a lot of
+computation all of the time, then it might be better to
+own rather than to rent. You have centralized IT. So rather than having your
+own IT team in your office, you have the IT team that is running, let's say, the Amazon cloud. And because they have so many computers that they're running together,
+they're more efficient. They're less responsive to your requests because they have so many clients, but the price that you
+pay is at a discount. So what about storage? Long-term cloud storage is
+much more expensive than local. So for storage, for long-term
+storage, let's say, years, you don't want to store
+things on the cloud. And also, moving data from
+the cloud and to the cloud is a very expensive
+thing in its own right. So what you want to usually
+do is have either applications that don't need a lot of storage or that you have the
+storage on a rolling basis, that you store it for a
+long-term on some other service, and then on the compute service, you just store what
+you need at that point. So you can think about it
+as like a huge supermarket. There are so many choices when
+you go to the Amazon cloud. It's not easy to necessarily
+find the best combination. So to summarize, big data
+analysis is performed on large clusters of commodity computers, computation as a service. So this is basically, we
+have a lot of computers in this location and we're
+going to rent you some number of compute units for a
+given amount of time. HDFS, the Hadoop File System, is a system that breaks files into chunks, makes copies, and then
+distributes it across machines. And Hadoop MapReduce is
+a computation abstraction that works well with
+the Hadoop File System. Okay, so we haven't really
+gone into MapReduce yet but we'll do that in the next videos.

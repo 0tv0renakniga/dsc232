@@ -1,0 +1,82 @@
+- Hi. So, we talked about RDD's and how to, how to do transformations
+and actions on RDD's, and now we're going to talk
+about a special kind of RDD. RDD's in which each element
+is a pair, a key and a value. So you can use any kind of, any kind of Python
+structure inside an RDD. But this specific type
+has a lot of support because then you'll see it's very useful. Okay so, here is an example. We have the key social security number, and the value is personal information. Or the key is longitude and latitude, and the value is the address. It corresponds to this location. And then the key is a word, and the value is the number
+of occurrences of this word. We'll see that in the next
+video when we do word counting. We have a key that identifies the record, and then the value is the record itself. So what kind of things
+can we do with that? We can do three types of spark operations, transformations, actions, and shuffles. And just to remind you, transformations take an
+RDD and generate a new RDD. And examples are map filter, sample, and you don't need any
+communication for doing that. Each computer can do it by itself. Then, an action is something that collects all of the data from the RDD, and somehow comes up
+with a single element, that is stored in the head note. In this case we have things like reduce, collect, count, take, and you need some communication. You need communication
+from the workers machines to the head note. And finally we have shuffles, so shuffles are really
+the heavy operations that we try to do not too many of because they take a lot of time. These are things like sort,
+distinct, repartition, sortByKey, reduceByKey, and
+we'll see what these things are. And these things require
+a lot of communication, so basically data needs to
+move from worker to worker, and that requires communication
+of large amounts of data through the ethernet connecting them. Let's start with some
+transformations on key value RDD's. The first one that is really very useful is something called reduceByKey. It generates a new RDD, where the, for each key you have the
+result of the reduction on the values that are
+associated with that key. So you can sum all of the
+values that are associated with that particular word. So you have the sum of
+these values for the word. So here is an example of that, suppose that you have an RDD that is an RDD consisting of three pairs. In each one of them the
+first element is the key, and the second element is the value. The RDD, the reduce operation
+that we're doing here is this, just summing. So we're basically summing
+all of the elements according to one of the keys. So here we have two key values, 2 and 1. And one just, we keep it there because it's just one element. And for the other one we sum
+the 4 and the 6 to get this 10. That's basically the result of the reduce. SortByKey is to take all
+of our key value pairs and just sort them
+according to the key value. That's a shuffle, and it basically says okay if I have these 3 elements, then I'm going to sort
+them according to the key which is the first element 1, 2, 3, and what I get as the
+result is the same pairs but ordered by their key. The map values is a simple operation. We're going to operate on each value without changing the key Here we have the operation which is take x and
+replace it by 2 x, times 2. So what we get from the
+original RDD being this, we just have the first pair, the key remains of the second is 4. They key remains of the
+second is 2 times 4 is 8. The key remains and the value is 2 times 6 which is 12. Now notice that key value maps don't have to have the, each key appearing only once. This is the thing about
+key value pairs in spark, that you don't have unique keys. You're not guaranteed unique keys. Now let's look at some transformations on two key value pairs. We take two RDD's, each one of them is a
+collection of key value pairs and we want to somehow do an
+operation to combine them. So subtractByKey means
+that you take all the keys that are elements in RDD 2, all of the keys in RDD 2 and we remove the elements
+with those keys from RDD 1. Here we have RDD 1, it
+has the keys 1, 2, and 2. And RDD 2 has the keys 2 and 3. So they key 2 is the critical one, it basically removes these two pairs. And what we're left with is
+just the first pair, 1 and 2. That's how that works. Join is one of the special operations that is meant to combine 2
+key value pair collections. It is very much one of the key operations in relational database. This gives us some of the
+relational database abilities inside spark. Suppose that we have these two datasets. Here we have dataset
+1, the key is the name and the value is gender, occupation, age. These are the four
+records that we have here. You notice that we have two Johns. And then here we have database 2, we have 3, we have basically a name
+and then the hair color and here we have these 3 people. We want to do join, so
+that means we want to take we want to take John here, here is John, and here is John, and John. And we basically want to add
+that color black to John. And for Jill, we want
+to add the color blonde. So Jill we have the color blonde, we add blonde here. And for Kate we, we don't have Kate over here, so we're not going to join those. How does that work? It returns, what the join operation returns, it returns a new key value pair. Key value collection, but
+the key is the same key as appeared in the two sets
+and the value is a pair. Which is the value from 1 set and the value from the other set. If you combine these 2 key value RDD's, what you get is a set that has only the, the common key. So John appears in both
+and Jill appears in both. And then for each John we
+have black hair we added, and for each Jill we added blonde. All right, so so here we have a small
+join that we're doing just between 2 simple RDD's. And we have 1, 2, and 2 is key. Here, 1, 2, and 2. And in RDD 2 we have the keys 2 and 3. What we get in the result, is we get 2 record
+corresponding to the key 2. Both of them have the key 2, which is the only common one. And then one of them has 1 and 5, so 1 taken from here and
+the 5 taken from here, and then in the other one we get 2 and 5. Now here we get the 2 from
+here and the same 5 from here. That's how this join works,
+this is an inner join if you know the SQL terminology. There are, I think variants that you
+can do other types of joins. What are the actions that
+we have for key value RDD. We have countByKey, so we can count the number
+of elements for each key. So just like count, but it
+does it separately on each key and returns a new, returns a dictionary, it's no longer an RDD
+that is in the head note. This is different from doing
+reduceByKey with addition because that generates the same result but essentially as an RDD. It depends on whether
+you want to say that, whether you assume that the
+number of keys that you have is big or small. Let's consider the next
+operation which is collectAsMap. CollectAsMap basically
+takes a key value RDD and returns it as a dictionary. So it's easier to use on the python side. But there is one tricky thing here, which is that it only
+returns one value per key. Which one it will choose,
+there's no telling. And here is what we get
+if we have this RDD, if we have this RDD, then 1, 2, 2, 4, and 2, 6. We see that there are 2
+elements with the same key and it just chose one of them, 2, 6. So 1 maps to 2, and 2 maps to 6, the 2, 4 has been lost. Lookup is another operation
+that is similar to databases. We want to return all the
+values for a particular key. Here is this RDD again that
+we had 1, 2, 2, 4, 2, 6. We ask to look up the key 2. So basically that give us
+the 2, 4, and the 2, 6, so we return the values 4 and 6. This one does keep all of the
+values associated with that. To summarize we saw some of
+the operations with pair RDD. And there's many more, you can see this notebook has more detail than what I went over. Also there is the RDD program guide that you can use that's linked. And it will get you to
+the full information about RDD's with just single elements
+or with key value pairs. Next what we're going to do is, we're going to look at the actual program so we can see how RDD's
+and all of these operations are used together to do something useful. I'll see you soon.

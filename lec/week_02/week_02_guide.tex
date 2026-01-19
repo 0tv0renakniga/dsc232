@@ -1,0 +1,386 @@
+\documentclass{article}
+
+%----------------------------------------------------------------------------------------
+\usepackage{enumerate}
+\usepackage{listings} % Required for inserting code snippets
+\usepackage[usenames,dvipsnames]{color} % Required for specifying custom colors and referring to colors by name
+
+\definecolor{DarkGreen}{rgb}{0.0,0.4,0.0} % Comment color
+\definecolor{highlight}{RGB}{255,251,204} % Code highlight color
+
+\lstdefinestyle{Style1}{ % Define a style for your code snippet
+language=Python, % Detects keywords, comments, strings, functions, etc for the language specified
+backgroundcolor=\color{highlight}, % Set the background color for the snippet - useful for highlighting
+basicstyle=\footnotesize\ttfamily, % The default font size and style of the code
+breakatwhitespace=false, % If true, only allows line breaks at white space
+breaklines=true, % Automatic line breaking (prevents code from protruding outside the box)
+captionpos=b, % Sets the caption position: b for bottom; t for top
+commentstyle=\usefont{T1}{pcr}{m}{sl}\color{DarkGreen}, % Style of comments within the code - dark green courier font
+deletekeywords={}, % If you want to delete any keywords from the current language separate them by commas
+%escapeinside={\%}, % This allows you to escape to LaTeX using the character in the bracket
+firstnumber=1, % Line numbers begin at line 1
+frame=single, % Frame around the code box, value can be: none, leftline, topline, bottomline, lines, single, shadowbox
+frameround=tttt, % Rounds the corners of the frame for the top left, top right, bottom left and bottom right positions
+keywordstyle=\color{Blue}\bf, % Functions are bold and blue
+morekeywords={}, % Add any functions no included by default here separated by commas
+numbers=left, % Location of line numbers, can take the values of: none, left, right
+numbersep=10pt, % Distance of line numbers from the code box
+numberstyle=\tiny\color{Gray}, % Style used for line numbers
+rulecolor=\color{black}, % Frame border color
+showstringspaces=false, % Don't put marks in string spaces
+showtabs=false, % Display tabs in the code as lines
+stepnumber=5, % The step distance between line numbers, i.e. how often will lines be numbered
+stringstyle=\color{Purple}, % Strings are purple
+tabsize=4, % Number of spaces per tab in the code
+}
+
+% set title
+\title{DSC 232R: Big Data Analytics Using Spark \\ Winter 2026 \\ Week 2} 
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+% section 1 
+%----------------------------------------------------------------------------------------
+
+\section{Topic: HDFS and The MapReduce Paradigm}
+
+%----------------------------------------------------------------------------------------
+% section 1.1
+%----------------------------------------------------------------------------------------
+\subsection{The Distributed File System (HDFS)}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{The Core Problem:} Standard file systems cannot handle petabytes of data because they rely on a single disk/computer.
+    \item \textbf{Google's Solution (GFS/HDFS):}
+    \begin{enumerate}
+        \item \textbf{Commodity Hardware:} Use thousands of cheap, unreliable computers instead of one expensive supercomputer.
+        \item \textbf{Chunking:} Files are broken into fixed-size blocks (default 128MB) called "Chunks" or "Splits".
+        \item \textbf{Redundancy (Replication):} Every chunk is copied to multiple machines (Default Replication Factor = 3).
+        \begin{itemize}
+            \item \textit{Why?} If a machine crashes (which happens constantly), the data exists elsewhere.
+        \end{itemize}
+        \item \textbf{Architecture:}
+        \begin{itemize}
+            \item \textbf{NameNode (Master):} Stores metadata (filename $\to$ list of chunk IDs).
+            \item \textbf{DataNode (Worker):} Stores the actual raw bytes.
+        \end{itemize}
+    \end{enumerate}
+    \item \textbf{Locality Principle:} "Move computation to the data, not data to the computation."
+    \begin{itemize}
+        \item Network bandwidth is the bottleneck. It is faster to send a 5KB program to the data than to pull 1TB of data to the program.
+    \end{itemize}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% section 2
+%----------------------------------------------------------------------------------------
+\section{Topic: Spark Architecture}
+
+%----------------------------------------------------------------------------------------
+% section 2.1 
+%----------------------------------------------------------------------------------------
+\subsection{RDDs and Context}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{SparkContext (The Driver):}
+    \begin{itemize}
+        \item The "Brain" of the operation. Resides on the Master node.
+        \item Does NOT store the data. It stores the \textit{Execution Plan} (Lineage).
+        \item Coordinates workers (Executors).
+    \end{itemize}
+    \item \textbf{RDD (Resilient Distributed Dataset):}
+    \begin{itemize}
+        \item \textbf{Resilient:} Reconstructs lost data automatically using lineage (re-computing steps) rather than replication.
+        \item \textbf{Distributed:} Partitioned across the cluster.
+        \item \textbf{Immutable:} Once created, it cannot be changed. You can only create a \textit{new} RDD from an old one.
+    \end{itemize}
+    \item \textbf{Spark vs. Hadoop:}
+    \begin{itemize}
+        \item \textbf{Hadoop MapReduce:} writes to Disk after every step (High Latency).
+        \item \textbf{Spark:} keeps data in Memory (RAM) between steps (Low Latency).
+    \end{itemize}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% section 2.2
+%----------------------------------------------------------------------------------------
+\subsection{Lazy Evaluation and Pipelines}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{Two Types of Operations:}
+    \begin{enumerate}
+        \item \textbf{Transformations (Lazy):} Definition of a plan. Returns a new RDD.
+        \begin{itemize}
+            \item \textit{Examples:} \texttt{map}, \texttt{filter}, \texttt{flatMap}, \texttt{sample}.
+            \item \textit{Behavior:} Spark does NOTHING when these lines are run. It builds a DAG (Directed Acyclic Graph).
+        \end{itemize}
+        \item \textbf{Actions (Eager):} Triggers execution. Returns a result to the Driver.
+        \begin{itemize}
+            \item \textit{Examples:} \texttt{collect}, \texttt{count}, \texttt{reduce}, \texttt{take}, \texttt{saveAsTextFile}.
+            \item \textit{Behavior:} Spark optimizes the DAG and launches tasks on the cluster.
+        \end{itemize}
+    \end{enumerate}
+    \item \textbf{Pipelining (Fusion):}
+    \begin{itemize}
+        \item Because of lazy evaluation, Spark can combine multiple steps into one pass.
+        \item \textit{Example:} \texttt{map} + \texttt{filter} happens in a single loop over the data, avoiding intermediate memory storage.
+    \end{itemize}
+    \item \textbf{Caching:}
+    \begin{itemize}
+        \item Because RDDs are re-computed by default, branching (using an RDD twice) causes double computation.
+        \item \texttt{rdd.cache()} tells Spark to save the result in RAM after the first computation.
+    \end{itemize}
+\end{itemize}
+
+\newpage
+%----------------------------------------------------------------------------------------
+% section 3
+%----------------------------------------------------------------------------------------
+\section{Topic: Key-Value Operations (The Danger Zone)}
+
+%----------------------------------------------------------------------------------------
+% section 3.1
+%----------------------------------------------------------------------------------------
+\subsection{Pair RDDs}
+\subsubsection{Jupyter Notebook Content}
+\begin{itemize}
+    \item \textbf{Data Structure:} RDDs where elements are Python tuples: \texttt{(Key, Value)}.
+    \item \textbf{reduceByKey(func):}
+    \begin{itemize}
+        \item Groups values by key and applies \texttt{func} (e.g., sum).
+        \item \textbf{Architecture Win:} Performs \textit{Map-Side Combination}. It reduces data LOCALLY before sending it over the network.
+        \item \textit{Result:} Low network traffic, high performance.
+    \end{itemize}
+    \item \textbf{groupByKey():}
+    \begin{itemize}
+        \item Groups values by key but performs NO reduction. Returns \texttt{(Key, Iterable)}.
+        \item \textbf{Architecture Fail:} Sends ALL raw data over the network to the reducer.
+        \item \textit{Result:} High network traffic, likely to cause \textbf{Out Of Memory (OOM)} errors on the reducer.
+    \end{itemize}
+    \item \textbf{The Shuffle:}
+    \begin{itemize}
+        \item Operations that require moving data between partitions (by key) cause a "Shuffle".
+        \item This breaks the pipeline and defines a "Stage Boundary".
+        \item \textit{Shuffle Ops:} \texttt{reduceByKey}, \texttt{groupByKey}, \texttt{join}, \texttt{repartition}.
+    \end{itemize}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% Exam Traps Section
+%----------------------------------------------------------------------------------------
+\section{Exam Traps: Danger Zone}
+\begin{itemize}
+    \item \textbf{The "Average" Trap (Algebraic Properties):}
+    \begin{itemize}
+        \item You cannot calculate an average using \texttt{reduce(lambda x,y: (x+y)/2)}.
+        \item \textbf{Why?} Reduce operations must be \textbf{Associative} and \textbf{Commutative}.
+        \item $(a+b)/2 + c$ is not the same as $(a+b+c)/3$.
+        \item \textbf{Solution:} Map to \texttt{(sum, count)} tuples first, reduce by adding components element-wise, then divide at the very end.
+    \end{itemize}
+    \item \textbf{The groupByKey Trap:}
+    \begin{itemize}
+        \item Prof will ask: "Why did my cluster crash when I switched from \texttt{reduceByKey} to \texttt{groupByKey}?"
+        \item \textbf{Answer:} \texttt{groupByKey} forces a massive shuffle of all data. \texttt{reduceByKey} pre-aggregates on the map side (like a combiner), sending minimal data.
+    \end{itemize}
+    \item \textbf{The Collect Trap:}
+    \begin{itemize}
+        \item \texttt{rdd.collect()} brings ALL data to the Driver node.
+        \item If the RDD is 1TB and the Driver has 16GB RAM, the driver crashes.
+        \item \textbf{Exam Fix:} Use \texttt{take(n)} or \texttt{saveAsTextFile()} instead.
+    \end{itemize}
+    \item \textbf{Terminology Shift:}
+    \begin{itemize}
+        \item Lecture: "Lazy Evaluation". Exam: "DAG Construction vs. Materialization".
+        \item Lecture: "Shuffle". Exam: "Wide Dependency".
+        \item Lecture: "Chunk". Exam: "Partition" or "Split".
+    \end{itemize}
+\end{itemize}
+
+\newpage
+%----------------------------------------------------------------------------------------
+% Practice Quiz Section
+%----------------------------------------------------------------------------------------
+\section{Practice Quiz}
+
+% Question 1
+\subsection*{Question 1}
+\subsubsection*{The Philosophy of MapReduce}
+Which statement best describes the "Data Locality" principle in HDFS/Spark?
+\begin{enumerate}[a]
+    \item All data is gathered to the Master node for processing.
+    \item Data is randomly shuffled across the network to ensure fairness.
+    \item Code (computation) is sent to the node where the data resides.
+    \item Data is always compressed before processing.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Network bandwidth is the scarcest resource. Moving code (kilobytes) to the data (terabytes) is orders of magnitude faster than moving data to the code.
+\end{itemize}
+
+% Question 2
+\subsection*{Question 2}
+\subsubsection*{The Math of Reduce}
+Why does the operation \texttt{rdd.reduce(lambda a,b: a - b)} yield unpredictable results?
+\begin{enumerate}[a]
+    \item Subtraction is too computationally expensive.
+    \item Subtraction is not Associative.
+    \item Spark does not support negative numbers.
+    \item The lambda syntax is incorrect.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Reduce operations execute in parallel in undefined orders. $(a-b)-c$ is not the same as $a-(b-c)$. Operations must be Associative and Commutative to guarantee deterministic results in a distributed system.
+\end{itemize}
+
+% Question 3
+\subsection*{Question 3}
+\subsubsection*{Lazy Evaluation}
+You run the following code on a 10TB dataset:
+\begin{lstlisting}[style=Style1]
+data = sc.textFile("huge_file.txt")
+mapped = data.map(lambda x: x.split())
+filtered = mapped.filter(lambda x: len(x) > 5)
+\end{lstlisting}
+How much time does this take to execute?
+\begin{enumerate}[a]
+    \item Approx 1 hour (reading 10TB).
+    \item Approx 10 minutes (filtering reduces size).
+    \item Microseconds (almost instant).
+    \item It depends on the number of executors.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item \texttt{textFile}, \texttt{map}, and \texttt{filter} are all \textbf{Transformations}. Spark is Lazy—it only builds the Execution Plan (DAG) in memory. No data is read until an Action (like \texttt{count}) is called.
+\end{itemize}
+
+% Question 4
+\subsection*{Question 4}
+\subsubsection*{Performance Tuning}
+You need to count word frequencies. Which operation is more efficient and why?
+\begin{enumerate}[a]
+    \item \texttt{groupByKey().map(sum)}
+    \item \texttt{reduceByKey(sum)}
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item \texttt{reduceByKey} performs \textbf{Map-Side Combination}. It sums the counts locally on each worker \textit{before} sending data across the network. \texttt{groupByKey} shuffles every single word pair, causing massive network congestion.
+\end{itemize}
+
+% Question 5
+\subsection*{Question 5}
+\subsubsection*{Stage Boundaries}
+What triggers the creation of a new "Stage" in a Spark Job?
+\begin{enumerate}[a]
+    \item Any Transformation.
+    \item Any Action.
+    \item A Shuffle (Wide Dependency).
+    \item A Cache command.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Spark pipelines "Narrow Dependencies" (map, filter) into a single stage. A "Shuffle" (reduceByKey, join, repartition) requires data to move between partitions, forcing a hard barrier (Stage Boundary) where all previous tasks must finish before the next begins.
+\end{itemize}
+
+\newpage
+
+% Question 6
+\subsection*{Question 6}
+\subsubsection*{HDFS Reliability}
+If a DataNode crashes, how does HDFS ensure data is not lost?
+\begin{enumerate}[a]
+    \item It uses RAID 5 on the Master Node.
+    \item It recovers the data from the NameNode's RAM.
+    \item It relies on the 3x Replication Factor (copies exist on other nodes).
+    \item The job simply fails.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item HDFS replicates every chunk (default 3 times) across different nodes. If one node dies, the Master simply redirects requests to one of the replicas.
+\end{itemize}
+
+% Question 7
+\subsection*{Question 7}
+\subsubsection*{Driver vs. Executor}
+What is the primary risk of running the following command on a production cluster?
+\texttt{result = huge\_rdd.collect()}
+\begin{enumerate}[a]
+    \item It will delete the original data on HDFS.
+    \item It forces the Executors to crash.
+    \item It causes an Out Of Memory (OOM) error on the Driver.
+    \item It runs too slowly because of Python serialization.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item \texttt{collect()} fetches all data from all distributed partitions and tries to fit it into the memory of the single Driver machine. If the data > Driver RAM, the driver crashes.
+\end{itemize}
+
+% Question 8
+\subsection*{Question 8}
+\subsubsection*{DAG Visualization}
+What is the purpose of \texttt{rdd.toDebugString()}?
+\begin{enumerate}[a]
+    \item To print the first 10 rows of data.
+    \item To view the logical Execution Plan (Lineage).
+    \item To check for syntax errors in Python.
+    \item To check the size of the RDD in bytes.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item \texttt{toDebugString()} outputs the DAG (Directed Acyclic Graph) showing the lineage of transformations and where shuffles/caching will occur.
+\end{itemize}
+
+% Question 9
+\subsection*{Question 9}
+\subsubsection*{Glom}
+What does the \texttt{glom()} transformation do?
+\begin{enumerate}[a]
+    \item Deletes empty partitions.
+    \item Coalesces all partitions into one.
+    \item Transforms each partition into a list (array) of elements.
+    \item Sorts the data globally.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item \texttt{glom()} maps each partition to a single array containing all elements of that partition. It is useful for efficient batch operations or checking partition skew (e.g., \texttt{glom().map(len).collect()}).
+\end{itemize}
+
+% Question 10
+\subsection*{Question 10}
+\subsubsection*{Immutability}
+You want to add 5 to every element in an RDD `A`. You run `A.map(lambda x: x+5)`. What happens to `A`?
+\begin{enumerate}[a]
+    \item `A` is modified in place.
+    \item `A` is deleted and replaced by the new result.
+    \item `A` remains unchanged; a new RDD is returned.
+    \item It depends on whether `A` is cached.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item RDDs are \textbf{Immutable}. You cannot change an RDD. Transformations always return a \textit{pointer} to a new RDD that depends on the old one.
+\end{itemize}
+
+\end{document}

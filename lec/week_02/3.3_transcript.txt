@@ -1,0 +1,73 @@
+(gentle music) (slides swooshing) - So we talked last time about MapReduce, and how it is used in the abstract. And now we're going to look specifically, how this is done in Spark. So we'll start to know how to actually use MapReduce within Spark. So we're going to
+describe two main object. One is the SparkContext
+and the other is the RDD, or the Resilient Distributed
+Dataset (sniffles). So what is the SparkContext? - [Instructor] Spark
+itself is a complicated distributed software that
+runs on many computers at the same time with all
+kinds of communication. The way that you want
+to communicate with it, is to use MapReduce, and similar commands that abstract all of this complexity. So the python interface to
+Spark is called pyspark, and the SparkContext is a python class, which is defined as part of pyspark, and manages the communication between the user program and Spark. So we start Spark program, or at least the part
+that really uses Spark with creating a SparkContext object. And here, we call it sc. So this is the command. We import from pyspark, we import the SparkContext, and we define sc to be a SparkContext. And we say here as a parameter, optional parameter that we want it to run on three chords, three of
+the chords that we have. Okay, and then we say, "Print out sc." So it tells us what it is. Okay, so it is a pyspark
+context, SparkContext (sniffles). RDDs are a more complex
+object to think about. - [Instructor] It's basically how you, you the program thinks about
+storage that is distributed in many computers. Okay, so the RDD is this kind of storage that is not necessarily on the computer that the python program is running on, but it is distributed
+on many other computers. Okay, so what we have is the Driver node. So this is, in general, the node where the controls, the other slave nodes or
+worker nodes (sniffles). And in this node, we have our python program that we wrote. And then through the SparkContext, this is the SparkContext that we created, we communicate with the
+other computers, okay? We don't communicate with them directly, we just give general commands
+to the SparkContext, okay? And what we have as storage is RDD, and RDD two, RDD one, and RDD two. And these are two arrays, if you want to think about it. And what exists on our Driver
+node is just a pointer. It's just a place that
+says, "Here is where you can get these parts that
+are actually distributed." So they're distributed
+in the following way: (instructor sniffles) Each RDD is broken into Partition. So here's RDD one, Partition
+one, RDD one, Partition two, and RDD one, Partition
+three is hiding behind here, and similarly for RDD two. Okay, so each one of their arrays, think about it, it's a very big array, something maybe like a hundred gigabyte. And each one of them is
+stored on multiple computers, broken up into pieces just
+like the Google File System, or the HDFS. Okay, and (sniffles) when you
+want, when the program here wants to do some operation,
+like a Map or Reduce on one of the RDDs, it
+basically goes through here. And the Spark system
+through the SparkContext, basically guides what the
+worker nodes should do with their own RDDs and
+what they should communicate back or to each other. Okay, so what did we talk about? We talked about (sniffles)
+the Driver node, the node that is the head node. Then we have the Driver program, which is really the
+program that you write. We have the SparkContext, which you can think about as a conduit, or a bridge, or a representative between your program and the Spark system. RDDs are these distributed data arrays. Partitions are each one of the parts, and Executors that I guess
+I haven't talked about yet, Oh, here they are, Executor one and Executor two, that's the CPU that is
+going to work with this RDD. So this RDD one is local to Executor one. So it can work with it quickly, fast, just like locality that we talked about in regular computer
+systems (sniffles). So how do you create an RDD? Well, the simplest way (sniffles), is to take a list of elements, and say to Spark, "I want you
+to make this into an RDD." So here it is, here is the list
+of elements zero, one, two. And then I call the SparkContext, and tell it, "To parallelize this." Okay, so now I have A as
+the pointer to an RDD. And here is the description of it. RDD collection in parallelize and so on. Okay, so basically this A stores a pointer to this distributed array. Now of course this is a tiny array, so there's no point of doing it, but suppose it was instead of three, it was 3 million or 3 billion? Collect is the opposite of parallelize. And in collect we take the RDD content from all of the different Executors, and bring it to the head node, or to the place where
+our python program runs. And what it generates is a list, okay? So it's just the reverse of parallelize. So if we do A collect is L. What is L? L is a list. And it has exactly what we
+put originally into the RDD. Okay, so nothing surprising here. Okay, what is map? So Map is, we talked about it last time, but it applies a given operation to each element of an RDD. Okay, so that's what we want to execute. And the parameter that this
+map gets is a function, that defines the operation. Okay, so it's common to
+use an anonymous function. So on a function that doesn't have a name, it just lambda function that
+maps x to x squared, okay? And so what we do here
+is we take an RDD A, we perform the map operation, and then we do collect
+to get it as a list, so we can look at it. Remember, if you don't do a collect, what you have is just a
+pointer to an RDD (sniffles), and you can't look at that, or see any part of it directly. Reduce is similar, is as
+we talked about before, we want to take any two elements, and we want to combine them. And this is done on each one
+of the Executors separately. And then the results are
+combined into the head node. Okay, so we really get
+a parallel computation, because each part of the data is going to be reduced
+separately on its own Executor. Okay, so here's how it looks. We take the same A, we perform reduce where we take x and y, and we add x and y. Okay, so this is summation,
+which we talked about before. And the sum of zero, one,
+two, is indeed three. Reduce generates a single number, so that you don't need to collect. It reduces automatically
+something that gives you a single element that is in the head node. Okay, here's another example: So suppose we have a list of words, this is the best Mac ever, okay? And we make it into wordRDD, so an RDD can have any
+kind of elements in it, even of different types. It's just like a list,
+it just distributed. And here we have an RDD of words, and now we do a reduce
+that is a little different. We basically get w,v to two words, and we output w, if the length of w is smaller than the length of v and
+otherwise we output v. So what are we doing? For a repair, we output
+for a repair of words, we output the shorter word. Okay, so if we run that on this list, we get as an output is, okay? That's the shortest word
+in this, in this sentence. (instructor sniffles) Sometimes you want to
+use regular expressions instead of lambda functions. So sometimes you have something
+relatively complicated that you want to do in
+terms of a map or a reduce. And so lambda functions are nice, because they are compact, and they make your code look shorter, but sometimes it's hard to use. And so we can use full-fledged
+functions instead. And so here's an example (sniffles). So suppose what we want to find in an RDD, is the last word in lexicographical order among the longest words in the list, okay? So let's say that if there's
+just one longest word, then you output that. But if there are several, you want to choose the one that is latest in the lexicographical order. So how would you do that? So here's the little
+program that takes x and y. (instructor sniffles) It checks first for the length of y, if x is larger than y, then return x. If y is larger than x, it returns y. And if the lengths are equal, then it keeps the one that is later in the lexicographical order. Okay, and then this function is given as a parameter into the reduce. Okay, so you can write
+quite complicated things to be executed inside the reduce. (instructor sniffles) All right, so to summarize, we talked about the SparkContext, which is the bridge
+between your Spark program your pythons program, and
+the Spark operating system. RDDs, which is the way that we abstract the distributed lists, if you will, map, which is the operation of
+doing an individual operation on each one element of the RDD, and reduce which reduces the
+whole RDD into one element. So we're going to look at more details, and exercises in the Jupyter notebooks. So that's where we will go next. See you then.

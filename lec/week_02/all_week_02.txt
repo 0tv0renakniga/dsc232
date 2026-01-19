@@ -1,0 +1,3836 @@
+--- start{3.1_slides.pdf} ---
+A short history of affordable
+    massive computing.
+Super computers
+
+• Cray, Deep Blue, Blue Gene …
+• Specialized hardware
+• Extremely expensive
+• created to solve specialized important problems
+Data Centers
+Data Centers
+• The physical aspect of ”the cloud”
+• Collection of commodity computers
+• VAST number of computers (100,000’s)
+• Created to provide computation for large and small organizations.
+• Computation as a commodity.
+Making History: Google 2003
+• Larry Page and Sergey Brin develop a method for storing very large
+  files on multiple commodity computers.
+• Each file is broken into fixed-size chunks.
+• Each chunk is stored on multiple chunk servers.
+• The locations of the chunks is managed by the master
+HDFS: Chunking files
+                                                               File 1, Chunk 1
+   File 1           File 1, Chunk 1   Copy   File 1, Chunk 1        Copy 2
+            Split                                 Copy 1
+                                                               File 1, Chunk 2
+                    File 1, Chunk 2          File 1, Chunk 2        Copy 2
+                                                  Copy 1
+                                                                          File 1, Chunk 2
+                                                                               Copy 3
+
+
+                                                               File 2, Chunk 1
+   File 2           File 2, Chunk 1   Copy   File 2, Chunk 1        Copy 2
+            Split                                 Copy 1
+                                                               File 2, Chunk 2
+                    File 2, Chunk 2          File 2, Chunk 2        Copy 2
+                                                  Copy 1
+HDFS: Distributing Chunks
+
+                   File 1, Chunk 1
+ File 1, Chunk 1        Copy 2
+      Copy 1
+                   File 1, Chunk 2
+ File 1, Chunk 2        Copy 2
+      Copy 1
+                        File 1, Chunk 2
+                             Copy 3
+
+
+                   File 2, Chunk 1
+ File 2, Chunk 1        Copy 2
+      Copy 1
+                   File 2, Chunk 2
+ File 2, Chunk 2        Copy 2
+      Copy 1
+Properties of GFS/HDFS
+• Commodity Hardware: Low cost per byte of storage.
+• Locality: data stored close to CPU.
+• Redundancy: can recover from server failures.
+• Simple abstraction: looks to user like standard file system (files,
+  directories, etc.) Chunk mechanism is hidden.
+Redundancy
+  Locality
+Task:
+Sum all of the
+elements in file 1
+Map-Reduce
+• HDFS is a storage abstraction
+• Map-Reduce is a computation abstraction that works well with HDFS
+• Allows programmer to specify parallel computation without knowing
+  how the hardware is organized.
+• We will describe Map-Reduce, using Spark, in a later section.
+Spark
+• Developed by Matei Zaharia , amplab, 2014
+• Hadoop uses shared file system (disk)
+• Spark uses shared memory – faster, lower latency.
+• Will be used in this course
+
+• Recall word count by sorting,
+  we will redo it using map-reduce!
+The Cloud
+• The common name for data centers.
+• What is better? Cloud or your local computers?
+   • Cloud vs. Local: Rent vs. own: if we want a lot of power for a short time, it is
+     cheaper to rent.
+   • Centralized IT: shared staff, shared maintenance, shared upgrade.
+   • Storage:
+      • Long term – cloud storage (multiple TB) much more expensive than local.
+      • Moving TB to/from cloud slow / expensive / physical (snowball)
+   • Like a huge supermarket, there are many choices and it is not easy to find the
+     best combination.
+Summary
+• Big data analysis is performed on large clusters of commodity
+  computers. – computation as a service.
+• HDFS (Hadoop file system): break down files to chunks, make copies,
+  distribute randomly.
+• Hadoop Map-Reduce: a computation abstraction that works well with
+  HDFS
+• Spark: Sharing memory instead of sharing disk.
+
+--- end {3.1_slides.pdf} ---
+--- start{3.1_slides.txt} ---
+A short history of affordable
+massive computing.
+
+Super computers
+• Cray, Deep Blue, Blue Gene …
+• Specialized hardware
+• Extremely expensive
+• created to solve specialized important problems
+
+Data Centers
+
+Data Centers
+• The physical aspect of ”the cloud”
+• Collection of commodity computers
+• VAST number of computers (100,000’s)
+• Created to provide computation for large and small organizations.
+• Computation as a commodity.
+
+Making History: Google 2003
+• Larry Page and Sergey Brin develop a method for storing very large
+files on multiple commodity computers.
+• Each file is broken into fixed-size chunks.
+• Each chunk is stored on multiple chunk servers.
+• The locations of the chunks is managed by the master
+
+HDFS: Chunking files
+File 1
+
+Split
+
+File 1, Chunk 1
+
+Copy
+
+File 1, Chunk 2
+
+File 1, Chunk 1
+Copy 1
+File 1, Chunk 2
+Copy 1
+
+File 1, Chunk 1
+Copy 2
+File 1, Chunk 2
+Copy 2
+File 1, Chunk 2
+Copy 3
+
+File 2
+
+Split
+
+File 2, Chunk 1
+File 2, Chunk 2
+
+Copy
+
+File 2, Chunk 1
+Copy 1
+File 2, Chunk 2
+Copy 1
+
+File 2, Chunk 1
+Copy 2
+File 2, Chunk 2
+Copy 2
+
+HDFS: Distributing Chunks
+
+File 1, Chunk 1
+Copy 1
+File 1, Chunk 2
+Copy 1
+
+File 2, Chunk 1
+Copy 1
+File 2, Chunk 2
+Copy 1
+
+File 1, Chunk 1
+Copy 2
+File 1, Chunk 2
+Copy 2
+
+File 1, Chunk 2
+Copy 3
+
+File 2, Chunk 1
+Copy 2
+File 2, Chunk 2
+Copy 2
+
+Properties of GFS/HDFS
+• Commodity Hardware: Low cost per byte of storage.
+• Locality: data stored close to CPU.
+• Redundancy: can recover from server failures.
+• Simple abstraction: looks to user like standard file system (files,
+directories, etc.) Chunk mechanism is hidden.
+
+Redundancy
+
+Locality
+Task:
+Sum all of the
+elements in file 1
+
+Map-Reduce
+• HDFS is a storage abstraction
+• Map-Reduce is a computation abstraction that works well with HDFS
+• Allows programmer to specify parallel computation without knowing
+how the hardware is organized.
+• We will describe Map-Reduce, using Spark, in a later section.
+
+Spark
+• Developed by Matei Zaharia , amplab, 2014
+• Hadoop uses shared file system (disk)
+• Spark uses shared memory – faster, lower latency.
+• Will be used in this course
+• Recall word count by sorting,
+we will redo it using map-reduce!
+
+The Cloud
+• The common name for data centers.
+• What is better? Cloud or your local computers?
+• Cloud vs. Local: Rent vs. own: if we want a lot of power for a short time, it is
+cheaper to rent.
+• Centralized IT: shared staff, shared maintenance, shared upgrade.
+• Storage:
+• Long term – cloud storage (multiple TB) much more expensive than local.
+• Moving TB to/from cloud slow / expensive / physical (snowball)
+
+• Like a huge supermarket, there are many choices and it is not easy to find the
+best combination.
+
+Summary
+• Big data analysis is performed on large clusters of commodity
+computers. – computation as a service.
+• HDFS (Hadoop file system): break down files to chunks, make copies,
+distribute randomly.
+• Hadoop Map-Reduce: a computation abstraction that works well with
+HDFS
+• Spark: Sharing memory instead of sharing disk.
+
+
+--- end {3.1_slides.txt} ---
+--- start{3.1_transcript.txt} ---
+(lighthearted music) (screen whooshing) - Okay, so before we get into Spark, I think it's useful to have
+a little bit of history of this kind of highly parallel
+and affordable computing. So non-affordable, high,
+very fast computing has been around, usually
+called supercomputing. And supercomputers,
+there're a list of names of such famous computers, Cray, Deep Blue, Blue Gene, and they are machines that
+use very specialized hardware to achieve a particular type
+of computation efficiently. And because they use specialized hardware, specialized chips, they're very expensive, because chips, their
+price depends very much on how many of them are being used. So those are used only in
+that very specialized setup and those are created to make progress on very important highly
+compute intensive problems. On the other hand, we have
+what are called data centers. So this is a picture of data center on the outside and this is on the inside. You see that there're racks
+and racks of computers. These computers are pretty much standard kind of commodity computers. And this is what is actually
+called the cloud, right? So when we do our
+computation in the cloud, when we use TikTok or we use Gmail, all of these things are being
+done in data centers, okay? So those are collections
+of commodity computers. So the computers that are in these centers are nothing special. They are more or less the
+same as the kind of computers that you would have as
+a workstation at home. And their main property
+is that they are cheap and that they can do a lot of computation compared to their price. So the thing that makes
+these data centers powerful is that you don't have one
+or two or 100 computers but rather you have maybe
+hundreds of thousands of computers in such a center. And that's why these
+centers look like this. It's really a factory of computing and usually the factory
+is put next to a river or some other way of cooling because these computers
+create so much heat that needs to be taken out somewhere. So this is something that is
+used to provide computation for large and small organizations and we're all using them all
+the time in our daily life. So it's computation as a commodity. It's like you have electricity
+coming into your home, you have water, you maybe have gas. This is another type of commodity that comes into your home and
+provides you with computation. So how did this get started? The start of it was in Google in 2003, where Larry Page and Sergey
+Brin, the founders of Google, were looking for a method
+to store very large files on multiple commodity computers. So they were already collecting
+large amounts of data and it was not cost-effective to store them in super large
+and powerful computers. They wanted to use the computers that were around used by
+people as workstations. So how do you do that? You take each file and
+assume it's big file, let's say gigabytes, and you break it into fixed-size chunks. Okay, let's say 256 kilobyte. And then each chunk you store on multiple chunk servers, okay? So you now think about your
+many commodity computers as basically each one storing a collection of chunks unrelated to what this computer is specifically designed to do. And the locations of the chunks are managed by a master node. So there is someplace in this cluster, that there is a head node. And that head node knows for
+each chunk from each file where it is actually stored. So it looks something like this. It's called, it was
+called Google File System and now it's called
+the Hadoop File System. The files are broken into chunks, okay? So each file here is
+broken into two chunks. And then you make several copies from each chunk, okay? So you have a file 1, chunk 2, and then another copy for file 1, chunk 2. So you have multiple
+copies of the same data. Soon we'll see why. And so now you basically
+have all of the information that was on the original files
+but broken up into pieces and copied multiple times. And now you distribute the files, okay? So you have your master node that basically is going to
+know where each chunk is, and you're going to take
+each one of the chunks and put it on randomly selected computers. Okay, so now everything
+is stored somewhere, but it's like a hologram. It's like every piece
+is at a random place. So it's only the master that knows how to put them together. Okay, so what are the properties of this? First and most important, this is used commodity hardware. So you're using computers that are cheap. You have locality because you have data
+stored next to a CPU. So every piece of data is stored somewhere in this distributed system
+and it's close to some CPU that can immediately
+access it and work on it. You have redundancy, so
+you have the same piece of information, the same chunk, you have copies in multiple machines. And you have a simple abstraction, okay? So to you when you're working on the Hadoop File System, it just looks like a regular file systems. There are files and directories and sub-directories and so on. You don't need to worry about all of the different distributed chunks that is going on underneath. And you get redundancy. So that has to do with having
+multiple copies of each chunk. Suppose that a particular
+chunk server here crashed or some hardware problem
+or software problem, doesn't matter, but it's
+no longer accessible. Well, you don't need to worry about it in terms of the computation because every chunk that is here, you have another copy
+of it on another machine that is still working, okay? So you can basically just say, okay, the computation I was doing
+on this chunk server is dead. I lost that computation. But I still have the
+data that is the input so I can start this junk
+server to work on it. And when you have 100,000
+computers in a data center, you have invariably,
+at any moment of time, hundreds of computers
+that are crashed, okay? So you basically or constantly need to kind of replace these computers. But this is done in a
+very transparent way. You just take this computer out, you put a new computer that is blank, and then the system knows how to populate that new computer with chunks so that it has its own part of
+the universe of file chunks. Locality is the other part which you get from the same piece. So suppose that you want
+to do some computation such as sum all of the
+elements in file 1, okay? So you have the elements in file 1, you have one here, you
+have the second chunk here, you have one here, and you
+have another piece here, and then you have one here, okay? So a bad solution would be to say, okay, this chunk server
+should calculate the sum of everything that it has, okay? Then you'll have to compute
+this sum and then this sum, and sum these things together. But you can instead have
+this one, let's change the, so you have this one
+be summed on this chunk and the chunk 2 for file 1, this one, be done on this machine. So they can work in parallel. And then as a result, you get the computation be done
+in half the amount of time. Okay, so MapReduce is what we're going to talk about in Spark. So what we have in HDFS
+is a storage abstraction. It's basically a storage abstraction. This storage abstraction
+lets us access files as if they were in one place. And the underlying system takes care of the distribution. MapReduce is a computation
+abstraction that works well with this distributed
+file system abstraction. So now we are going to have
+a computation language, a computation method that
+works very well with the HDFS and which allows us to
+basically compute things, write our program in a simple way, and have it automatically be distributed and running on many computers to reduce the amount of time. Okay, so it allows the programmer to specify parallel computation without knowing how the
+hardware is organized. And this is super important. Why? Because you don't want
+to write your program for a specific hardware, then it would mean that
+every new hardware, every new cluster that you want to use, you have to tweak various
+parameters inside your software. This software basically, this approach gives you an abstraction. You don't know what is
+happening at the lowest level, but you can basically still
+give efficient commands to the computer and they will be executed according to the particular hardware. So we will describe MapReduce using Spark in a later section. So what is Spark? So it was developed in
+2014 by Matei Zaharia. And Hadoop is the older system. It uses a file system to do
+the distribution storage. The Spark shares memory. So you have, instead of
+sharing spaces on disks, you share memories. And so that is much faster and you can do computation
+in a much faster way. And that's what we will be using. Okay, so what is the cloud? The cloud is a common
+name for data centers. What is better, cloud
+or your local computer? It's really a question
+about renting versus buying. If you get computational
+resources on the cloud, you usually pay per hour of use. So you don't have to pay
+the whole cost of the thing. But if you need a lot of
+computation all of the time, then it might be better to
+own rather than to rent. You have centralized IT. So rather than having your
+own IT team in your office, you have the IT team that is running, let's say, the Amazon cloud. And because they have so many computers that they're running together,
+they're more efficient. They're less responsive to your requests because they have so many clients, but the price that you
+pay is at a discount. So what about storage? Long-term cloud storage is
+much more expensive than local. So for storage, for long-term
+storage, let's say, years, you don't want to store
+things on the cloud. And also, moving data from
+the cloud and to the cloud is a very expensive
+thing in its own right. So what you want to usually
+do is have either applications that don't need a lot of storage or that you have the
+storage on a rolling basis, that you store it for a
+long-term on some other service, and then on the compute service, you just store what
+you need at that point. So you can think about it
+as like a huge supermarket. There are so many choices when
+you go to the Amazon cloud. It's not easy to necessarily
+find the best combination. So to summarize, big data
+analysis is performed on large clusters of commodity computers, computation as a service. So this is basically, we
+have a lot of computers in this location and we're
+going to rent you some number of compute units for a
+given amount of time. HDFS, the Hadoop File System, is a system that breaks files into chunks, makes copies, and then
+distributes it across machines. And Hadoop MapReduce is
+a computation abstraction that works well with
+the Hadoop File System. Okay, so we haven't really
+gone into MapReduce yet but we'll do that in the next videos.
+--- end {3.1_transcript.txt} ---
+--- start{3.2_notebook.md} ---
+# Spark Basics 1
+
+This notebook introduces two fundamental objects in Spark:
+
+* The Spark Context
+*  The Resilient Distributed DataSet or RDD
+
+## Spark Context
+
+We start by creating a **SparkContext** object named **sc**. In this case we create a spark context that uses 4 *executors* (one per core)
+
+```python
+import os
+os.environ["PYSPARK_PYTHON"]="python3"
+os.environ["PYSPARK_DRIVER_PYTHON"] = "python3"
+
+#start the SparkContext
+from pyspark import SparkContext 
+sc = SparkContext(master="local[4]")
+print(sc)
+
+#RETURNS
+# -> <SparkContext master=local[4] appName=pyspark-shell>
+```
+
+## Only one sparkContext at a time!
+* Spark is designed for single user
+* Only one sparkContext per program/notebook.
+* Before starting a new sparkContext. Stop the one currently running
+
+```python
+# sc.stop() #commented out so that you don't stop your context by mistake
+```
+
+## RDDs
+
+RDD (or Resilient Distributed DataSet) is the main novel data structure in Spark. You can think of it as a list whose elements are stored on several computers.
+
+The elements of each RDD are distributed across the worker nodes which are the nodes that perform the actual computations. This notebook, however, is running on the Driver node. As the RDD is not stored on the driver-node you cannot access it directly. The variable name RDD is really just a pointer to a python object which holds the information regardnig the actual location of the elements.
+
+## Some basic RDD commands
+
+### Parallelize
+* Simplest way to create an RDD.
+* The method `A=sc.parallelize(L)`, creates an RDD named `A` from list `L`
+* `A` is an RDD of type `PythonRDD`
+
+```python
+A=sc.parallelize(range(3))
+A
+
+# RETURNS
+# -> PythonRDD[1] at RDD at PythonRDD.scala:48
+```
+
+### Collect
+* RDD content is distributed among all executors.
+* `collect()` is the inverse of `parallelize()`
+* collects the elements of the RDD
+* Returns a `list`
+
+```python
+L=A.collect()
+print(type(L))
+print(L)
+
+# RETURNS
+# -> <class 'list'>
+# -> [0, 1, 2]
+```
+
+Using `.collect()` eliminates the benefits of parallelism
+
+It is often tempting to `.collect()` and RDD, make it into a list, and then process the list using standard python. However, note that this means that you are using only the head node to perform the computation which means that you are not getting any benefit from spark.
+
+Using RDD operations, as described below, will make use of all of the computers at your disposal.
+
+### Map
+* applies a given operation to each element of an RDD
+* parameter is the function defining the operation.
+* returns a new RDD.
+* Operation performed in parallel on all executors.
+* Each executor operates on the data local to it.
+
+```python
+A.map(lambda x: x*x).collect()
+
+# RETURNS
+# -> [0, 1, 4]
+```
+
+Note: Here we are using lambda functions, later we will see that regular functions can also be used.
+
+### Reduce
+* Takes RDD as input, returns a single value.
+* Reduce operator takes two elements as input returns one as output.
+* Repeatedly applies a reduce operator
+* Each executor reduces the data local to it.
+* The results from all executors are combined.
+
+The simplest example of a 2-to-1 operation is the sum:
+
+```python
+A.reduce(lambda x,y:x+y)
+
+# RETURNS
+# -> 3
+```
+
+Here is an example of a reduce operation that finds the shortest string in an RDD of strings.
+
+```python
+words=['this','is','the','best','mac','ever']
+wordRDD=sc.parallelize(words)
+wordRDD.reduce(lambda w,v: w if len(w)<len(v) else v)
+
+# RETURNS
+# -> 'is'
+```
+
+### Properties of reduce operations
+
+* Reduce operations must not depend on the order
+    * Order of operands should not matter
+    * Order of application of reduce operator should not matter
+* Multiplication and summation are good:
+$$1 + 3 + 5 + 2\quad 5 + 3 + 1 + 2$$
+* Division and subtraction are bad:
+$$1 - 3 - 5 - 2\quad 1 - 3 - 5 - 2$$
+
+### Why must reordering not change the result?
+
+You can think about the reduce operation as a binary tree where the leaves are the elements of the list and the root is the final result. Each triplet of the form (parent, child1, child2) corresponds to a single application of the reduce function.
+
+The order in which the reduce operation is applied is determined at run time and depends on how the RDD is partitioned across the cluster. There are many different orders to apply the reduce operation.
+
+If we want the input RDD to uniquely determine the reduced value all evaluation orders must must yield the same final result. In addition, the order of the elements in the list must not change the result. In particular, reversing the order of the operands in a reduce function must not change the outcome.
+
+For example the arithmetic operations multiply `*` and add `+` can be used in a reduce, but the operations subtract `-` and divide `/` should not.
+
+Doing so will not raise an error, but the result is unpredictable.
+
+```python
+B=sc.parallelize([1,3,5,2])
+B.reduce(lambda x,y: x-y)
+
+# RETURNS
+# -> -9
+```
+
+Which of these the following orders was executed?
+$$((1-3)-5)-2$$
+
+or
+
+$$(1-3)-(5-2)
+
+### Using regular functions instead of lambda functions
+* lambda function are short and sweet.
+* but sometimes it's hard to use just one line.
+* We can use full-fledged functions instead.
+
+```python
+A.reduce(lambda x,y: x+y)
+
+# RETURNS
+# -> 3
+```
+
+Suppose we want to find the
+
+* last word in a lexicographical order
+* among
+* the longest words in the list.
+We could achieve that as follows
+
+```python
+def largerThan(x,y):
+    if len(x)>len(y): return x
+    elif len(y)>len(x): return y
+    else:  #lengths are equal, compare lexicographically
+        if x>y: 
+            return x
+        else: 
+            return y
+        
+wordRDD.reduce(largerThan)
+
+# RETURNS
+# -> 'this'
+```
+
+## Summary
+We saw how to:
+
+* Start a SparkContext
+* Create an RDD
+* Perform Map and Reduce operations on an RDD
+* Collect the final results back to head node.
+
+--- end {3.2_notebook.md} ---
+--- start{3.2_slides.pdf} ---
+MapReduce
+  DSC 232R
+Achieving locality by being oblivious to order
+• To minimize cache misses we want to process data sequentially.
+• To compute in parallel on several CPUs, we want processing in
+  each CPU to be independent of the others.
+• As a programmer, we want to achieve sequentiality and
+  parallelism, without knowing the details of the hardware.
+• Approach: write code that expresses the desired end result,
+  without specifying how to get there.
+• MapReduce: perform operations on arrays without specifying the
+  order of the computation.
+Map: square each item
+• list L =[0,1,2,3]
+• Compute the square of each item
+• output: [0,1,4,9]
+ Traditional            MapReduce
+
+                        computation order is
+                        not specified
+
+
+
+
+compute from first to
+last in order
+Reduce: compute the sum
+• A list L=[3,1,5,7]
+• Find the sum (16)
+ Traditional            MapReduce
+
+                        computation order is
+                        not specified
+
+
+
+
+compute from first to
+last in order
+Map + Reduce
+• list L=[0,1,2,3]
+• Compute the sum of the squares
+• Note the differences
+  Traditional                         MapReduce
+
+
+                                      computation order is not
+                                      specified
+
+                                      Execution plan
+compute from first to last in order
+
+Immediate execution
+Order independence
+• The result of map or reduce must not depend on the order
+sum does not depend on computation order
+
+
+
+
+           Result does not depend on order
+difference depends on computation order
+
+
+
+
+             Result depends on order
+Computing the average incorrectly
+Average = data.reduce(lambda a,b: (a+b)/2)
+
+data=[1,2,3], average is 2
+Computed Average = ((1+2/2+3)/2 = 2.25
+Computing the average correctly
+sum,count = data.map(lambda x: (x,1))
+     .reduce(lambda P1,P2:
+           (P1[0]+P2[0], P1[1]+P2[1]))
+
+Average = sum/count
+
+     [1,2,3].map(lambda x: (x,1)) = [(1,1),(2,1),(3,1)]
+     sum, count = [(1,1),(2,1),(3,1)].reduced() = 6,3
+     average = 6/3 = 2
+     data=[1,2,3], average is 2
+Why Order Independence?
+• Computation order can be chosen by compiler/optimizer.
+• Allows for parallel computation of sums of subsets.
+   • Modern hardware calls for parallel computation but parallel
+     computation is very hard to program.
+• Using MapReduce programmer exposes to the compiler
+  opportunities for parallel computation.
+Spark and MapReduce
+• MapReduce is the basis for many systems.
+• For big data: Hadoop and Spark.
+
+--- end {3.2_slides.pdf} ---
+--- start{3.2_transcript.txt} ---
+(light airy music) - [Instructor] So let's
+start looking into map reduce and how we use it. So what is the idea of map reduce? The idea is to achieve locality. You remember locality as we talked about memory access by
+being oblivious to order. Okay? So we want to give the
+compiler essentially the opportunity to be efficient and make things local by telling by having the software not over
+specify what it wants to do. Okay? So this minimizes cache misses and allows us to compute things in parallel on multiple computers without too much dependence
+between the computers. So as a programmer, the
+important thing is we don't need to know how
+all this is achieved. This is achieved underneath what we see by the Spark operating
+system and runtime system and this allows us to
+write software that can run on multiple different types of hardware. So what is the approach? We're going to write code that expresses the desired end result. Okay, so the desired end result without specifying how
+exactly to get there. Okay? So that is what's going
+to give the compiler the freedom to do things more efficiently. So map reduce performs
+operations on a raise without specifying the
+order of the computation and spark will optimize the
+order of the computation on the fly as it sees what
+resources are available what CPUs are available. Okay, so let's start
+with the map operation which is a very, very simple operation. We want to, we have a list of values 0, 1, 2, 3 and we want to
+compute the square of each item. So we want to get a new list, 0, 1, 4,9. So each element here is
+related to one element here but we don't really care about what order this would be executed. So how do we write that
+in traditional Python? We can write it in the following way here. So basically we define a list and then for every element in our input
+list we append i squared. So notice that here we're
+defining the loop to go from the first to the
+last element in the list. So we are defining an order we can also write it in this way but it doesn't really make a
+difference to the execution. Again, we're just running it from the first element
+till the last element. On the other hand in map reduce we write
+something like this. We say here is the operation map and the parameter to the
+operation is this function, sorry up to here that maps X to X times X. Okay, so that's the operation
+and we want to do that on L. We're not saying anything about the order in which to execute it. So here is compute form first to the last and here the computation
+order is not specified. Okay, so that leaves it makes it possible to
+run some of the computation on one computer and some
+of it on another computer. Reduce is an operation that reduces a list into a single number or single element. So here we have a list of 3, 1, 5, 7 and we
+want to compute the sum. Okay? So this is 16 is the sum
+of these four elements. So again, we have two ways to do it. This is a little tongue in cheek. This is basically just, we
+have an operation called sum. So it does it, but if we really want to look
+into our own implementation we have again a loop
+that goes from the first to the last element in L and
+adds that element into I. Okay, so one by one here
+we have the map reduce way of operating it, which is to to map every two elements X
+and Y into their sum X plus Y. Okay? But how to order what to how to organize these different sums. We don't say this is just a binary sum and we somehow want it to
+operate on all of the list and make it smaller until
+it becomes one element. So again, this is with an order specified and here the computation
+order is not specified. Okay? And then we can do map plus reduce. So we can say that the
+list is elements 0, 1, 2, 3 and we want to compute
+the sum of the squares. So first we want to map every element to its square and then we
+want to sum them, okay? So again, look at the differences between how you would do
+it in a regular Python code versus how you would
+do it using map reduce. So in the regular Python code we have this summation
+variable S that we're going to add the elements to. We go through the elements
+in the list in the loop from the first to the
+last and every time we add to S this I times I,
+or we can write it as a as a sum of reduction
+of list comprehension. Okay? So that's the way to do it traditionally. In map reduce we write it more abstractly. We just say we want to reduce something and this something is a
+map of the list, okay? So we take every element in
+the list, map it to i squared and then we perform reduce on that summation, on that result, okay? At what order these things
+are going to be done we don't say anything about it. So here we compute from
+first to last in order and here computation
+order is not specified. So you get the theme. So basically the idea
+is I'm going to tell you what I want to compute but I'm not going to tell you anything about the order so that you
+can optimize it in real time. So this is what we call
+immediate execution. So the every command is executed as it is being read
+essentially after compilation. And here there is no execution. This is basically we're
+just saying this is our plan for what we want to compute and we haven't necessarily
+computed anything yet. So order independence. So the result of the map
+are reduced, must depend must not depend on the order must not depend on the order because if it does depend on the
+order, then we don't know then then what we will get
+out is not deterministic. So here is something that
+we can look at summation. So in summation there is no relationship there's no dependence on the order. So what we get here is
+that in the loop order in the regular python order,
+we first add five and seven we get 12, we add to that
+three, we get 15, we add one we get 16 and we get three, we get 19. But we can do things in a different order. So for instance here we're
+going to start by adding seven and three to get 10 in the
+same time we can add one and three to get four, right? So those are different
+summation can be done the two can be done in parallel. Then we can add the 10
+and the four to get 14. And finally we add to it five to get 19. So the result, the 19 is the
+same independent of the order. And that's important because we want to be able
+to optimize the execution in any way that we want. Okay? Suppose that we wanted to do in a similar way the difference. So we could write a a reduced command that
+would take differences but then we are not guaranteed
+to get the same results in different runs. So here is the order that
+you get in Python five minus seven is minus two,
+minus three is minus five minus one is minus six, and
+minus three is minus nine. Okay? On the other hand, if we
+take a different order seven minus three is four,
+one minus three is minus two four minus minus two is six and
+five minus six is minus one. So here we got minus nine
+and here we got minus one. So that basically means
+that reduce cannot work with differences, okay? We have to do something else. If we want to do differences for instance we can use positive and
+negative numbers and then just adding them
+would simulate differences. Okay? So let's look at how
+to compute the average. So the average is reduce
+of lambda of A and B of A plus B over two. So that seems reasonable
+enough if you have two variables, two numbers A and B. If you take A plus B over two,
+that gives you the average. But what happens if we do
+this reduce on a longer list? So let's say that the data
+is one and two and three the average we know is two. But now if we do the the map reduce we get one plus two over two. That gives us 1.5. We add to that three you get 4.5 and divided
+by two we get 2.25. So we don't get the right answer, right? So even though this seems like
+the right way to do things it isn't. So let me show you what is
+the right way to do things. Okay? So here is the the right way to do it. Basically what you do is you do a map of X to X comma one, right? So you just basically map
+each X to the pair X comma one and then you do the
+reduce operation where you get these pairs. P one is a pair and P
+two is a pair and you add the first part and you add the second part and that's the result. Okay? So what is going on here? At the end of that we get a
+pair, which is a sum and a count and we take the ratio to get the average. Okay, so let's see an example. So suppose we are trying to
+do the average of one and two and three again, and we are doing this map of Lambda X two X one. So all we get is one
+comma one, two comma one, and three comma one, okay? Now If we look at the reduce,
+what does that do? So basically what we get is that this one is added to this one and it added to this two
+and is added to this three. So that gives us six here and then these ones are
+added and they give us three. So what are these ones? These ones are simply the count
+of the number of elements. As we go through the reduce we are counting the number of elements and we're computing there some and at the end we have the sum and the count of everything
+and we can just take the ratio. Okay, so this requires a
+little bit more thought in order to do it in the correct way. So map reduce can work on it. So why is order independence so important? Again, computation order can be chosen by the compiler optimizer. So suppose you don't
+have just one CPU working on doing your summation. Suppose it's a summation
+of a billion elements and you want to summit using 100 CPUs then each CPU is going
+to do some of the work. And so you're not sure at which
+order things will be done. This allows parallel computation. And so modern hardware is
+something that we want to use parallel computation because there's so many
+cores in any laptop. However, it's not easy to program, right? Because you need to think
+about how exactly the the computation is going to be broken up. map reduce. The solution is to abstract
+it to say I don't really care at what order you will do things. Okay, so map reduce the programmer exposes to the compiler opportunities
+for parallel computation because I'm not telling you
+exactly at what order to do and you can choose the order that is best. So spark and map reduce. So map reduce is a system that
+has existed for a long time. It's kind of a programming
+abstraction, but in big data it is comes
+two main systems, Hadoop which was the older system and Spark which is the system that
+we're going to learn. Okay, so I'll see you next time.
+--- end {3.2_transcript.txt} ---
+--- start{3.3_notebook.md} ---
+# Dataframes
+
+* Dataframes are a restricted sub-type of RDDs.
+* Restricting the type allows for more optimization.
+* Dataframes store two dimensional data, similar to the type of data stored in a spreadsheet.
+    * Each column in a dataframe can have a different type.
+    * Each row contains a record.
+* Similar to pandas dataframes and R dataframes
+
+```python
+#import findspark
+#findspark.init()
+from pyspark import SparkContext
+import os
+
+os.environ["PYSPARK_PYTHON"]="python3"
+os.environ["PYSPARK_DRIVER_PYTHON"] = "python3"
+
+sc = SparkContext(master="local[4]")
+sc.version
+
+# RETURNS
+# -> '3.5.0'
+```
+
+```python
+import os
+import sys
+
+from pyspark import SparkContext
+from pyspark.sql import SQLContext
+from pyspark.sql.types import Row, StructField, StructType, StringType, IntegerType
+%pylab inline
+
+# RETURNS
+# -> %pylab is deprecated, use %matplotlib inline and import the required libraries.
+# -> Populating the interactive namespace from numpy and matplotlib
+```
+
+```python
+# Just like using Spark requires having a SparkContext, using SQL requires an SQLContext
+sqlContext = SQLContext(sc)
+sqlContext
+
+# RETURNS
+# -> <pyspark.sql.context.SQLContext at 0x7fffd88057d0>
+```
+
+## Spark sessions
+[A newer API for spark dataframes](https://spark.apache.org/docs/latest/sql-getting-started.html#starting-point-sparksession)
+
+We will stick to the old API in this class.
+
+A new interface object has been added in Spark 2.0 called SparkSession. A spark session is initialized using a builder
+
+```python
+spark = SparkSession.builder \
+         .master("local") \
+         .appName("Word Count") \
+         .config("spark.some.config.option", "some-value") \
+         .getOrCreate()
+```
+
+Using a SparkSession a Parquet file is read as follows:
+
+```python
+df = spark.read.parquet('python/test_support/sql/parquet_partitioned')
+```
+
+## Constructing a DataFrame from an RDD of Rows
+
+Each Row defines it's own fields, the schema is inferred.
+
+```python
+# One way to create a DataFrame is to first define an RDD from a list of Rows 
+_list=[Row(name=u"John", age=19),
+       Row(name=u"Smith", age=23),
+       Row(name=u"Sarah", age=18)]
+some_rdd = sc.parallelize(_list)
+some_rdd.collect()
+
+# RETURNS
+# -> [Row(name='John', age=19), Row(name='Smith', age=23), Row(name='Sarah', age=18)]
+```
+
+```python
+# The DataFrame is created from the RDD or Rows
+# Infer schema from the first row, create a DataFrame and print the schema
+some_df = sqlContext.createDataFrame(_list)
+some_df.printSchema()
+
+# RETURNS
+# -> root
+# ->  |-- name: string (nullable = true)
+# ->  |-- age: long (nullable = true)
+```
+
+```python
+# A dataframe is an RDD of rows plus information on the schema.
+# performing **collect()* on either the RDD or the DataFrame gives the same result.
+print(type(some_rdd),type(some_df))
+print('some_df =',some_df.collect())
+print('some_rdd=',some_rdd.collect())
+
+# RETURNS
+# -> <class 'pyspark.rdd.RDD'> <class 'pyspark.sql.dataframe.DataFrame'>
+# -> some_df = [Row(name='John', age=19), Row(name='Smith', age=23), Row(name='Sarah', age=18)]
+# -> some_rdd= [Row(name='John', age=19), Row(name='Smith', age=23), Row(name='Sarah', age=18)]
+```
+
+## Defining the Schema explicitly
+
+The advantage of creating a DataFrame using a pre-defined schema allows the content of the RDD to be simple tuples, rather than rows.
+
+```python
+# In this case we create the dataframe from an RDD of tuples (rather than Rows) and provide the schema explicitly
+another_rdd = sc.parallelize([("John", 19), ("Smith", 23), ("Sarah", 18)])
+# Schema with two fields - person_name and person_age
+schema = StructType([StructField("person_name", StringType(), False),
+                     StructField("person_age", IntegerType(), False)])
+  
+# Create a DataFrame by applying the schema to the RDD and print the schema
+another_df = sqlContext.createDataFrame(another_rdd, schema)
+another_df.printSchema()
+# root
+#  |-- age: binteger (nullable = true)
+#  |-- name: string (nullable = true)
+
+# RETURNS
+# -> root
+# ->  |-- person_name: string (nullable = false)
+# ->  |-- person_age: integer (nullable = false)
+```
+
+## Loading DataFrames from disk
+
+There are many maethods to load DataFrames from Disk. Here we will discuss three of these methods
+
+* Parquet
+* JSON (on your own)
+* CSV (on your own)
+
+In addition, there are API's for connecting Spark to an external database. We will not discuss this type of connection in this class
+
+### Loading dataframes from JSON files
+
+JSON is a very popular readable file format for storing structured data. Among it's many uses are twitter, javascript communication packets, and many others. In fact this notebook file (with the extension .ipynb is in json format. JSON can also be used to store tabular data and can be easily loaded into a dataframe.
+
+```python
+# when loading json files you can specify either a single file or a directory containing many json files.
+print('--- json file')
+path = "../Data/people.json"
+!cat $path 
+
+# Create a DataFrame from the file(s) pointed to by path
+people = sqlContext.read.json(path)
+print('\n--- dataframe\n people is a',type(people))
+# The inferred schema can be visualized using the printSchema() method.
+people.show()
+
+print('--- Schema')
+people.printSchema()
+
+# RETURNS
+"""
+--- json file
+{"name":"Michael"}
+{"name":"Andy", "age":30}
+{"name":"Justin", "age":19}
+
+--- dataframe
+ people is a <class 'pyspark.sql.dataframe.DataFrame'>
++----+-------+
+| age|   name|
++----+-------+
+|NULL|Michael|
+|  30|   Andy|
+|  19| Justin|
++----+-------+
+
+--- Schema
+root
+ |-- age: long (nullable = true)
+ |-- name: string (nullable = true)
+"""
+```
+
+### Excercise: Loading csv files into dataframes
+Spark 2.0 includes a facility for reading csv files. In this excercise you are to create similar functionality using your own code.
+
+You are to write a class called csv_reader which has the following methods:
+
+`__init__(self,filepath)`: recieves as input the path to a csv file. It throws an exeption `NoSuchFile` if the file does not exist.
+`Infer_Schema()` opens the file, reads the first 10 lines (or less if the file is shorter), and infers the schema. The first line of the csv file defines the column names. The following lines should have the same number of columns and all of the elements of the column should be of the same type. The only types allowd are `int`,`float`,`string`. The method infers the types of the columns, checks that they are consistent, and defines a dataframe schema of the form:
+
+```python
+schema = StructType([StructField("person_name", StringType(), False),
+                     StructField("person_age", IntegerType(), False)])
+```
+
+If everything checks out, the method defines a `self`. variable that stores the schema and returns the schema as it's output. If an error is found an exception `BadCsvFormat` is raised.
+
+`read_DataFrame()`: reads the file, parses it and creates a dataframe using the inferred schema. If one of the lines beyond the first 10 (i.e. a line that was not read by `InferSchema`) is not parsed correctly, the line is not added to the Dataframe. Instead, it is added to an RDD called `bad_lines`. The methods returns the dateFrame and the `bad_lines` RDD.
+
+### Parquet files
+
+* Parquet is a popular columnar format.
+* Spark SQL allows SQL queries to retrieve a subset of the rows without reading the whole file.
+* Compatible with HDFS : allows parallel retrieval on a cluster.
+* Parquet compresses the data in each column.
+`<reponame>.parquet` is usually a directory with many files or subdirectories.
+
+### Spark and Hive
+
+* Parquet is a file format not an independent database server.
+* Spark can work with the Hive relational database system that supports the full array of database operations.
+* Hive is compatible with HDFS.
+
+```python
+dir='../Data'
+parquet_file=dir+"/users.parquet"
+!ls $dir
+
+# RETURNS
+# -> Moby-Dick.txt  namesAndFavColors.parquet  people.json  users.parquet  Weather
+```
+
+```python
+#load a Parquet file
+print(parquet_file)
+df = sqlContext.read.load(parquet_file)
+df.show()
+
+# RETURNS
+# ->
+"""
+../Data/users.parquet
++------+--------------+----------------+
+|  name|favorite_color|favorite_numbers|
++------+--------------+----------------+
+|Alyssa|          NULL|  [3, 9, 15, 20]|
+|   Ben|           red|              []|
++------+--------------+----------------+
+"""
+```
+
+```python
+df2=df.select("name", "favorite_color")
+df2.show()
+
+# RETURNS
+# -> 
+"""
++------+--------------+
+|  name|favorite_color|
++------+--------------+
+|Alyssa|          NULL|
+|   Ben|           red|
++------+--------------+
+"""
+```
+
+```python
+outfilename="namesAndFavColors.parquet"
+!rm -rf $dir/$outfilename
+df2.write.save(dir+"/"+outfilename)
+!ls -ld $dir/$outfilename
+
+# RETURNS
+# -> drwxr-xr-x 6 jovyan users 192 Apr 14 17:52 ../Data/namesAndFavColors.parquet
+```
+
+## Lets have a look at a real-world dataframe
+
+This dataframe is a small part from a large dataframe (15GB) which stores meteorological data from stations around the world.
+
+```python
+from os.path import split,join,exists
+from os import mkdir,getcwd,remove
+from glob import glob
+
+# create directory if needed
+notebook_dir=getcwd()
+data_dir=join(split(notebook_dir)[0],'Data')
+weather_dir=join(data_dir,'Weather')
+
+file_index='NY'
+zip_file='%s.tgz'%(file_index)
+
+weather_parquet = join(weather_dir, zip_file[:-3]+'parquet')
+print(weather_parquet)
+df = sqlContext.read.load(weather_parquet)
+df.show(1)
+
+# RETURNS
+# ->
+"""
+/home/jovyan/Library/CloudStorage/GoogleDrive-ssingal@ucsd.edu/My Drive/UCSD/Notes/6th Quarter - Spring 24/DSC 232R - BDA with Spark/GitHub/lecture-notebooks/Data/Weather/NY.parquet
++-----------+-----------+----+--------------------+-----------------+--------------+------------------+-----------------+-----+-----------------+
+|    Station|Measurement|Year|              Values|       dist_coast|      latitude|         longitude|        elevation|state|             name|
++-----------+-----------+----+--------------------+-----------------+--------------+------------------+-----------------+-----+-----------------+
+|USW00094704|   PRCP_s20|1945|[00 00 00 00 00 0...|361.8320007324219|42.57080078125|-77.71330261230469|208.8000030517578|   NY|DANSVILLE MUNI AP|
++-----------+-----------+----+--------------------+-----------------+--------------+------------------+-----------------+-----+-----------------+
+only showing top 1 row
+"""
+```
+
+```python
+#selecting a subset of the rows so it fits in slide.
+df.select('station','year','measurement').show(5)
+
+# RETURNS
+# ->
+"""
++-----------+----+-----------+
+|    station|year|measurement|
++-----------+----+-----------+
+|USW00094704|1945|   PRCP_s20|
+|USW00094704|1946|   PRCP_s20|
+|USW00094704|1947|   PRCP_s20|
+|USW00094704|1948|   PRCP_s20|
+|USW00094704|1949|   PRCP_s20|
++-----------+----+-----------+
+only showing top 5 rows
+"""
+```
+
+## Summary
+
+* Dataframes are an efficient way to store data tables.
+* All of the values in a column have the same type.
+* A good way to store a dataframe in disk is to use a Parquet file.
+* Next: Operations on dataframes.
+
+--- end {3.3_notebook.md} ---
+--- start{3.3_slides.pdf} ---
+               Spark Basics
+• Spark Context
+• Resilient Distributed Dataset (RDD)
+Spark Context
+• Spark is complex distributed software.
+• The python interface to spark is called pyspark
+• SparkContext is a python class, defined as part of pyspark which
+  manages the communication between the user's program and spark.
+• We start by creating a SparkContext object named sc.
+Resilient Distributed DataSets (RDDs)
+     Driver Node
+                                Worker Node1 (CPU)
+                                                                       Worker Node3 (CPU)
+Driver Program                        Executor 1
+   (Python)                                     Worker Node2 (CPU)          Executor 3
+                                 RDD1          RDD2
+                               partitions1   partitions1Executor 2     RDD1          RDD2
+                                                                     partitions3   partitions3
+   RDD1          RDD2
+                                                 RDD1          RDD2
+                                               partitions2   partitions2
+    Spark Context
+       (Scala)
+                        1. Driver node
+                        2. Driver Program
+                        3. Spark Context
+                        4. RDDs
+                        5. Partitions
+                        6. Executors
+Another example:
+Find the shortest word in a list
+Summary
+• Spark - Context
+• RDDs
+• Map
+• Reduce
+• More details, and excercises, in the jupyter notebook.
+• Next time: more about RDDs
+
+--- end {3.3_slides.pdf} ---
+--- start{3.3_transcript.txt} ---
+(gentle music) (slides swooshing) - So we talked last time about MapReduce, and how it is used in the abstract. And now we're going to look specifically, how this is done in Spark. So we'll start to know how to actually use MapReduce within Spark. So we're going to
+describe two main object. One is the SparkContext
+and the other is the RDD, or the Resilient Distributed
+Dataset (sniffles). So what is the SparkContext? - [Instructor] Spark
+itself is a complicated distributed software that
+runs on many computers at the same time with all
+kinds of communication. The way that you want
+to communicate with it, is to use MapReduce, and similar commands that abstract all of this complexity. So the python interface to
+Spark is called pyspark, and the SparkContext is a python class, which is defined as part of pyspark, and manages the communication between the user program and Spark. So we start Spark program, or at least the part
+that really uses Spark with creating a SparkContext object. And here, we call it sc. So this is the command. We import from pyspark, we import the SparkContext, and we define sc to be a SparkContext. And we say here as a parameter, optional parameter that we want it to run on three chords, three of
+the chords that we have. Okay, and then we say, "Print out sc." So it tells us what it is. Okay, so it is a pyspark
+context, SparkContext (sniffles). RDDs are a more complex
+object to think about. - [Instructor] It's basically how you, you the program thinks about
+storage that is distributed in many computers. Okay, so the RDD is this kind of storage that is not necessarily on the computer that the python program is running on, but it is distributed
+on many other computers. Okay, so what we have is the Driver node. So this is, in general, the node where the controls, the other slave nodes or
+worker nodes (sniffles). And in this node, we have our python program that we wrote. And then through the SparkContext, this is the SparkContext that we created, we communicate with the
+other computers, okay? We don't communicate with them directly, we just give general commands
+to the SparkContext, okay? And what we have as storage is RDD, and RDD two, RDD one, and RDD two. And these are two arrays, if you want to think about it. And what exists on our Driver
+node is just a pointer. It's just a place that
+says, "Here is where you can get these parts that
+are actually distributed." So they're distributed
+in the following way: (instructor sniffles) Each RDD is broken into Partition. So here's RDD one, Partition
+one, RDD one, Partition two, and RDD one, Partition
+three is hiding behind here, and similarly for RDD two. Okay, so each one of their arrays, think about it, it's a very big array, something maybe like a hundred gigabyte. And each one of them is
+stored on multiple computers, broken up into pieces just
+like the Google File System, or the HDFS. Okay, and (sniffles) when you
+want, when the program here wants to do some operation,
+like a Map or Reduce on one of the RDDs, it
+basically goes through here. And the Spark system
+through the SparkContext, basically guides what the
+worker nodes should do with their own RDDs and
+what they should communicate back or to each other. Okay, so what did we talk about? We talked about (sniffles)
+the Driver node, the node that is the head node. Then we have the Driver program, which is really the
+program that you write. We have the SparkContext, which you can think about as a conduit, or a bridge, or a representative between your program and the Spark system. RDDs are these distributed data arrays. Partitions are each one of the parts, and Executors that I guess
+I haven't talked about yet, Oh, here they are, Executor one and Executor two, that's the CPU that is
+going to work with this RDD. So this RDD one is local to Executor one. So it can work with it quickly, fast, just like locality that we talked about in regular computer
+systems (sniffles). So how do you create an RDD? Well, the simplest way (sniffles), is to take a list of elements, and say to Spark, "I want you
+to make this into an RDD." So here it is, here is the list
+of elements zero, one, two. And then I call the SparkContext, and tell it, "To parallelize this." Okay, so now I have A as
+the pointer to an RDD. And here is the description of it. RDD collection in parallelize and so on. Okay, so basically this A stores a pointer to this distributed array. Now of course this is a tiny array, so there's no point of doing it, but suppose it was instead of three, it was 3 million or 3 billion? Collect is the opposite of parallelize. And in collect we take the RDD content from all of the different Executors, and bring it to the head node, or to the place where
+our python program runs. And what it generates is a list, okay? So it's just the reverse of parallelize. So if we do A collect is L. What is L? L is a list. And it has exactly what we
+put originally into the RDD. Okay, so nothing surprising here. Okay, what is map? So Map is, we talked about it last time, but it applies a given operation to each element of an RDD. Okay, so that's what we want to execute. And the parameter that this
+map gets is a function, that defines the operation. Okay, so it's common to
+use an anonymous function. So on a function that doesn't have a name, it just lambda function that
+maps x to x squared, okay? And so what we do here
+is we take an RDD A, we perform the map operation, and then we do collect
+to get it as a list, so we can look at it. Remember, if you don't do a collect, what you have is just a
+pointer to an RDD (sniffles), and you can't look at that, or see any part of it directly. Reduce is similar, is as
+we talked about before, we want to take any two elements, and we want to combine them. And this is done on each one
+of the Executors separately. And then the results are
+combined into the head node. Okay, so we really get
+a parallel computation, because each part of the data is going to be reduced
+separately on its own Executor. Okay, so here's how it looks. We take the same A, we perform reduce where we take x and y, and we add x and y. Okay, so this is summation,
+which we talked about before. And the sum of zero, one,
+two, is indeed three. Reduce generates a single number, so that you don't need to collect. It reduces automatically
+something that gives you a single element that is in the head node. Okay, here's another example: So suppose we have a list of words, this is the best Mac ever, okay? And we make it into wordRDD, so an RDD can have any
+kind of elements in it, even of different types. It's just like a list,
+it just distributed. And here we have an RDD of words, and now we do a reduce
+that is a little different. We basically get w,v to two words, and we output w, if the length of w is smaller than the length of v and
+otherwise we output v. So what are we doing? For a repair, we output
+for a repair of words, we output the shorter word. Okay, so if we run that on this list, we get as an output is, okay? That's the shortest word
+in this, in this sentence. (instructor sniffles) Sometimes you want to
+use regular expressions instead of lambda functions. So sometimes you have something
+relatively complicated that you want to do in
+terms of a map or a reduce. And so lambda functions are nice, because they are compact, and they make your code look shorter, but sometimes it's hard to use. And so we can use full-fledged
+functions instead. And so here's an example (sniffles). So suppose what we want to find in an RDD, is the last word in lexicographical order among the longest words in the list, okay? So let's say that if there's
+just one longest word, then you output that. But if there are several, you want to choose the one that is latest in the lexicographical order. So how would you do that? So here's the little
+program that takes x and y. (instructor sniffles) It checks first for the length of y, if x is larger than y, then return x. If y is larger than x, it returns y. And if the lengths are equal, then it keeps the one that is later in the lexicographical order. Okay, and then this function is given as a parameter into the reduce. Okay, so you can write
+quite complicated things to be executed inside the reduce. (instructor sniffles) All right, so to summarize, we talked about the SparkContext, which is the bridge
+between your Spark program your pythons program, and
+the Spark operating system. RDDs, which is the way that we abstract the distributed lists, if you will, map, which is the operation of
+doing an individual operation on each one element of the RDD, and reduce which reduces the
+whole RDD into one element. So we're going to look at more details, and exercises in the Jupyter notebooks. So that's where we will go next. See you then.
+--- end {3.3_transcript.txt} ---
+--- start{3.4_notebook.md} ---
+# Spark Basics 2
+
+## Chaining
+
+We can chain transformations and aaction to create a computation pipeline
+
+Suppose we want to compute the sum of the squares
+$$\Sigma_{i=1}^{n} x_{i}^{2}$$
+where the elements $x_i$ are stored in an RDD.
+
+```python
+#start the SparkContext
+import os
+os.environ["PYSPARK_PYTHON"]="python3"
+os.environ["PYSPARK_DRIVER_PYTHON"] = "python3"
+
+from pyspark import SparkContext
+sc = SparkContext(master="local[4]")
+print(sc)
+
+# RETURNS
+# -> <SparkContext master=local[4] appName=pyspark-shell>
+```
+
+### Create an RDD
+
+```python
+B=sc.parallelize(range(4))
+B.collect()
+
+# RETURNS
+# -> [0, 1, 2, 3]
+```
+
+### Sequential syntax for chaining
+
+Perform assignment after each computation
+
+```python
+Squares=B.map(lambda x:x*x)
+Squares.reduce(lambda x,y:x+y) 
+
+# RETURNS
+# -> 14
+```
+
+### Cascaded syntax for chaining
+
+Combine computations into a single cascaded command
+
+```python
+B.map(lambda x:x*x)\
+   .reduce(lambda x,y:x+y)
+
+# RETURNS
+# -> 14
+```
+
+### Both syntaxes mean exactly the same thing
+The only difference:
+
+* In the sequential syntax the intermediate RDD has a name Squares
+* In the cascaded syntax the intermediate RDD is anonymous
+
+The execution is identical!
+
+### Sequential execution
+
+The standard way that the map and reduce are executed is
+
+* perform the map
+* store the resulting RDD in memory
+* perform the reduce
+
+### Disadvantages of Sequential execution
+
+* Intermediate result (Squares) requires memory space.
+* Two scans of memory (of B, then of Squares) - double the cache-misses.
+
+### Pipelined execution
+
+Perform the whole computation in a single pass. For each element of B
+
+    * Compute the square
+    * Enter the square as input to the reduce operation.
+
+## Advantages of Pipelined execution
+
+    * Less memory required - intermediate result is not stored.
+    * Faster - only one pass through the Input RDD.
+
+## Lazy Evaluation
+
+This type of pipelined evaluation is related to Lazy Evaluation. The word Lazy is used because the first command (computing the square) is not executed immediately. Instead, the execution is delayed as long as possible so that several commands are executed in a single pass.
+
+The delayed commands are organized in an Execution plan
+
+For more on Pipelined execution, Lazy evaluation and Execution Plans see spark programming guide/RDD operations
+
+## An instructive mistake
+
+Here is another way to compute the sum of the squares using a single reduce command. Can you figure out how it comes up with this unexpected result?
+
+```python
+C=sc.parallelize([1,1,2])
+C.reduce(lambda x,y: x*x+y*y)
+
+# RETURNS
+# -> 8
+```
+
+### Answer:
+
+* `reduce` first operates on the pair $(1,1)$ , replacing it with $1^{2}+1^{2} = 2$ 
+reduce then operates on the pair $(2,2)$ , giving the final result $2^{2}+2^{2} = 8$ 
+
+## getting information about an RDD
+
+RDD's typically have hundreds of thousands of elements. It usually makes no sense to print out the content of a whole RDD. Here are some ways to get manageable amounts of information about an RDD
+
+Create an RDD of length n which is a repetition of the pattern 1,2,3,4
+
+```python
+n=1000000
+B=sc.parallelize([1,2,3,4]*int(n/4))
+
+#find the number of elements in the RDD
+B.count()
+
+# RETURNS
+# -> 1000000
+```
+
+```python
+# get the first few elements of an RDD
+print('first element=',B.first())
+print('first 5 elements = ',B.take(5))
+
+# RETURNS
+# ->
+"""
+first element= 1
+first 5 elements =  [1, 2, 3, 4, 1]
+"""
+```
+
+### Sampling an RDD
+
+* RDDs are often very large.
+* Aggregates, such as averages, can be approximated efficiently by using a sample.
+* Sampling is done in parallel and requires limited computation.
+
+The method `RDD.sample(withReplacement,p)` generates a sample of the elements of the RDD. where
+
+* `withReplacement` is a boolean flag indicating whether or not a an element in the RDD can be sampled more than once.
+* `p` is the probability of accepting each element into the sample. Note that as the sampling is performed independently in each partition, the number of elements in the sample changes from sample to sample.
+
+```python
+# get a sample whose expected size is m
+# Note that the size of the sample is different in different runs
+m=5.
+print('sample1=',B.sample(False,m/n).collect()) 
+print('sample2=',B.sample(False,m/n).collect())
+
+# RETURNS
+# ->
+"""
+sample1= [4, 1, 3, 2, 1, 1, 1]
+sample2= [2, 2, 2, 1, 3, 2, 2]
+"""
+```
+
+### Things to note and think about
+
+* Each time you run the previous cell, you get a different estimate
+* The accuracy of the estimate is determined by the size of the sample $n \cdot p$
+See how the error changes as you vary 
+* Can you give a formula that relates the variance of the estimate to $(p \cdot n)$ ? 
+    * *note: (The answer is in the Probability and statistics course).*
+
+### filtering an RDD
+
+The method `RDD.filter(func)` Return a new dataset formed by selecting those elements of the source on which func returns true.
+
+```python
+print('the number of elements in B that are > 3 =',B.filter(lambda n: n > 3).count())
+
+# RETURNS
+# -> the number of elements in B that are > 3 = 250000
+```
+
+### Removing duplicate elements from an RDD
+The method `RDD.distinct()` Returns a new dataset that contains the distinct elements of the source dataset.
+
+This operation requires a shuffle in order to detect duplication across partitions.
+
+```python
+# Remove duplicate element in DuplicateRDD, we get distinct RDD
+DuplicateRDD = sc.parallelize([1,1,2,2,3,3])
+print('DuplicateRDD=',DuplicateRDD.collect())
+print('DistinctRDD = ',DuplicateRDD.distinct().collect())
+
+# RETURNS
+# ->
+"""
+DuplicateRDD= [1, 1, 2, 2, 3, 3]
+DistinctRDD =  [1, 2, 3]
+"""
+```
+
+### flatmap an RDD
+The method `RDD.flatMap(func)` is similar to map, but each input item can be mapped to 0 or more output items (so func should return a Seq rather than a single item).
+
+```python
+text=["you are my sunshine","my only sunshine"]
+text_file = sc.parallelize(text)
+# map each line in text to a list of words
+print('map:',text_file.map(lambda line: line.split(" ")).collect())
+# create a single list of words by combining the words from all of the lines
+print('flatmap:',text_file.flatMap(lambda line: line.split(" ")).collect())
+
+# RETURNS
+# -> 
+"""
+map: [['you', 'are', 'my', 'sunshine'], ['my', 'only', 'sunshine']]
+flatmap: ['you', 'are', 'my', 'sunshine', 'my', 'only', 'sunshine']
+"""
+```
+
+### Set operations
+
+In this part, we explore set operations including union,intersection,subtract, cartesian in pyspark
+
+```python
+rdd1 = sc.parallelize([1, 1, 2, 3])
+rdd2 = sc.parallelize([1, 3, 4, 5])
+```
+
+1. union(other)
+* Return the union of this RDD and another one.
+* Note that that repetitions are allowed. The RDDs are bags not sets
+* To make the result a set, use .distinct
+
+```python
+rdd2=sc.parallelize(['a','b',1])
+print('rdd1=',rdd1.collect())
+print('rdd2=',rdd2.collect())
+print('union as bags =',rdd1.union(rdd2).collect())
+print('union as sets =',rdd1.union(rdd2).distinct().collect())
+
+# RETURNS
+# ->
+"""
+rdd1= [1, 1, 2, 3]
+rdd2= ['a', 'b', 1]
+union as bags = [1, 1, 2, 3, 'a', 'b', 1]
+union as sets = [1, 'a', 2, 3, 'b']
+"""
+```
+
+2. intersection(other)
+
+* Return the intersection of this RDD and another one. The output will not contain any duplicate elements, even if the input RDDs did.Note that this method performs a shuffle internally.
+
+```python
+rdd2=sc.parallelize([1,1,2,5])
+print('rdd1=',rdd1.collect())
+print('rdd2=',rdd2.collect())
+print('intersection=',rdd1.intersection(rdd2).collect())
+
+# RETURNS
+# ->
+"""
+rdd1= [1, 1, 2, 3]
+rdd2= [1, 1, 2, 5]
+intersection= [1, 2]
+"""
+```
+
+3. subtract(other, numPartitions=None)
+
+* Return each value in self that is not contained in other.
+
+```python
+print('rdd1=',rdd1.collect())
+print('rdd2=',rdd2.collect())
+print('rdd1.subtract(rdd2)=',rdd1.subtract(rdd2).collect())
+
+# RETURNS
+# ->
+"""
+rdd1= [1, 1, 2, 3]
+rdd2= [1, 1, 2, 5]
+rdd1.subtract(rdd2)= [3]
+"""
+```
+
+4. cartesian(other)
+
+* Return the Cartesian product of this RDD and another one, that is, the RDD of all pairs of elements (a, b) where a is in self and b is in other.
+
+```python
+rdd2=sc.parallelize([1,1,2])
+rdd2=sc.parallelize(['a','b'])
+print('rdd1=',rdd1.collect())
+print('rdd2=',rdd2.collect())
+print('rdd1.cartesian(rdd2)=\n',rdd1.cartesian(rdd2).collect())
+
+# RETURNS
+# ->
+"""
+rdd1= [1, 1, 2, 3]
+rdd2= ['a', 'b']
+rdd1.cartesian(rdd2)=
+ [(1, 'a'), (1, 'b'), (1, 'a'), (1, 'b'), (2, 'a'), (2, 'b'), (3, 'a'), (3, 'b')]
+"""
+```
+
+## Summary
+* Chaining: creating a pipeline of RDD operations.
+* counting, taking and sampling an RDD
+* More Transformations: `filter`, `distinct`, `flatmap`
+* Set transformations: `union`, `intersection`, `subtract`, `cartesian`
+
+--- end {3.4_notebook.md} ---
+--- start{3.4_slides.pdf} ---
+Basic Spark 2 – Part 1
+        DSC 232R
+1.1 Chaining
+We can chain transformations and actions to create a computation
+pipeline
+Suppose we want to compute the sum of the squares
+                               𝑛
+
+                              ෍ 𝑥2𝑖
+                              𝑖=1
+
+
+where the elements xi are stored in an RDD.
+1.1.1 Create an RDD
+1.1.2 Sequential syntax for chaining
+Perform assignment after each computation
+1.1.3 Cascaded syntax for chaining
+Combine computations into a single cascaded command
+1.1.4 Both syntaxes mean exactly the same
+thing
+The only difference:
+
+   • In the sequential syntax the intermediate RDD has a name
+     Squares
+   • In the cascaded syntax the intermediate RDD is anonymous
+
+The execution is identical!
+1.1.5 Sequential execution
+The way MapReduce are executed by a standard system (not
+Spark!)
+
+  • perform the map
+  • store the resulting RDD in memory
+  • perform the reduce
+
+1.1.6 Disadvantages of Sequential execution
+ 1. Intermediate result (Squares) requires memory space.
+ 2. Two scans of memory (of B, then of Squares) – double the
+    cache-misses.
+1.1.7 Pipelined execution
+Spark performs the whole computation in a single pass. For each
+element of B
+
+  1. Compute the square.
+  2. Enter the square as input to the reduce operation.
+
+
+1.1.8 Advantages of Pipelined execution
+  1. Less memory required – intermediate result is not stored.
+  2. Faster – only one pass through the Input RDD.
+1.1.9 Lazy Evaluation
+This type of pipelined evaluation is related to Lazy Evaluation. The
+word Lazy is used because the first command (computing the
+square) is not executed immediately. Instead, the execution is
+delayed as long as possible so that several commands are
+executed in a single pass.
+
+The delayed commands are organized in an Execution plan.
+
+For more on Pipelined execution, Lazy evaluation and Execution
+Plans see spark programming guide/RDD operations
+    1.1.10 An instructive mistake
+    Here is another way to compute the sum of the squares using a
+    single reduce command. Can you figure out how it comes up with
+    this unexpected result?
+
+
+
+
+     1.1.10.1 Answer:
+1. reduce first operates on the pair (1,1), replacing it with 1 2 + 12 = 2
+2. reduce then operates on the pair (2,2), giving the final result 2 2 + 22 = 8
+
+--- end {3.4_slides.pdf} ---
+--- start{3.4_transcript.txt} ---
+- ♪ Music ♪ - Hi. In the previous videos I told you about the map use operation and I told you about the R D D. So those are the
+distributed data structure that that are used at
+the basic unit in Spark. That's the basic type of data structure. It is done now to start
+to see what we can do with R D D and how we operate on. So the first thing I'd like
+to talk about is chaining. Chaining is a way to
+combine different operation into a sequence that is
+executed or a pipeline. So suppose that we want
+to compute something like the sum of the
+squares of some variables. And the elements Xi are already
+stored for us in an R D D. So we're going to first create the R D D. So what we're going to
+do is create a list zero one, two three, and
+then call the operation paralyzed to create the R D D called B. So we have two waves of chaining these two operations X squared taking the square of every
+element and then taking the sum One way is the sequential
+chaining where we say that squares is an R D D that is equal to B dot map of lambda,
+X goes to X square. Okay? And then we take
+squares, that's new R D D and we take the operation
+reduce on that square. Okay? So, we take the operation reduce and then we get the
+final result which is 14. Okay? We have a different
+way of writing this which is called cascaded and that's just to not create
+this intermediate R D D but simply to perform a map operation on B and then perform a reduce on the result without
+giving the result any name. Okay? So that's sometimes
+a more succinct way to write things. Now the important thing to realize that both things mean
+exactly the same thing. So even though it seems to us that as we're writing it that
+things are written sequentially so they would be executed sequentially that is not the case. Though they're going to be executed in an order that is determined
+by the spark system. The difference is really that in this case the R D D is anonymous, right? So the R D D in the middle
+doesn't have a name. We can't refer to it. So let's talk about the execution. So first let's think about the
+execution that would happen in a standard map produced
+system that did not spark that did not parallel system. So the way that it'll happen is that we first perform the map then we store the resulting result in an R D D that is in memory and then we're going to perform a review on that new R D D, okay? The disadvantages are two. The first one is that to
+store the intermediate result requires memory space. Now that might not seem
+very consequential when you have four elements, but suppose that you had 40 million elements, okay? Then having another intermediate array for the intermediate result
+would cost significant amount in terms of memory. And the other is that we're using two scan
+to perform this operation. So first we're scanning
+everything in order to square everything, and then
+we're scanning another time in order to add the result. And it would be nicer if we
+could just do it in one scan because you remember in
+locality of computation if we can just use the same locations the sequential locations
+as efficiently as possible then we run faster in terms
+of a very large dataset. Okay? So the pipelined
+execution that performs is taking the whole computation
+in a single pass. So for each element in B you first compute the square
+and then you enter the square as an input to the reduced operation. So the reduce operation is happening at the same time as the, okay. So the advantages are two. First it uses less memory intermediate results are not stored cause they're immediately
+consumed by the reduce and it's faster because it's only one pass through the R D D. So this kind of evaluation
+that we're talking about here is often referred
+to as lazy evaluation. So the word lazy is because we get the first
+command that what we should do and we literally do nothing,
+we just put this command in a kind of program plan that of what we're going to do when
+we will do something, right? So rather than executing
+things immediately we basically say, "No let's
+more more operations accumulate and then we can execute
+all of them at once and we'll do it more efficiently." So that is what is called
+here the execution plan. That the central idea in
+spark where you take chunks of code and you basically
+combine them together into a single thing to be executed and then you send this thing to the workers to execute it
+on different parts of the data. Okay? So there's more you can
+read about laser evaluation and execution plan when
+you follow this link. Okay? So let's talk about
+an instructive mistake something that we're writing in Spark that seems logical enough, but in fact doesn't do what
+we expect it to do. So we have here something
+that we paralyzed this list one one two and we want to calculate
+the sum of the squares. So we say, okay, we are going to reduce X and Y to x squared plus y squared. That seems logical enough, right? Because if we just had these
+two elements that indeed would give us the right result,
+but we have three elements. So what would happen if
+we have three element? So the first operation would be on this pair one, one, okay? So this pair over here, and replacing that with the one square
+plus one squared is two. Okay? And then the second
+operation on this pair, two two which is the two that we got from the first pair and the
+two that is written right here. Then we get the final
+result. That is eight. And this is not the right answer, right? One square plus one square
+plus two squared is six. Okay? So the, the problem is that we are not really
+thinking about this operation as an operation that
+needs to be executable in any order of of thing, right? So the intermediate results
+are going to be stored in this X, So you don't want
+to square this result.
+--- end {3.4_transcript.txt} ---
+--- start{3.5_slides.pdf} ---
+Basic Spark 2 – Part 2
+        DSC 232R
+1.2 getting information about an RDD
+RDDs typically have hundreds of thousands of elements. It usually
+makes no sense to print out the content of a whole RDD. Here are
+some ways to get manageable amounts of information about an
+RDD.
+Create an RDD of length n which is a repetition of the pattern
+1,2,3,4
+1.2.1 Sampling an RDD
+• RDDs are often very large.
+• Aggregates, such as averages, can be approximated efficiently by
+  using a sample.
+• Sampling is done in parallel and requires limited computation.
+1.2.3 Filtering an RDD
+The method RDD.filter(func) Returns a new dataset formed
+by selecting those elements of the source on which func remains
+true.
+1.2.4 Removing duplicate elements from an
+RDD
+The method RDD.distinct() Returns a new dataset that
+contains the distinct elements of the source dataset.
+
+This operation requires a shuffle in order to detect duplication
+across partitions.
+1.2.5 flatmap an RDD
+The method RDD.flatMap(func) is similar to map, but each
+input item can be mapped to 0 or more output items (so func
+should return a Seq rather than a single item).
+1.2.6 Set operations
+In this part, we explore set operations including union, intersection,
+subtract, cartesian in PySpark.
+1. union(other)
+   • Return the union of this RDD and another one.
+   • Note that repetitions are allowed. The RDDs are bags not sets.
+   • To make the result a set, use .distinct
+2. intersection(other)
+      • Return the intersection of this RDD and another one. The
+        output will not contain any duplicate elements, even if the
+        input RDDs did. Note that this method performs a shuffle
+        internally.
+3. subtract(other,numPartitions=None)
+     • Return each value in self that is not contained in other.
+4. cartesian(other)
+     • Return the Cartesian product of this RDD and another one,
+       that is, the RDD of all pairs of elements (a,b) where a is in
+       self and b is in other.
+1.3 Summary
+• Chaining: creating a pipeline of RDD operations.
+• Counting, taking and sampling an RDD
+• More transformations: filter, distinct, flatmap
+• Set transformations: union, intersection, subtract,
+  cartesian
+
+--- end {3.5_slides.pdf} ---
+--- start{3.5_transcript.txt} ---
+(bright lively music) - Okay, so let's think about how we can get information about an RDD. When we want to say we
+want to get information about something that is in memory, that's a pretty simple thing. We just go and we look at it. We bring it or print it out. But when we have RDDs, they're, first of all,
+very large typically. And secondly, they're not
+really on our computer, they're on other worker computers that are doing the calculation for us. So we can collect all of the data and then we'll have it to see locally, but usually that's not desirable
+because then we are losing all of the ability, all of the advantages of the distributed parallel computation. So there are other ways of, like, poking and peeking into the content of an RDD, even though it's away. Okay, so let's see how we do that. So here, we're going to create
+an RDD of some length n, which will be a million. And it's going to have 1, 2,
+3, 4, 1, 2, 3, 4, 1, 2, 3, 4. Okay. So that's basically the two command. I create that and now we have this B. That is a medium-large RDD and it's out of our computer. Okay, so one first thing
+that we might want to do is to find the number of elements in an RDD, and that's an easy thing. We can just do B.count. Another thing is that we can
+just ask for the first element or the first few element, that's
+the command first or take. Next, we have a more
+sophisticated operation, which is sampling. So we have an RDD. Maybe with a million or maybe
+with a billion data points. And we want to calculate,
+let's say, the average. Now, that is possible, to sum everything and
+divide by the number, but that is pretty expensive operation. So we can get almost the same
+answer if we average a sample. So we just take a subset,
+a randomly chosen subset of the element and then
+we operate just on those. That would be faster. So here is an example of that, that in our case here is how many elements we want on average, that's m. Okay, so that's m that we want. And then we do a sample
+operation with m/n. So m/n is the ratio between
+the number of elements that we want and the total
+number of elements in the RDD. And so this is basically the probability of taking an element in from that RDD. And so here is a first
+sample and a second sample, and what you see is that the first sample and the second samples, not only are they different, which is natural when
+you sample at random, but they have a different length. So why do they have a different length? Because what we specify, just the probability of getting this, taking a specific element, not the exact number of
+elements that we want. And why don't we want it to give us the exact number of element? Because that would require
+a significant coordination. If you just sample with some probability, you can do it separately on each worker and then combine all of the results. If you want to have a specific number, then you have to have
+the workers coordinate how much elements each
+one of them will generate. Okay? So that would require more work. So that's the way that it's done in Spark. And if you want a specific element, then you just choose a P that
+would be a little bit larger than what you need and then you trim down to the size that you want. Another operation is filtering the RDD. So that takes an RDD and generates a new
+smaller RDD by selecting, by giving a rule for
+which elements to select. So what we have here is, we're taking the same B,
+RDD, that we had before, and then we pick the operation filter and what the function that
+we give filter is a function that just gives true or false, okay? And if it gives true, then
+you get these elements and if you give false, then
+you don't take the element. Okay? So we're basically saying that out of these elements
+that are, I don't remember, 0, 1, 2, 3, 4, we are just taking the
+elements that are larger than, that are larger than 3, so it's just 4, and that's indeed like a
+quarter of the elements, okay? So 250,000 out of a million. Another operation that
+we want to do sometimes is RDD.distinct. That seems like a very natural operation. We don't want repetitions
+of the same element. So that is a natural one, but in fact it turns out that
+it's a very expensive one. Why is it expensive? Because it requires a shuffle operation. It requires all of the
+workers to communicate so that they can find out
+whether one has a copy of an element that the other one has so that they can remove it. Here, we have two operations. So we parallelize this list that has two 1s, two 2s and two 3s, okay? It's this list here. And then we just collect this one. So we just get it as it is. Or we ask for the distinct
+element and then we collect. And so we get just 1 and 2 and 3. flatMap of an RDD is
+like the map operation, but it's an operation that
+assumes that the function that you have as a map, generates a list and it
+concatenates these list, rather than having these
+lists in separate element. So here is a natural way
+that you want to use that. So suppose that you have text that is made out of two sentences and you want an RDD that is
+just all the words, okay? So how do you do that? First of all, you do a map
+that separates each list, splits it up into each sentence, each string split out the words, so you have a list of words. And then you run flatMap. So here, it's the same
+operation, here and here, but here we're doing it with a map and here we're doing it with a flatMap. So what you get in the first case is, you get two lists, right? Because each operation gives you a list. And so you just get a list of two lists. While if you do flatMap, you just get one list that
+has all of the element and that's sometimes
+more of what you want. Some operations that we
+have are set operations. So we can work with sets and we can basically take unions of sets, intersections of sets, subtract one set from another, and we can take cartesian operation. So here is union. So it basically creates
+the union of two RDDs, which basically is just a
+combination of all the element. Now, it's not really a set at this point. It might not have started even with a set. So in order to make it a set, we need to use distinct, right? So if we basically take here two RDDs and we take the union of them, so this 1, 1, 2, 3 is one RDD,
+and this is the other RDD. If we just take the union, then we get a bag, or a thing
+that has elements repeating. This one has one 1 repeating and this 1 also appears in the other list. And if we want it at sets, we have to use the operation distinct so that it would remove
+all of the multiple copies that we give: 1, a, 2, 3, and b. intersection is similar. But intersection
+automatically uses distinct. So it has to perform this
+extensive operation internally. Okay? So even though this was a
+bag with the repeating 1s and this was a bag, then if we take the
+intersection of the two, we get just the elements 1 and 2, we don't get the element twice. Similarly, subtract is
+when you take one RDD and you remove all of the
+elements from a different RDD. And then finally, you have an
+operation that is Cartesian where you take two RDD and you create a new RDD that is pairs, all possible pairs of taking
+one element from the first and one element from the second. That can be a very, very big RDD. Sometimes it's the thing that you want. Okay, so here it is. We have: one list that is 1, 1, 2; one list that is a and b, okay? And we generate them as RDD. And then we take the
+Cartesian rdd1 and rdd2, we get 1, a; 1, b; 1, a; 1, b. So because of the two 1s here. And then 2, a; and 2, b. Okay? So we get the product and
+all of the repetition. Alright, to summarize, chaining is a way of creating
+a pipeline of RDD operation. To get a information about
+an RDD, we use counting, taking and sampling, and then there is more transformations: filter, distinct, flatmap. And set transformation. Like union, intersection,
+subtract, and cartesian. And there are many other one. We will talk about some
+more in the next video. See you then.
+--- end {3.5_transcript.txt} ---
+--- start{4.1_notebook.md} ---
+# Execution Plans, Lazy Evaluation and Caching
+
+Task: calculate the sum of squares :
+
+$$ \Sigma_{i=1}^{n} x_{i}^{2} $$
+
+The standard (or busy) way to do this is
+
+1. Calculate the square of each element.
+2. Sum the squares.
+
+This requires storing all intermediate results.
+
+$$ S = \Sigma_{i=1}^{n} x_{i}^{2} $$
+
+## Lazy Evaluation
+
+Unlike a regular python program, map/reduce commands do not always perform any computation when they are executed. Instead, they construct something called an execution plan. Only when a result is needed does the computation start. This approach is also called lazy execution.
+
+The benefit from lazy execution is in minimizing the the number of memory accesses. Consider for example the following map/reduce commands:
+
+```python
+A=RDD.map(lambda x:x*x).filter(lambda x: x%2==0)
+A.reduce(lambda x,y:x+y) 
+```
+
+The commands defines the following plan. For each number `x` in the RDD:
+
+1. Compute the square of `x`
+2. Filter out `x*x` whose value is odd.
+3. Sum the elements that were not filtered out.
+
+A naive execution plan is to square all items in the RDD, store the results in a new RDD, then perform a filtering pass, generating a second RDD, and finally perform the summation. Doing this will require iterating through the RDD three times, and creating 2 interim RDDs. As memory access is the bottleneck in this type of computation, the execution plan is slow.
+
+A better execution plan is to perform all three operations on each element of the RDD in sequence, and then move to the next element. This plan is faster because we iterate through the elements of the RDD only once, and because we don't need to save the intermediate results. We need to maintain only one variable: the partial sum, and as that is a single variable, we can use a CPU register.
+
+For more on RDDs and lazy evaluation see here in the [spark manual](https://spark.apache.org/docs/latest/rdd-programming-guide.html)
+
+## Experimenting with Lazy Evaluation
+The `%%time` magic
+
+The `%%time` command is a cell magic which measures the execution time of the cell. We will mostly be interested in the wall time, which includes the time it takes to move data in the memory hierarchy.
+
+For more on jupyter magics See here
+
+### Preparations
+
+In the following cells we create an RDD and define a function which wastes some time and then returns `cos(i)`. We want the function to waste some time so that the time it takes to compute the `map` operation is significant.
+
+```python
+import os
+os.environ["PYSPARK_PYTHON"]="python3"
+os.environ["PYSPARK_DRIVER_PYTHON"] = "python3"
+
+from pyspark import SparkContext
+sc = SparkContext(master="local[4]")  #note that we set the number of workers to 3
+
+# We create an RDD with one million elements to amplify the effects of lazy evaluation and caching.
+
+%%time
+RDD=sc.parallelize(range(1000000))
+
+# RETURNS
+# ->
+"""
+CPU times: user 0 ns, sys: 0 ns, total: 0 ns
+Wall time: 222 ms
+"""
+```
+
+It takes about 01.-0.5 sec. to create the RDD.
+
+```python
+print(RDD.toDebugString().decode())
+
+# RETURNS
+# ->
+"""
+(4) PythonRDD[1] at RDD at PythonRDD.scala:48 []
+ |  ParallelCollectionRDD[0] at parallelize at PythonRDD.scala:175 []
+"""
+```
+
+### Define a computation
+
+The role of the function `taketime` is to consume CPU cycles.
+
+```python
+from math import cos
+def taketime(i):
+    [cos(j) for j in range(100)]
+    return cos(i)
+
+%%time
+taketime(1)
+
+# RETURNS
+# ->
+"""
+CPU times: user 0 ns, sys: 0 ns, total: 0 ns
+Wall time: 32.7 µs
+0.5403023058681398
+"""
+```
+
+### Time units
+* 1 second = 1000 Milli-second ($ms$)
+* 1 Millisecond = 1000 Micro-second ($\mu s$)
+* 1 Microsecond = 1000 Nano-second ($ns$)
+
+### Clock Rate
+One cycle of a 3GHz cpu takes $\frac{1}{3}ns$
+ 
+
+`taketime(1000)` takes about 25 $\mu s$ = 75,000 clock cycles.
+
+### The `map` operation
+
+```python
+%%time
+Interm=RDD.map(lambda x: taketime(x))
+
+# RETURNS
+# ->
+"""
+CPU times: user 0 ns, sys: 0 ns, total: 0 ns
+Wall time: 19.1 µs
+"""
+```
+
+### How come so fast?
+
+* We expect this map operation to take 1,000,000 * 25 $\mu s$= 25 Seconds.
+* Why did the previous cell take just 29 $\mu s$?
+* Because no computation was done
+* The cell defined an execution plan, but did not execute it yet.
+
+Lazy Execution refers to this type of behaviour. The system delays actual computation until the latest possible moment. Instead of computing the content of the RDD, it adds the RDD to the execution plan.
+
+Using Lazy evaluation of a plan has two main advantages relative to immediate execution of each step:
+
+1. A single pass over the data, rather than multiple passes.
+2. Smaller memory footprint becase no intermediate results are saved.
+### Execution Plans
+
+At this point the variable Interm does not point to an actual data structure. Instead, it points to an execution plan expressed as a dependence graph. The dependence graph defines how the RDDs are computed from each other.
+
+The dependence graph associated with an RDD can be printed out using the method `toDebugString()`.
+
+```python
+print(Interm.toDebugString().decode())
+
+# RETURNS
+# ->
+"""
+(4) PythonRDD[2] at RDD at PythonRDD.scala:48 []
+ |  ParallelCollectionRDD[0] at parallelize at PythonRDD.scala:175 []
+"""
+```
+
+Interm = ``(4) PythonRDD[2]` at RDD at `PythonRDD.scala:48 []`
+
+`______(4)`` corresponds to the number of partitions
+
+RDD =   |  `ParallelCollectionRDD[0]` at parallelize at `PythonRDD.scala:489 []`
+
+At this point only the two left blocks of the plan have been declared.
+
+### Actual execution
+
+The reduce command needs to output an actual output, spark therefor has to actually execute the `map` and the reduce. Some real computation needs to be done, which takes about 1 - 3 seconds (Wall time) depending on the machine used and on it's load.
+
+```python
+%%time
+print('out=',Interm.reduce(lambda x,y:x+y))
+
+# RETURNS
+# ->
+"""
+out= -0.2887054679684464
+CPU times: user 4 ms, sys: 8 ms, total: 12 ms
+Wall time: 6.59 s
+"""
+```
+
+### How come so fast? (take 2)
+
+* We expect this map operation to take 1,000,000 * 25 $\mu s$ = 25 Seconds.
+* Map+reduce takes only ~4 second.
+* Why?
+* Because we have 4 workers, rather than one.
+* Because the measurement of a single iteration of taketime is an overestimate.
+
+### Executing a different calculation based on the same plan.
+
+The plan defined by `Interm` might need to be executed more than once.
+
+Example: compute the number of map outputs that are larger than zero.
+
+```python
+%%time
+print('out=',Interm.filter(lambda x:x>0).count())
+
+# RETURNS
+# ->
+"""
+out= 500000
+CPU times: user 8 ms, sys: 0 ns, total: 8 ms
+Wall time: 7.86 s
+"""
+```
+
+### The price of not materializing
+
+* The run-time (3.4 sec) is similar to that of the reduce (4.4 sec).
+* Because the intermediate results in `Interm` have not been saved in memory (materialized)
+* They need to be recomputed.
+
+The middle block: `Map(Taketime)` is executed twice. Once for each final step.
+
+### Caching intermediate results
+
+* We sometimes want to keep the intermediate results in memory so that we can reuse them later without recalculating. * This will reduce the running time, at the cost of requiring more memory.
+* The method `cache()` indicates that the RDD generates in this plan should be stored in memory. Note that this is a plan to cache. The actual caching will be done only when the final result is needed.
+
+```python
+%%time
+Interm=RDD.map(lambda x: taketime(x)).cache()
+
+# RETURNS
+# ->
+"""
+CPU times: user 4 ms, sys: 0 ns, total: 4 ms
+Wall time: 14.2 ms
+"""
+```
+
+By adding the Cache after `Map(Taketime)`, we save the results of the map for the second computation.
+
+### Plan to cache
+The definition of `Interm` is almost the same as before. However, the plan corresponding to `Interm` is more elaborate and contains information about how the intermediate results will be cached and replicated.
+
+Note that `PythonRDD[4]` is now [Memory Serialized 1x Replicated]
+
+```python
+print(Interm.toDebugString().decode())
+
+# RETURNS
+# ->
+"""
+(4) PythonRDD[5] at RDD at PythonRDD.scala:48 [Memory Serialized 1x Replicated]
+ |  ParallelCollectionRDD[0] at parallelize at PythonRDD.scala:175 [Memory Serialized 1x Replicated]
+"""
+```
+
+### Comparing plans with and without cache
+
+Plan with Cache
+
+```python
+4) PythonRDD[33] at RDD at PythonRDD.scala:48 [Memory Serialized 1x Replicated]
+ |  ParallelCollectionRDD[0] at parallelize at PythonRDD.scala:489 [Memory Serialized 1x Replicated]
+```
+
+The difference is that the plan for both RDDs includes [Memory Serialized 1x Replicated] which is the plan to materialize both RDDs when they are computed.
+
+### Creating the cache
+The following command executes the first map-reduce command and caches the result of the `map` command in memory.
+
+```python
+%%time
+print('out=',Interm.reduce(lambda x,y:x+y))
+
+# RETURNS
+# ->
+"""
+out= -0.2887054679684464
+CPU times: user 4 ms, sys: 4 ms, total: 8 ms
+Wall time: 11.2 s
+"""
+```
+
+### Using the cache
+
+This time `Interm` is cached. Therefor the second use of `Interm` is much faster than when we did not use cache: 0.25 second instead of 1.9 second. (your milage may vary depending on the computer you are running this on).
+
+```python
+%%time
+print('out=',Interm.filter(lambda x:x>0).count())
+
+# RETURNS
+# ->
+"""
+out= 500000
+CPU times: user 8 ms, sys: 0 ns, total: 8 ms
+Wall time: 256 ms
+"""
+```
+
+## Summary
+
+* Spark uses Lazy Evaluation to save time and space.
+* When the same RDD is needed as input for several computations, it can be better to keep it in memory, also called `cache()`.
+* Next Video, Partitioning and Gloming
+
+# Partitioning and Gloming
+* When an RDD is created, you can specify the number of partitions.
+* The default is the number of workers defined when you set up SparkContext
+```python
+A=sc.parallelize(range(1000000))
+print(A.getNumPartitions())
+# RETURNS
+# -> 4
+```
+
+We can repartition A into a different number of partitions.
+```python
+D=A.repartition(10)
+print(D.getNumPartitions())
+
+# RETURNS
+# -> 10
+```
+
+We can also define the number of partitions when creating the RDD.
+
+```python
+A=sc.parallelize(range(1000000),numSlices=10)
+print(A.getNumPartitions())
+# RETURNS
+# -> 10
+```
+
+## Why is the #Partitions important?
+* They define the unit the executor works on.
+* You should have at least as pany partitions as workers.
+* Smaller partitions can allow more parallelization.
+
+## Repartitioning for Load Balancing
+
+Suppose we start with 10 partitions, all with exactly the same number of elements
+```python
+A=sc.parallelize(range(1000000))\
+    .map(lambda x:(x,x)).partitionBy(10)
+print(A.glom().map(len).collect())
+
+# RETURNS
+# -> [100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000]
+```
+
+* Suppose we want to use filter() to select some of the elements in A.
+* Some partitions might have more elements remaining than others.
+
+```python
+#select 10% of the entries
+B=A.filter(lambda pair: pair[0]%5==0)
+# get no. of partitions
+print(B.glom().map(len).collect())
+
+# RETURNS
+# -> [100000, 0, 0, 0, 0, 100000, 0, 0, 0, 0]
+```
+
+* Future operations on B will use only two workers.
+* The other workers will do nothing,because their partitions are empty.
+* To fix the situation we need to repartition the RDD.
+* One way to do that is to repartition using a new key.
+* The method `.partitionBy(k)` expects to get a `(key,value)` RDD where keys are integers.
+* Partitions the RDD into `k` partitions.
+* The element `(key,value)` is placed into partition no. `key % k`
+
+```python
+C=B.map(lambda pair:(pair[1]/10,pair[1])).partitionBy(10) 
+print(C.glom().map(len).collect())
+
+# RETURNS
+# -> [20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000]
+```
+
+* Another approach is to use random partitioning using `repartition(k)`
+* An advantage of random partitioning is that it does not require defining a key.
+* A disadvantage of random partitioning is that you have no control on the partitioning.
+
+```python
+C=B.repartition(10)
+print(C.glom().map(len).collect())
+
+# RETURNS
+# -> [20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000]
+```
+## Glom()
+
+* In general, spark does not allow the worker to refer to specific elements of the RDD.
+* Keeps the language clean, but can be a major limitation.
+* `glom()` transforms each partition into a tuple (immutabe list) of elements.
+* Creates an RDD of tules. One tuple per partition.
+* workers can refer to elements of the partition by index.
+* but you cannot assign values to the elements, the RDD is still immutable.
+* Now we can understand the command used above to count the number of elements in each partition.
+* We use `glom()` to make each partition into a tuple.
+* We use len on each partition to get the length of the tuple - size of the partition.
+* We collect the results to print them out.
+
+```python
+print(C.glom().map(len).collect())
+
+# RETURNS
+# -> [20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000]
+```
+
+* A more elaborate example
+* There are many things that you can do using `glom()`
+
+* Below is an example, can you figure out what it does?
+
+```python
+def getPartitionInfo(G):
+    d=0
+    if len(G)>1: 
+        for i in range(len(G)-1):
+            d+=abs(G[i+1][1]-G[i][1]) # access the glomed RDD that is now a  list
+        return (G[0][0],len(G),d)
+    else:
+        return(None)
+
+output=B.glom().map(lambda B: getPartitionInfo(B)).collect()
+print(output)
+
+# RETURNS
+# -> [(0, 100000, 999990), None, None, None, None, (5, 100000, 999990), None, None, None, None]
+```
+
+## Summary
+* We learned why partitions are important and how to control them.
+* We Learned how `glom()` can be used to allow workers to access their partitions as lists.
+
+--- end {4.1_notebook.md} ---
+--- start{4.1_slides.pdf} ---
+ Execution Plans, Lazy
+Evaluation, and Caching
+         DSC 232R
+1.2 Lazy Evaluation
+• Postpone computing the square until result is needed.
+• No need to store intermediate results.
+• Scan through the data once, rather than twice.
+1.1 Task: calculate the sum of squares
+                               𝑛
+
+                             ෍ 𝑥2𝑖
+                              𝑖=1
+
+The standard (or busy) way to do this is
+
+   1. Calculate the square of each element.
+   2. Sum the squares.
+
+This requires storing all intermediate results.
+Busy Evaluation
+       𝑛
+
+ 𝑆 = ෍ 𝑥2𝑖
+      𝑖=1
+Busy Evaluation
+       𝑛
+
+ 𝑆 = ෍ 𝑥2𝑖
+      𝑖=1
+Busy Evaluation
+       𝑛
+
+ 𝑆 = ෍ 𝑥2𝑖
+      𝑖=1
+Lazy Evaluation
+       𝑛
+
+ 𝑆 = ෍ 𝑥2𝑖
+      𝑖=1
+Lazy Evaluation
+       𝑛
+
+ 𝑆 = ෍ 𝑥2𝑖
+      𝑖=1
+2 Experimenting with Lazy Evaluation
+We create an RDD with one million elements to demonstrate the
+effects of lazy evaluation.
+2.2 Define a Computation
+The role of the function taketime is to consume CPU cycles.
+2.3 Time Units
+• 1 second = 1000 Milli-seconds (ms)
+• 1 Millisecond = 100 Micro-seconds (μs)
+• 1 Microsecond = 1000 Nano-seconds (ns)
+
+
+2.4 Clock Rate
+                             1
+One cycle of a 3GHz cpu takes ns
+                             3
+A single execution of taketime takes about 25 μs = 75,000 clock
+cycles.
+2.3 The map Operation
+
+
+
+
+2.6 How come so fast?
+• We expect this map operation to take 1,000,000 * 25 μs = 25
+  seconds
+• Why did the previous cell take just 29 μs?
+ • Because no computation was done.
+ • The cell defined an execution plan, but did not execute it yet.
+
+
+
+
+At this point, only the two left blocks of the plan have been
+declared.
+2.8 Actual Execution
+The reduce command needs to output an actual output. Spark
+therefore has to actually execute the map and the reduce. Some
+real computation needs to be done, which takes about 1-3 seconds
+(Wall time) depending on the machine used and on its load.
+2.9 How come so fast? (Take 2)
+• We expect this map operation to take 1,000,000 * 25 μs = 25
+  seconds
+• Map + reduce takes only ~4 seconds
+• Why?
+
+• Because we have four workers rather than one.
+• Because the measurement of a single iteration of taketime is an
+  overestimate.
+2.10 Executing a different calculation based
+on the same plan
+The plan defined by Interm might need to be executed more than
+once.
+
+Example: Compute the number of map outputs that are larger than
+zero.
+2.11 The price of not materializing
+• The run-time (3.4 sec) is similar to that of the reduce (4.4 sec).
+• Because the intermediate results in Interm have not been saved
+  in memory (materialized).
+• They need to be recomputed.
+The middle block: Map(Taketime) is executed twice, once for
+each final step.
+2.12 Caching intermediate results
+• We sometimes want to keep the intermediate results in memory
+  so that we can reuse them later without recalculating.
+• This will reduce the running time, at the cost of requiring more
+  memory.
+• The method cache() indicates that the RDD generates in this
+  plan should be stored in memory. Note that this is a plan to
+  cache. The actual caching will be done only when the final result
+  is needed.
+By adding the Cache after Map(Taketime), we save the results of
+the map for the second computation.
+     2.13 Plan to cache
+The definition of Interm is almost the same as before. However, the plan
+corresponding to Interm is more elaborate and contains information about
+how intermediate results will be cached and replicated.
+
+Note that PythonRDD[4] is now [Memory Serialized 1x Replicated].
+
+We can check on the plan by applying .toDebugString() to the RDD.
+2.14 Creating the cache
+The following command executes the first map-reduce command
+and caches the result of the map command in memory.
+2.15 Using the cache
+This time Interm is cached. Therefore, the second use of Interm
+is much faster than when we did not use cache: 0.25 second
+instead of 1.9 second. (Your milage may vary depending on the
+computer you are running this on).
+3 Summary of evaluation plans
+• Spark uses Lazy Evaluation to save time and space.
+• When the same RDD is needed as input for several computations,
+  it can be better to keep it in memory, also called cache().
+• Next Video, Partitioning and Gloming
+
+--- end {4.1_slides.pdf} ---
+--- start{4.1_transcript.txt} ---
+(lively music) - So in the previous video, I told you about some
+operations that you can do with Spark and RDDs and how
+these operations fit together. What I want to do this time is dig deeper into how you can make these
+things really run fast, right? Because the whole point of
+Spark is that you can run things on cluster of computers
+and get the results therefore significantly faster. If you run Spark on your own computer, there is very little point
+in general in doing that. Okay. So we're going to talk
+about execution plans, lazy evaluation, and caching. We haven't really talked about caching. We talked a little bit
+about execution plans and lazy evaluation, but I think it's worthwhile to dig deeper. And I recommend that you review this. So this is a notebook that
+you should have access to. And there is much more
+information in the notebook than what I will be talking about. And I think it's really important that you go and review that
+notebook, play with it, until you feel like you really
+understand what is going on. Of course, ask question
+whenever you don't understand. Okay, so the task we're
+going to do is a task that we talked about before. It's calculating the sum of square, and the standard or busy way to do this is to calculate the square of
+each element in the RDD, then sum the squares, and
+then you get the result, okay? This requires storing all
+of the intermediate results, and that is a big disadvantage,
+as we will see in a minute. Okay, so here is a visualization of busy evaluation. We have this RDD initially and then we run a square
+operation, a map square, and we get this new RDD, okay? that has the squares or
+the square of each element. Then we run the reduce operation, which basically takes all of
+the elements in the second RDD, in the intermediate RDD, and then calculates the
+sum and we get the result. Okay, so that is a disadvantage. First, because we are calculating, we're storing this intermediate result, which doubles the amount
+of memory that we need. And the second is that we
+pass through the data once to calculate the squares and then we pass through
+the data a second time to calculate the sum. So the idea of lazy evaluation is to postpone computing the square
+until the result is needed. So when you get the command
+through the map of squares, you actually don't do anything. You don't need to store
+any intermediate result. And you scan through the
+data once rather than twice. So let's see how that works. We start at the beginning of this RDD. And then we square 2 to get
+4, we square 5 to get 25, and then we sum these two
+elements, and get 29, okay? Now this second RDD is
+not really materialized. We're not storing all of
+these intermediate results. I'm just showing them
+here for illustration. So here we have the third element. We take the -6 and we take the square root to 36, and then we take the 36, add it to the 29, and get the 65, okay? And now we can forget about the 36, as we forgot about the previous element. So let's do some experiment
+to see how this works in practice. So we're going to create an
+RDD with 1 million elements to demonstrate the effects
+of lazy evaluation. So we basically just take the range, zero to 1 million minus 1, range 1 million; and we parallelize it to create an RDD. This is not really a very big RDD, but it would suffice for demonstration. Okay, now we're going
+to define an operation that we are going to use for map, okay? So map, if you just square,
+is a very tiny operation, takes very, very little time, so redoing that operation is not costly. But I want an operation
+that is relatively costly. So I just called it
+taketime to indicate that. And it just does some computation that is not really very important, but it basically calculate the cosine of all of the numbers
+between zero and 99, okay? So just something to do, and then it returns the cosine of the element that you
+got with any (inaudible). So nothing really smart here, it's just a way to waste time. Okay? So if we calculate the time
+that it take, that's here, about 44.3 microsecond, nanosecond. So I always get these things confused. So to help me, I have here
+a little table to remind you that one second is 1,000 millisecond. One millisecond is 1,000 microsecond. and one microsecond is 1,000 nanosecond. So basically, second is
+a billion nanosecond. Many, many, many nanoseconds in a second. And in the clock rate, that we typically have three
+gigahertz in modern computers, it means that one cycle takes
+1/3 of nanosecond, okay? So it basically means that we can execute, we have 3 billion operations per second. Now, the single execution
+of taketime takes about 25 microsecond, right 25 microseconds. So that's about 75,000 clock cycle. Okay, so here is the map operation. We basically say, Interm is R.map of lambda x and taketime x, okay? So on each x in each one
+of the million elements we do the taketime operation, and this is the amount
+of time that it took. That is very, very little, right? 24 microsecond is just about the time that it takes to compute this once, to compute taketime once. So how come it is so fast, right? I mean, what we expected is
+maybe something like 25 second. How come it is so fast? The previous took about 29 microsecond. Here it took actually 24 microsecond. And this is because no
+computation was done, okay? So this is a manifestation
+of the lazy execution. Got an operation. The operation might be quite expensive, but we haven't done it. So therefore, that finished very quickly. Okay? So you can actually read
+out the execution plan that you have right now in the system, the R, the RDD R, and the Interm, intermediate RDD both can be written out and this is the description
+of the steps that they're saying. So this is an explicit way of saying, "This is what we are going to do when this map is going to be executed. Okay? So we can think
+about it in this way: We can have an RDD and this RDD, this RDD might have been
+already materialized, and this, then we run on it a Map time and then we're going
+to run on it a reduce. And then at the end, we're
+going to have a number. Okay? So this is the pipeline of what we are doing. So this whole thing, from parallelized map and
+reduce is the pipeline. We haven't reached the reduce step. Okay? So here is the execution. So the reduce command needs
+to output an actual number. That it cannot say, "Oh, I will
+calculate something later." Therefore, we have to actually operate and this is what happened. So we take the intermediate RDD and take an operation reduce
+that just sums the result. And then we see that
+what this takes in terms of Wall time is 2.61 second, okay? So this still is fast, right? Because we expected 25 second and what we got is something more like 3 second or 2 second. Why is that? Well, one reason is because we
+actually have on my computer 4 workers, we have 4 core.
+And so each core is a CPU. And the other is that actually
+the measurement that they did of how long it takes to run taketime is an overestimate because there's more
+things happening in Python that cost significant amount of time that is not really the time
+that the cover of time take. But still it takes time,
+it takes 2 1/2 second. Okay? So what do we see here? We saw that we have this plan
+that is being accumulated as we write the command and
+only when we need to execute in order to generate something, then it actually takes the computation. That's the lazy computation. Now, the problem with
+the lazy computation is that sometimes we actually
+need the intermediate results for other calculations. Okay, so it might be that
+this intermediate results of taking the squares over
+the square of every element is actually something that
+later we would want to use and it would be costly to redo it, right? So that's the idea, the idea that helps with that
+is what's called caching. Okay? So here's the intermediate result. And now we do a different
+command on it, filter. And what we see is that the
+amount of time that it took to do filter is significant and the reason is because
+it actually executed all of the map command again, right? Because the intermediate
+results were not held anywhere and so we paid this price of recalculating the intermediate result. So a lot of what you do as
+a programmer in Spark is that you basically say, "Okay, which parts of the
+calculation do I need to store or to cache and which
+parts I can just let go and not materialize them?" Okay, so the price of not materializing, the numbers here, not
+exactly the right ones, but the runtime is similar
+to that of the reduce, right? That's because we needed
+to calculate things twice. The intermediate result in
+Interm have not been saved in memory. So it's kind of interesting to just think about it for a minute. What is Interm? Interm is just a plan to
+calculate something, right? So it's a plan to calculate the squares. It is not an actual
+storage of the squares. So it's an RDD that has not
+been materialized, okay? So it needs to be recomputed
+whenever it's needed. So two seconds might not be a big issue, but let's say it's an hour,
+then it starts to be an issue. Okay, so what we have right now is just this kind of pipeline. So we have this pipeline going into here and then we have another
+pipeline that basically goes to here and this pipeline
+requires us to recompute this map. Okay, so what we want to do is to cache intermediate results. We sometimes want to keep
+this intermediate results so that we don't need to recalculate them, and this will reduce the
+running time at the cost of requiring more memory, right? Because now we're back to
+storing intermediate things. So we can decide which
+pieces we want to store or otherwise we just don't
+store them and recalculate them. So there is a command
+for doing exactly that and it's called cache. But the surprising, a little
+bit strange things about it, it's not really immediately storing, it's just planning to store. So when you write the command cache, it's really a plan to cache. It's part of the lazy plan. Okay? So if I'm writing this, I have R.map, Interm is R.map taketime and then this is cache, cache. But it doesn't take much more time. Okay? So when does it take time? It will take the time when it
+is actually executing. Okay? So we put here a cache,
+right after the Map, and once we will calculate the Map, we will basically store the
+intermediate result in the cache and then we can take the cache and quickly calculate
+the reduce or the filter or anything else that we might want to do. So here is the plan to cache and you can read the
+details of the plan here. Not going to do that. And now we're going to
+actually create the cache. Okay? So now that we do a reduce, that takes a significant amount of time. But this time is now amortized. So we basically materialize
+the intermediate result. So we're not going to need to
+pay this amount of time again. And now we're going to
+use the cache. Okay? So what we see is now we are
+basically doing the exact same command as before:
+Interm.filter, okay? And then we see that the time that it took is 169 millisecond instead of, like, two second. Okay? So that's basically a demonstration of the utility of a cache. Okay, so to summarize evaluation plan, Spark uses lazy evaluation
+to save time and space. When the same RDD is needed as input for several computations, it can be better to keep it in memory, and this is also called caching. Okay. So I'll see you next time.
+--- end {4.1_transcript.txt} ---
+--- start{4.2_notebook.md} ---
+# Operations on (key,val) RDDs
+
+## Types of spark operations
+
+There are Three types of operations on RDDs: Transformations, Actions and Shuffles.
+
+* The most expensive operations are those the require communication between nodes.
+
+### Transformations: RDD $\rightarrow$ RDD.
+
+* Examples map, filter, sample, More
+* No communication needed.
+
+### Actions: RDD $\rightarrow$ Python-object in head node.
+
+* Examples: reduce, collect, count, take, More
+* Some communication needed.
+### Shuffles: RDD $\rightarrow$ RDD, shuffle needed
+
+* Examples: sort, distinct, repartition, sortByKey, reduceByKey, join More
+* A LOT of communication might be needed.
+
+## Key/value pairs
+
+* A python dictionary is a collection of key/value pairs.
+* The key is used to find a set of pairs with the particular key.
+* The value can be anything.
+* Spark has a set of special operations for (key,value) RDDs.
+
+Spark provides specific functions to deal with RDDs in which each element is a key/value pair. Key/value RDDs expose new operations (e.g. aggregating and grouping together data with the same key and grouping together two different RDDs.) Such RDDs are also called pair RDDs. In python, each element of a pair RDD is a pair tuple.
+
+```python
+import os
+os.environ["PYSPARK_PYTHON"]="python3"
+os.environ["PYSPARK_DRIVER_PYTHON"] = "python3"
+
+from pyspark import SparkContext
+sc = SparkContext(master="local[4]")
+```
+
+## Creating (key,value) RDDS
+
+### Method 1: `parallelize` a list of pairs.
+
+```python
+pair_rdd = sc.parallelize([(1,2), (3,4)])
+print(pair_rdd.collect())
+
+# RETURNS
+# -> [(1, 2), (3, 4)]
+```
+
+### Method 2: `map` a function that maps elements to key/value pairs.
+
+```python
+regular_rdd = sc.parallelize([1, 2, 3, 4, 2, 5, 6])
+pair_rdd = regular_rdd.map( lambda x: (x, x*x) )
+print(pair_rdd.collect())
+
+# RETURNS
+# -> [(1, 1), (2, 4), (3, 9), (4, 16), (2, 4), (5, 25), (6, 36)]
+```
+
+## Transformations on (key,value) rdds
+
+### `reduceByKey(func)`
+
+Apply the reduce function on the values with the same key.
+
+```python
+rdd = sc.parallelize([(1,2), (2,4), (2,6)])
+print("Original RDD :", rdd.collect())
+print("After transformation : ", rdd.reduceByKey(lambda a,b: a+b).collect())
+
+# RETURNS
+# -> 
+"""
+Original RDD : [(1, 2), (2, 4), (2, 6)]
+After transformation :  [(1, 2), (2, 10)]
+"""
+```
+
+### `sortByKey()`
+
+Sort RDD by keys in ascending order.
+
+```python
+rdd = sc.parallelize([(2,2), (1,4), (3,6)])
+print("Original RDD :", rdd.collect())
+print("After transformation : ", rdd.sortByKey().collect())
+
+# RETURNS
+# ->
+"""
+Original RDD : [(2, 2), (1, 4), (3, 6)]
+After transformation :  [(1, 4), (2, 2), (3, 6)]
+"""
+```
+
+Note: The output of sortByKey() is an RDD. This means that RDDs do have a meaningful order, which extends between partitions.
+
+### `mapValues(func)`
+
+Apply func to each value of RDD without changing the key.
+
+```python
+rdd = sc.parallelize([(1,2), (2,4), (2,6)])
+print("Original RDD :", rdd.collect())
+print("After transformation : ", rdd.mapValues(lambda x: x*2).collect())
+
+# RETURNS
+# ->
+"""
+Original RDD : [(1, 2), (2, 4), (2, 6)]
+After transformation :  [(1, 4), (2, 8), (2, 12)]
+"""
+```
+
+### `groupByKey()`
+
+Returns a new RDD of `(key,<iterator>)` pairs where the iterator iterates over the values associated with the key.
+
+
+`Iterators` are python objects that generate a sequence of values. Writing a loop over `n` elements as
+
+```python
+for i in range(n):
+    ## do something...
+```
+
+is inefficient because it first allocates a list of `n` elements and then iterates over it. Using the iterator `xrange(n)` achieves the same result without materializing the list. Instead, elements are generated on the fly.
+
+To materialize the list of values returned by an iterator we will use the list comprehension command:
+
+```python
+[i for i in list]
+```
+
+```python
+rdd = sc.parallelize([(1,2), (2,4), (2,6)])
+print("Original RDD :", rdd.collect())
+print("After transformation : ", rdd.groupByKey().mapValues(lambda x:[a for a in x]).collect())
+
+# RETURNS
+# ->
+"""
+Original RDD : [(1, 2), (2, 4), (2, 6)]
+After transformation :  [(1, [2]), (2, [4, 6])]
+"""
+```
+
+### `flatMapValues(func)`
+
+Similar to `flatMap()`: creates a separate key/value pair for each element of the list generated by the map operation.
+
+func is a function that takes as input a single value and returns an iterator that generates a sequence of values. The application of flatMapValues operates on a key/value RDD. It applies `func`to each value, and gets an list (generated by the iterator) of values. It then combines each of the values with the original key to produce a list of key-value pairs. These lists are concatenated as in `flatMap`
+
+```python
+rdd = sc.parallelize([(1,2), (2,4), (2,6)])
+print("Original RDD :", rdd.collect())
+# the lambda function generates for each number i, an iterator that produces i,i+1
+print("After transformation : ", rdd.flatMapValues(lambda x: list(range(x,x+2))).collect())
+
+# RETURNS
+# ->
+"""
+Original RDD : [(1, 2), (2, 4), (2, 6)]
+After transformation :  [(1, 2), (1, 3), (2, 4), (2, 5), (2, 6), (2, 7)]
+"""
+```
+
+### (Advanced) `combineByKey(createCombiner, mergeValue, mergeCombiner)`
+
+Combine values with the same key using a different result type.
+
+This is the most general of the per-key aggregation functions. Most of the other per-key combiners are implemented using it.
+
+The elements of the original RDD are considered here values
+
+Values are converted into combiners which we will refer to here as "accumulators". An example of such a mapping is the mapping of the value word to the accumulator (word,1) that is done in WordCount.
+
+accumulators are then combined with values and the other combiner to generate a result for each key.
+
+For example, we can use it to calculate per-activity average durations as follows. Consider an RDD of key/value pairs where keys correspond to different activities and values correspond to duration.
+
+```python
+rdd = sc.parallelize([("Sleep", 7), ("Work",5), ("Play", 3), 
+                      ("Sleep", 6), ("Work",4), ("Play", 4),
+                      ("Sleep", 8), ("Work",5), ("Play", 5)])
+
+sum_counts = rdd.combineByKey(
+    (lambda x: (x, 1)), # createCombiner maps each value into a  combiner (or accumulator)
+    (lambda acc, value: (acc[0]+value, acc[1]+1)),
+#mergeValue defines how to merge a accumulator with a value (saves on mapping each value to an accumulator first)
+    (lambda acc1, acc2: (acc1[0]+acc2[0], acc1[1]+acc2[1])) # combine accumulators
+)
+
+print(sum_counts.collect())
+duration_means_by_activity = sum_counts.mapValues(lambda value:
+                                                  value[0]*1.0/value[1]) \
+                                            .collect()
+print(duration_means_by_activity)
+
+# RETURNS
+# ->
+"""
+[('Work', (14, 3)), ('Play', (12, 3)), ('Sleep', (21, 3))]
+[('Work', 4.666666666666667), ('Play', 4.0), ('Sleep', 7.0)]
+"""
+```
+
+
+To understand combineByKey(), it’s useful to think of how it handles each element it processes. As combineByKey() traverses through the elements in a partition, each element either has a key it hasn’t seen before or has the same key as a previous element.
+
+If it’s a new key, createCombiner() is called to create the initial value for the accumulator on that key. In the above example, the accumulator is a tuple initialized as (x, 1) where x is a value in original RDD. Note that createCombiner() is called only when a key is seen for the first time in each partition.
+
+If it is a key we have seen before while processing that partition, it will instead use the provided function, mergeValue(), with the current value for the accumulator for that key and the new value.
+
+Since each partition is processed independently, we can have multiple accumulators for the same key. When we are merging the results from each partition, if two or more partitions have an accumulator for the same key, we merge the accumulators using the user-supplied mergeCombiners() function. In the above example, we are just adding the 2 accumulators element-wise.
+
+## Transformations on two (key-value) RDDs
+
+```python
+rdd1 = sc.parallelize([(1,2),(2,1),(2,2)])
+rdd2 = sc.parallelize([(2,5),(3,1)])
+print('rdd1=',rdd1.collect())
+print('rdd2=',rdd2.collect())
+
+# RETURNS
+# ->
+"""
+rdd1= [(1, 2), (2, 1), (2, 2)]
+rdd2= [(2, 5), (3, 1)]
+"""
+```
+
+1. `subtractByKey`
+
+Remove from RDD1 all elements whose key is present in RDD2.
+
+```python
+print('rdd1=',rdd1.collect())
+print('rdd2=',rdd2.collect())
+print("Result:", rdd1.subtractByKey(rdd2).collect())
+
+# RETURNS
+# ->
+"""
+rdd1= [(1, 2), (2, 1), (2, 2)]
+rdd2= [(2, 5), (3, 1)]
+Result: [(1, 2)]
+"""
+```
+
+2. `join`
+
+* A fundamental operation in relational databases.
+* assumes two tables have a key column in common.
+* merges rows with the same key.
+
+Suppose we have `key,value` datasets
+
+|dataset 1| |..........| dataset 2 | | |-------------|-------------------------------------| |-------------|-----------------| | key=name | (gender,occupation,age) | | key=name | hair color | | John | (male,cook,21) | | Jill | blond | | Jill | (female,programmer,19) | | Grace | brown |
+| John | (male, kid, 2) | | John | black | | Kate | (female, wrestler, 54) |
+
+When `Join` is called on datasets of type `(Key, V)` and `(Key, W)`, it returns a dataset of `(Key, (V, W))` pairs with all pairs of elements for each key. Joining the 2 datasets above yields:
+
+|   key = name | (gender,occupation,age),haircolor |
+|--------------|-----------------------------------|
+| John         | ((male,cook,21),black)            |
+| John         | ((male, kid, 2),black)            |
+| Jill         | ((female,programmer,19),blond)    |
+
+```python
+print('rdd1=',rdd1.collect())
+print('rdd2=',rdd2.collect())
+print("Result:", rdd1.join(rdd2).collect())
+
+# RETURNS
+# ->
+"""
+rdd1= [(1, 2), (2, 1), (2, 2)]
+rdd2= [(2, 5), (3, 1)]
+Result: [(2, (1, 5)), (2, (2, 5))]
+"""
+```
+
+## Variants of join.
+There are four variants of join which differ in how they treat keys that appear in one dataset but not the other.
+
+* `join` is an inner join which means that keys that appear only in one dataset are eliminated.
+* `leftOuterJoin` keeps all keys from the left dataset even if they don't appear in the right dataset. The result of leftOuterJoin in our example will contain the keys John, Jill, Kate
+* `rightOuterJoin` keeps all keys from the right dataset even if they don't appear in the left dataset. The result of leftOuterJoin in our example will contain the keys Jill, Grace, John
+* `FullOuterJoin` keeps all keys from both datasets. The result of leftOuterJoin in our example will contain the keys Jill, Grace, John, Kate
+
+    In outer joins, if the element appears only in one dataset, the element in (K,(V,W)) that does not appear in the dataset is represented bye None
+
+3. `rightOuterJoin`
+
+Perform a right join between two RDDs. Every key in the right/second RDD will be present at least once.
+
+```python
+print('rdd1=',rdd1.collect())
+print('rdd2=',rdd2.collect())
+print("Result:", rdd1.rightOuterJoin(rdd2).collect())
+
+# RETURNS
+# ->
+"""
+rdd1= [(1, 2), (2, 1), (2, 2)]
+rdd2= [(2, 5), (3, 1)]
+Result: [(2, (1, 5)), (2, (2, 5)), (3, (None, 1))]
+"""
+```
+
+4. `leftOuterjoin`: Perform a left join between two RDDs. Every key in the left RDD will be present at least once.
+
+```python
+print('rdd1=',rdd1.collect())
+print('rdd2=',rdd2.collect())
+print("Result:", rdd1.leftOuterJoin(rdd2).collect())
+
+# RETURNS
+# ->
+"""
+rdd1= [(1, 2), (2, 1), (2, 2)]
+rdd2= [(2, 5), (3, 1)]
+Result: [(1, (2, None)), (2, (1, 5)), (2, (2, 5))]
+"""
+```
+
+## Actions on (key,val) RDDs
+
+```python
+rdd = sc.parallelize([(1,2), (2,4), (2,6)])
+```
+
+1. `countByKey()`
+
+Count the number of elements for each key. Returns a dictionary for easy access to keys.
+
+```python
+print("RDD: ", rdd.collect())
+result = rdd.countByKey()
+print("Result:", result)
+
+# RETURNS
+# ->
+"""
+RDD:  [(1, 2), (2, 4), (2, 6)]
+Result: defaultdict(<class 'int'>, {1: 1, 2: 2})
+"""
+```
+
+2. `collectAsMap()`
+
+Collect the result as a dictionary to provide easy lookup.
+
+```python
+print("RDD: ", rdd.collect())
+result = rdd.collectAsMap()
+print("Result:", result)
+# RETURNS
+# ->
+"""
+RDD:  [(1, 2), (2, 4), (2, 6)]
+Result: {1: 2, 2: 6}
+"""
+```
+
+3. `lookup(key)`
+
+Return all values associated with the provided key.
+
+```python
+print("RDD: ", rdd.collect())
+result = rdd.lookup(2 )
+print("Result:", result)
+
+# RETURNS
+# ->
+"""
+RDD:  [(1, 2), (2, 4), (2, 6)]
+Result: [4, 6]
+"""
+```
+
+## Summary
+* We saw some more of the operations on Pair RDDs
+* For more, see the spark RDD programming guide
+* Next DataFrames and Spark-SQL
+
+
+--- end {4.2_notebook.md} ---
+--- start{4.2_slides.pdf} ---
+Key-Value Operations
+       DSC 232R
+Operations on (key,val) RDDs
+RDDs are similar to Python lists in that each element can be of a
+different type and size.
+(key.value) RDDs are useful to store and retrieve records. Examples:
+
+• Key = SNN, Value = personal information
+• Key = (Longitude, Latitude), Value = address
+• Key = word, Value = number of occurrences
+1.1 Three types of Spark operations
+• Transformations
+• Actions
+• Shuffles
+Transformations: RDD → RDD.
+• Examples: map, filter, sample, more
+• No communication needed.
+Actions: RDD → Python-object in head node.
+• Examples: reduce, collect, count, take, more
+• Some communication needed.
+Shuffles: RDD → RDD, shuffle needed
+• Examples: sort, distinct, repartition, sortByKey, reduceByKey, join
+  more
+• A LOT communication might be needed.
+1.4 Transformations on (key,value) rdds
+1.4.1 reduceByKey(func)
+Apply the reduce function on the values with the same key.
+1.4.2 sortByKey():
+Sort RDD by keys in ascending order.
+1.4.3 mapValues(func):
+Apply func to each value of RDD without changing the key.
+1.5 Transformations on two (key-value) RDDs
+1.5.1 1. subtractByKey:
+Remove from RDD1 all elements whose key is present in RDD2.
+1.5.2 2. join:
+• A fundamental operation in relational databases.
+• Assumes two tables have a key column in common.
+• Merges rows with the same key.
+
+Suppose we have two (key,value) datasets.
+Accessible Table of Page 14
+
+ Dataset 1                               Dataset 2
+ key=name    (gender, occupation, age)   key=name    hair color
+ John        (male, cook, 21)            Jil         blond
+ Jill        (female, programmer, 19)    Grace       brown
+ John        (male, kid, 2)              John        black
+ Kate        (female, wrestler, 54)
+When Join is called on datasets of type (Key, V) and (Key,
+W), it returns a dataset of (Key, (V, W)) pairs with all pairs of
+elements for each key. Joining the 2 datasets above yields:
+Accessible Table of Page 16
+
+
+     key = name   (gender, occupation, age), hair color
+     John         ((male, cook, 21), black)
+     John         ((male, kid, 2), black)
+     Jill         ((female, programmer, 19), blond)
+1.7 Actions on (key,val) RDDs
+1.7.1 1. countByKey():
+Count the number of elements for each key. Returns a dictionary for
+easy access to keys.
+1.7.2 2. collectAsMap():
+Collect the result as a dictionary to provide easy lookup.
+1.7.3 3. lookup(key):
+Return all values associated with the provided key.
+2 Summary
+• We saw some more of the operations on Pair RDDs.
+• For more, see the Spark RDD programming guide.
+• An example of an actual Spark program: Word-Count.
+
+--- end {4.2_slides.pdf} ---
+--- start{4.2_transcript.txt} ---
+- Hi. So, we talked about RDD's and how to, how to do transformations
+and actions on RDD's, and now we're going to talk
+about a special kind of RDD. RDD's in which each element
+is a pair, a key and a value. So you can use any kind of, any kind of Python
+structure inside an RDD. But this specific type
+has a lot of support because then you'll see it's very useful. Okay so, here is an example. We have the key social security number, and the value is personal information. Or the key is longitude and latitude, and the value is the address. It corresponds to this location. And then the key is a word, and the value is the number
+of occurrences of this word. We'll see that in the next
+video when we do word counting. We have a key that identifies the record, and then the value is the record itself. So what kind of things
+can we do with that? We can do three types of spark operations, transformations, actions, and shuffles. And just to remind you, transformations take an
+RDD and generate a new RDD. And examples are map filter, sample, and you don't need any
+communication for doing that. Each computer can do it by itself. Then, an action is something that collects all of the data from the RDD, and somehow comes up
+with a single element, that is stored in the head note. In this case we have things like reduce, collect, count, take, and you need some communication. You need communication
+from the workers machines to the head note. And finally we have shuffles, so shuffles are really
+the heavy operations that we try to do not too many of because they take a lot of time. These are things like sort,
+distinct, repartition, sortByKey, reduceByKey, and
+we'll see what these things are. And these things require
+a lot of communication, so basically data needs to
+move from worker to worker, and that requires communication
+of large amounts of data through the ethernet connecting them. Let's start with some
+transformations on key value RDD's. The first one that is really very useful is something called reduceByKey. It generates a new RDD, where the, for each key you have the
+result of the reduction on the values that are
+associated with that key. So you can sum all of the
+values that are associated with that particular word. So you have the sum of
+these values for the word. So here is an example of that, suppose that you have an RDD that is an RDD consisting of three pairs. In each one of them the
+first element is the key, and the second element is the value. The RDD, the reduce operation
+that we're doing here is this, just summing. So we're basically summing
+all of the elements according to one of the keys. So here we have two key values, 2 and 1. And one just, we keep it there because it's just one element. And for the other one we sum
+the 4 and the 6 to get this 10. That's basically the result of the reduce. SortByKey is to take all
+of our key value pairs and just sort them
+according to the key value. That's a shuffle, and it basically says okay if I have these 3 elements, then I'm going to sort
+them according to the key which is the first element 1, 2, 3, and what I get as the
+result is the same pairs but ordered by their key. The map values is a simple operation. We're going to operate on each value without changing the key Here we have the operation which is take x and
+replace it by 2 x, times 2. So what we get from the
+original RDD being this, we just have the first pair, the key remains of the second is 4. They key remains of the
+second is 2 times 4 is 8. The key remains and the value is 2 times 6 which is 12. Now notice that key value maps don't have to have the, each key appearing only once. This is the thing about
+key value pairs in spark, that you don't have unique keys. You're not guaranteed unique keys. Now let's look at some transformations on two key value pairs. We take two RDD's, each one of them is a
+collection of key value pairs and we want to somehow do an
+operation to combine them. So subtractByKey means
+that you take all the keys that are elements in RDD 2, all of the keys in RDD 2 and we remove the elements
+with those keys from RDD 1. Here we have RDD 1, it
+has the keys 1, 2, and 2. And RDD 2 has the keys 2 and 3. So they key 2 is the critical one, it basically removes these two pairs. And what we're left with is
+just the first pair, 1 and 2. That's how that works. Join is one of the special operations that is meant to combine 2
+key value pair collections. It is very much one of the key operations in relational database. This gives us some of the
+relational database abilities inside spark. Suppose that we have these two datasets. Here we have dataset
+1, the key is the name and the value is gender, occupation, age. These are the four
+records that we have here. You notice that we have two Johns. And then here we have database 2, we have 3, we have basically a name
+and then the hair color and here we have these 3 people. We want to do join, so
+that means we want to take we want to take John here, here is John, and here is John, and John. And we basically want to add
+that color black to John. And for Jill, we want
+to add the color blonde. So Jill we have the color blonde, we add blonde here. And for Kate we, we don't have Kate over here, so we're not going to join those. How does that work? It returns, what the join operation returns, it returns a new key value pair. Key value collection, but
+the key is the same key as appeared in the two sets
+and the value is a pair. Which is the value from 1 set and the value from the other set. If you combine these 2 key value RDD's, what you get is a set that has only the, the common key. So John appears in both
+and Jill appears in both. And then for each John we
+have black hair we added, and for each Jill we added blonde. All right, so so here we have a small
+join that we're doing just between 2 simple RDD's. And we have 1, 2, and 2 is key. Here, 1, 2, and 2. And in RDD 2 we have the keys 2 and 3. What we get in the result, is we get 2 record
+corresponding to the key 2. Both of them have the key 2, which is the only common one. And then one of them has 1 and 5, so 1 taken from here and
+the 5 taken from here, and then in the other one we get 2 and 5. Now here we get the 2 from
+here and the same 5 from here. That's how this join works,
+this is an inner join if you know the SQL terminology. There are, I think variants that you
+can do other types of joins. What are the actions that
+we have for key value RDD. We have countByKey, so we can count the number
+of elements for each key. So just like count, but it
+does it separately on each key and returns a new, returns a dictionary, it's no longer an RDD
+that is in the head note. This is different from doing
+reduceByKey with addition because that generates the same result but essentially as an RDD. It depends on whether
+you want to say that, whether you assume that the
+number of keys that you have is big or small. Let's consider the next
+operation which is collectAsMap. CollectAsMap basically
+takes a key value RDD and returns it as a dictionary. So it's easier to use on the python side. But there is one tricky thing here, which is that it only
+returns one value per key. Which one it will choose,
+there's no telling. And here is what we get
+if we have this RDD, if we have this RDD, then 1, 2, 2, 4, and 2, 6. We see that there are 2
+elements with the same key and it just chose one of them, 2, 6. So 1 maps to 2, and 2 maps to 6, the 2, 4 has been lost. Lookup is another operation
+that is similar to databases. We want to return all the
+values for a particular key. Here is this RDD again that
+we had 1, 2, 2, 4, 2, 6. We ask to look up the key 2. So basically that give us
+the 2, 4, and the 2, 6, so we return the values 4 and 6. This one does keep all of the
+values associated with that. To summarize we saw some of
+the operations with pair RDD. And there's many more, you can see this notebook has more detail than what I went over. Also there is the RDD program guide that you can use that's linked. And it will get you to
+the full information about RDD's with just single elements
+or with key value pairs. Next what we're going to do is, we're going to look at the actual program so we can see how RDD's
+and all of these operations are used together to do something useful. I'll see you soon.
+--- end {4.2_transcript.txt} ---
+--- start{4.3_notebook.md} ---
+# Word Count
+
+Counting the number of occurances of words in a text is a popular first exercise using map-reduce.
+
+## The Task
+
+Input: A text file consisisting of words separated by spaces.
+Output: A list of words and their counts, sorted from the most to the least common.
+
+We will use the book "Moby Dick" as our input.
+
+```python
+mport os
+os.environ["PYSPARK_PYTHON"]="python3"
+os.environ["PYSPARK_DRIVER_PYTHON"] = "python3"
+
+#start the SparkContext
+from pyspark import SparkContext
+sc=SparkContext(master="local[4]")
+
+# set import path
+import sys
+sys.path.append('../../Utils/')
+#from plan2table import plan2table
+
+def pretty_print_plan(rdd):
+    for x in rdd.toDebugString().decode().split('\n'):
+        print(x)
+```
+
+## Define an RDD that will read the file
+* Execution of read is lazy
+* File has been opened.
+* Reading starts when stage is executed.
+
+```python
+%%time
+data_dir='../Data'
+filename='Moby-Dick.txt'
+text_file = sc.textFile(data_dir+'/'+filename)
+type(text_file) 
+
+# RETURNS
+# ->
+"""
+CPU times: user 4 ms, sys: 0 ns, total: 4 ms
+Wall time: 1.89 s
+"""
+```
+
+## Steps for counting the words
+* split line by spaces.
+* map word to (word,1)
+* count the number of occurances of each word.
+
+```python
+%%time
+words =     text_file.flatMap(lambda line: line.split(" "))
+not_empty = words.filter(lambda x: x!='') 
+key_values= not_empty.map(lambda word: (word, 1)) 
+counts=     key_values.reduceByKey(lambda a, b: a + b)
+
+# RETURNS
+# ->
+"""
+CPU times: user 16 ms, sys: 0 ns, total: 16 ms
+Wall time: 239 ms
+"""
+```
+
+## `flatMap()`
+
+Note the line:
+
+```python
+words = text_file.flatMap(lambda line: line.split(" "))
+```
+
+Why are we using `flatMap`, rather than `map`?
+
+The reason is that the operation `line.split(" ")` generates a list of strings, so had we used `map` the result would be an RDD of lists of words. Not an RDD of words.
+
+The difference between `map` and `flatMap` is that the second expects to get a list as the result from the map and it concatenates the lists to form the RDD.
+
+## The execution plan
+
+In the last cell we defined the execution plan, but we have not started to execute it.
+
+* Preparing the plan took ~100ms, which is a non-trivial amount of time,
+* But much less than the time it will take to execute it.
+* Lets have a look a the execution plan.
+
+### Understanding the details
+
+To see which step in the plan corresponds to which RDD we print out the execution plan for each of the RDDs.
+
+Note that the execution plan for `words`, `not_empty` and `key_values` are all the same.
+
+```python
+pretty_print_plan(text_file)
+
+# RETURNS
+# ->
+"""
+(2) ../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:0 []
+ |  ../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMethodAccessorImpl.java:0 []
+"""
+```
+
+```python
+pretty_print_plan(words)
+# RETURNS
+# ->
+"""
+(2) PythonRDD[6] at RDD at PythonRDD.scala:48 []
+ |  ../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:0 []
+ |  ../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMethodAccessorImpl.java:0 []
+"""
+```
+
+
+```python
+pretty_print_plan(not_empty)
+# RETURNS
+# ->
+"""
+(2) PythonRDD[7] at RDD at PythonRDD.scala:48 []
+ |  ../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:0 []
+ |  ../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMethodAccessorImpl.java:0 []
+"""
+```
+
+```python
+pretty_print_plan(key_values)
+# RETURNS
+# ->
+"""
+(2) PythonRDD[8] at RDD at PythonRDD.scala:48 []
+ |  ../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:0 []
+ |  ../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMethodAccessorImpl.java:0 []
+"""
+```
+
+```python
+pretty_print_plan(counts)
+# RETURNS
+# ->
+"""
+(2) PythonRDD[9] at RDD at PythonRDD.scala:48 []
+ |  MapPartitionsRDD[5] at mapPartitions at PythonRDD.scala:122 []
+ |  ShuffledRDD[4] at partitionBy at NativeMethodAccessorImpl.java:0 []
+ +-(2) PairwiseRDD[3] at reduceByKey at <timed exec>:4 []
+    |  PythonRDD[2] at reduceByKey at <timed exec>:4 []
+    |  ../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:0 []
+    |  ../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMethodAccessorImpl.java:0 []
+"""
+```
+
+| Execution plan | RDD | Comments | | :---------------------------------------------------------------- | :------------: | :--- | |(2)_PythonRDD[6] at RDD at PythonRDD.scala:48 []| counts | Final RDD| |_/__MapPartitionsRDD[5] at mapPartitions at PythonRDD.scala:436 []| ---"--- | |_/__ShuffledRDD[4] at partitionBy at NativeMethodAccessorImpl.java:0 [| ---"--- | RDD is partitioned by key | |_+-(2)_PairwiseRDD[3] at reduceByKey at <timed exec>:4 []| ---"--- | Perform mapByKey | |____/__PythonRDD[2] at reduceByKey at <timed exec>:4 []| words, not_empty, key_values | The result of partitioning into words| | | | removing empties, and making into (word,1) pairs| |____/__../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at Nat| text_file | The partitioned text | |____/__../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMeth| ---"--- | The text source |
+
+## Execution
+
+Finally we count the number of times each word has occured. Now, finally, the Lazy execution model finally performs some actual work, which takes a significant amount of time.
+
+```python
+%%time
+## Run #1
+Count=counts.count()  # Count = the number of different words
+Sum=counts.map(lambda x:x[1]).reduce(lambda x,y:x+y) # 
+print('Different words=%5.0f, total words=%6.0f, mean no. occurances per word=%4.2f'%(Count,Sum,float(Sum)/Count))
+# RETURNS
+# ->
+"""
+Different words=33781, total words=215133, mean no. occurances per word=6.37
+CPU times: user 16 ms, sys: 0 ns, total: 16 ms
+Wall time: 3.45 s
+"""
+```
+
+### Amortization
+When the same commands are performed repeatedly on the same data, the execution time tends to decrease in later executions.
+
+The cells below are identical to the one above, with one exception at Run #3
+
+Observe that `Run #2` take much less time that `Run #1`. Even though no `cache()` was explicitly requested. The reason is that Spark caches (or materializes) `key_values`, before executing `reduceByKey()` because performng reduceByKey requires a shuffle, and a shuffle requires that the input RDD is materialized. In other words, sometime caching happens even if the programmer did not ask for it.
+
+```python
+%%time
+## Run #2
+Count=counts.count()
+Sum=counts.map(lambda x:x[1]).reduce(lambda x,y:x+y)
+print('Different words=%5.0f, total words=%6.0f, mean no. occurances per word=%4.2f'%(Count,Sum,float(Sum)/Count))
+
+# RETURNS
+# ->
+"""
+Different words=33781, total words=215133, mean no. occurances per word=6.37
+CPU times: user 12 ms, sys: 0 ns, total: 12 ms
+Wall time: 414 ms
+"""
+```
+
+### Explicit Caching
+In `Run #3` we explicitly ask for `counts` to be cached. This will reduce the execution time in the following run by a little bit, but not by much.
+
+```python
+%%time
+## Run #3, cache
+Count=counts.cache().count()
+Sum=counts.map(lambda x:x[1]).reduce(lambda x,y:x+y)
+print('Different words=%5.0f, total words=%6.0f, mean no. occurances per word=%4.2f'%(Count,Sum,float(Sum)/Count))
+
+# RETURNS
+# ->
+"""
+Different words=33781, total words=215133, mean no. occurances per word=6.37
+CPU times: user 8 ms, sys: 4 ms, total: 12 ms
+Wall time: 605 ms
+"""
+```
+
+```python
+%%time
+#Run #4
+Count=counts.count()
+Sum=counts.map(lambda x:x[1]).reduce(lambda x,y:x+y)
+print('Different words=%5.0f, total words=%6.0f, mean no. occurances per word=%4.2f'%(Count,Sum,float(Sum)/Count))
+
+# RETURNS
+# ->
+"""
+Different words=33781, total words=215133, mean no. occurances per word=6.37
+CPU times: user 8 ms, sys: 4 ms, total: 12 ms
+Wall time: 297 ms
+"""
+```
+
+```python
+%%time
+#Run #5
+Count=counts.count()
+Sum=counts.map(lambda x:x[1]).reduce(lambda x,y:x+y)
+print('Different words=%5.0f, total words=%6.0f, mean no. occurances per word=%4.2f'%(Count,Sum,float(Sum)/Count))
+
+# RETURNS
+# ->
+"""
+Different words=33781, total words=215133, mean no. occurances per word=6.37
+CPU times: user 8 ms, sys: 4 ms, total: 12 ms
+Wall time: 430 ms
+"""
+```
+
+## Summary
+
+This was our first real pyspark program, hurray!
+
+### Some things you learned:
+1. An RDD is a distributed immutable array. It is the core data structure of Spark is an RDD.
+2. You cannot operate on an RDD directly. Only through Transformations and Actions.
+3. Transformations transform an RDD into another RDD.
+4. Actions output their results on the head node.
+5. After the action is done, you are using just the head node, not the workers.
+
+### Lazy Execution
+1. RDD operations are added to an Execution Plan.
+2. The plan is executed when a result is needed.
+3. Explicit and implicit caching cause internediate results to be saved.
+
+Next: Finding the most common words.
+
+# Finding the most common words
+* `counts`: RDD with 33301 pairs of the form (word,count).
+* Find the 5 most frequent words.
+* Method1: collect and sort on head node.
+* Method2: Pure Spark, collect only at the end.
+
+## Method1: collect and sort on head node
+
+### Collect the RDD into the driver node
+
+* Collect can take significant time.
+
+```python
+%%time
+C=counts.collect()
+
+# RETURNS
+# ->
+"""
+CPU times: user 52 ms, sys: 4 ms, total: 56 ms
+Wall time: 206 ms
+"""
+```
+
+### Sort
+
+* RDD collected into list in driver node.
+* No longer using spark parallelism.
+* Sort in python
+* will not scale to very large documents.
+
+```python
+%%time
+C.sort(key=lambda x:x[1])
+print('most common words\n'+'\n'.join(['%s:\t%d'%c for c in reversed(C[-5:])]))
+
+# RETURNS
+# ->
+"""
+most common words
+the:	13766
+of:	6587
+and:	5951
+a:	4533
+to:	4510
+CPU times: user 12 ms, sys: 0 ns, total: 12 ms
+Wall time: 25.5 ms
+"""
+```
+
+### Compute the mean number of occurances per word.
+
+```python
+Count2=len(C)
+Sum2=sum([i for w,i in C])
+print('count2=%f, sum2=%f, mean2=%f'%(Count2,Sum2,float(Sum2)/Count2))
+
+# RETURNS
+# -> count2=33781.000000, sum2=215133.000000, mean2=6.368462
+```
+
+## Method2: Pure Spark, `collect` only at the end.
+
+* Collect into the head node only the more frquent words.
+* Requires multiple stages
+
+### Step 1 split, clean and map to `(word,1)`
+
+```python
+%%time
+word_pairs=text_file.flatMap(lambda x: x.split(' '))\
+    .filter(lambda x: x!='')\
+    .map(lambda word: (word,1))
+
+# RETURNS
+# ->
+"""
+CPU times: user 0 ns, sys: 0 ns, total: 0 ns
+Wall time: 35.3 µs
+"""
+```
+
+### Step 2 Count occurances of each word.
+
+```python
+%%time
+counts=word_pairs.reduceByKey(lambda x,y:x+y)
+
+# RETURNS
+# ->
+"""
+CPU times: user 8 ms, sys: 0 ns, total: 8 ms
+Wall time: 42.6 ms
+"""
+```
+
+### Step 3 Reverse ``(word,count)` to `(count,word)` and sort by key
+
+```python
+%%time
+reverse_counts=counts.map(lambda x:(x[1],x[0]))   # reverse order of word and count
+sorted_counts=reverse_counts.sortByKey(ascending=False)
+
+# RETURNS
+# ->
+"""
+CPU times: user 20 ms, sys: 4 ms, total: 24 ms
+Wall time: 1.29 s
+"""
+```
+
+### Full execution plan
+
+We now have a complete plan to compute the most common words in the text. Nothing has been executed yet! Not even a single byte has been read from the `file Moby-Dick.txt`!
+
+For more on execution plans and lineage see jace Klaskowski's blog
+
+```python
+print('word_pairs:')
+pretty_print_plan(word_pairs)
+print('\ncounts:')
+pretty_print_plan(counts)
+print('\nreverse_counts:')
+pretty_print_plan(reverse_counts)
+print('\nsorted_counts:')
+pretty_print_plan(sorted_counts)
+
+# RETURNS
+# ->
+"""
+word_pairs:
+(2) PythonRDD[30] at RDD at PythonRDD.scala:48 []
+ |  ../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:0 []
+ |  ../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMethodAccessorImpl.java:0 []
+
+counts:
+(2) PythonRDD[31] at RDD at PythonRDD.scala:48 []
+ |  MapPartitionsRDD[23] at mapPartitions at PythonRDD.scala:122 []
+ |  ShuffledRDD[22] at partitionBy at NativeMethodAccessorImpl.java:0 []
+ +-(2) PairwiseRDD[21] at reduceByKey at <timed exec>:1 []
+    |  PythonRDD[20] at reduceByKey at <timed exec>:1 []
+    |  ../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:0 []
+    |  ../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMethodAccessorImpl.java:0 []
+
+reverse_counts:
+(2) PythonRDD[32] at RDD at PythonRDD.scala:48 []
+ |  MapPartitionsRDD[23] at mapPartitions at PythonRDD.scala:122 []
+ |  ShuffledRDD[22] at partitionBy at NativeMethodAccessorImpl.java:0 []
+ +-(2) PairwiseRDD[21] at reduceByKey at <timed exec>:1 []
+    |  PythonRDD[20] at reduceByKey at <timed exec>:1 []
+    |  ../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:0 []
+    |  ../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMethodAccessorImpl.java:0 []
+
+sorted_counts:
+(2) PythonRDD[33] at RDD at PythonRDD.scala:48 []
+ |  MapPartitionsRDD[29] at mapPartitions at PythonRDD.scala:122 []
+ |  ShuffledRDD[28] at partitionBy at NativeMethodAccessorImpl.java:0 []
+ +-(2) PairwiseRDD[27] at sortByKey at <timed exec>:2 []
+    |  PythonRDD[26] at sortByKey at <timed exec>:2 []
+    |  MapPartitionsRDD[23] at mapPartitions at PythonRDD.scala:122 []
+    |  ShuffledRDD[22] at partitionBy at NativeMethodAccessorImpl.java:0 []
+    +-(2) PairwiseRDD[21] at reduceByKey at <timed exec>:1 []
+       |  PythonRDD[20] at reduceByKey at <timed exec>:1 []
+       |  ../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at NativeMethodAccessorImpl.java:0 []
+       |  ../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMethodAccessorImpl.java:0 []
+"""
+```
+
+| Execution plan   | RDD |  Comments |    | :---------------------------------------------------------------- | :------------: | :--- |
+    |`(2)_PythonRDD[6] at RDD at PythonRDD.scala:48 []`| **counts** | Final RDD|
+    |`_/__MapPartitionsRDD[5] at mapPartitions at PythonRDD.scala:436 []`| **---\"---** |
+    |`_/__ShuffledRDD[4] at partitionBy at NativeMethodAccessorImpl.java:0 [`| **---\"---** | RDD is partitioned by key |
+    |`_+-(2)_PairwiseRDD[3] at reduceByKey at <timed exec>:4 []`| **---\"---** | Perform mapByKey |
+    |`____/__PythonRDD[2] at reduceByKey at <timed exec>:4 []`| **words, not_empty, key_values** | The result of  partitioning into words|
+    | | |  removing empties, and making into (word,1) pairs|
+    |`____/__../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at Nat`| **text_file** | The partitioned text |
+    |`____/__../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMeth`| **---\"---** | The text source |
+
+### Step 4 Take the top 5 words
+
+```python
+%%time
+D=sorted_counts.take(5)
+print('most common words\n'+'\n'.join(['%d:\t%s'%c for c in D]))
+
+# RETURNS
+# ->
+"""
+most common words
+13766:	the
+6587:	of
+5951:	and
+4533:	a
+4510:	to
+CPU times: user 8 ms, sys: 0 ns, total: 8 ms
+Wall time: 401 ms
+"""
+```
+
+## Summary
+We showed two ways for finding the most common words:
+
+1. Collecting and sorting at the head node. -- Does not scale.
+2. Using RDDs to the end.
+
+
+--- end {4.3_notebook.md} ---
+--- start{4.3_slides.pdf} ---
+Word Count
+   DSC 232R
+1 Word Count
+Counting the number of occurrences of words in a text is a popular
+first exercise using MapReduce.
+1.1 The Task
+Input: A text file consisting of words separated by spaces.
+Output: A list of words and their counts, sorted from the most to
+the least common.
+
+We will use the book “Moby Dick” as our input.
+1.3 Define an RDD that will read the file
+• Execution of read is lazy.
+• File has been opened.
+• Reading starts when stage is executed.
+• What is a stage — explained later
+1.4 Steps for counting the words
+• Split line by spaces.
+• Map word to (word, 1).
+• Count the number of occurrences of each word.
+1.5 The execution plan
+In the last cell we defined the execution plan, but we have not
+started to execute it.
+
+   • Preparing the plan took ~100ms, which is a non-trivial amount
+     of time,
+   • But much less than the time it will take to execute it.
+   • Let’s have a look at the execution plan.
+1.5.1 Understanding the details
+To see which step in the plan corresponds to which RDD we print
+out the execution plan for each of the RDDs.
+
+Note that the execution plan for words, not_empty, and
+key_values are all the same.
+        Accessible Table of Page 8
+Execution plan                                                          RDD                 Comments
+(2)_PythonRDD[6] at RDD at PythonRDD.scala:48 [ ]                       counts              Final RDD
+_/__MapPartitionsRDD[5] at mapPartitions at PythonRDD.scala:436 [ ]     ---″---
+
+__/___ShuffledRDD[4] at partitionBy at                                  ---″---             RDD is partitioned by
+NativeMethodAccessorImpl.java:0 [                                                           key
+__+-(2)_PairwiseRDD[3] at reduceByKey at <timed exec>:4 [ ]             ---″---             Perform mapByKey
+___/__PythonRDD[2] at reduceByKey at <time exec>:4 [ ]                  words, not_empty,   The result of partitioning
+                                                                        key_values          into words
+                                                                                            Removing empties, and
+                                                                                            making into (word,1)
+                                                                                            pairs
+
+___/__../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at Nat   text_file           The partitioned text
+___/__../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeMeth                       The text source
+                                                                        ---″---
+1.6 Execution
+Finally, we count the number of times each word has occurred.
+Now, the Lazy execution model finally performs some actual work,
+which takes a significant amount of time.
+1.7 Summary
+• This was our first real PySpark program, hurray!
+1.7.0.1 Some things you learned:
+1. An RDD is a distributed immutable array. The core data
+   structure of Spark is an RDD.
+2. You cannot operate on an RDD directly. Only through
+   Transformations and Actions.
+3. Transformations transform an RDD into another RDD.
+4. Actions output their results to your jupyter notebook.
+5. Computations done after actions do not use Spark resources,
+   only resources on the host of the jupyter notebook.
+1.7.0.1 Lazy Execution
+1. RDD operations are added to an Execution Plan.
+2. The plan is executed when a result is needed.
+3. Explicit and implicit caching cause intermediate results to be
+   saved.
+
+Next: Finding the most common words.
+2 Finding the most common words
+• counts: RDD with 33301 pairs of the form (word,count).
+• Find the 5 most frequent words.
+• Method1: collect and sort on head node.
+• Method2: Pure Spark, collect only at the end.
+2.1 Method1: collect and sort on head
+node
+2.1.1 Collect the RDD into the driver node
+
+   • Collect can take significant time.
+
+
+
+
+Note: Pen is covering “sys.”
+2.1.2 Sort
+• RDD collected into list in driver node.
+• No longer using Spark parallelism.
+• Sort in Python.
+• Will not scale well to very large documents.
+2.2 Method2: Pure Spark, collect only at
+the end
+• Collect into the head node only the more frequent words.
+• Requires multiple stages.
+2.2.1 Step 1 split, clean and map to
+(word,1)
+2.2.2 Step 2 Count occurrences of each word
+2.2.3 Step 3 Reverse (word,count) to
+(count,word) and sort by key
+
+
+
+
+Note: Pen is covering “total.” Text underneath red ink is (lambda x:
+x[1], x[0])).
+2.2.4 Full execution plan
+We now have a complete plan to compute the most common words
+in the text. Nothing has been executed yet! Not even a single byte
+has been read from the file Moby-Dick.txt!
+
+For more on execution plans and lineage, see Jace Klaskowski’s
+blog.
+sorted_counts:
+     Accessible Table of Page 23
+Execution plan                                                           RDD
+(2)_PythonRDD[20] at RDD at PythonRDD.scala:48 [ ]                       sorted_counts
+__/___MapPartitionsRDD[19] at mapPartitions at PythonRDD.scala:436 [ ]   ---″---
+_/__ShuffledRDD[18] at partitionBy at NativeMethodAccessorImpl.java:0    ---″---
+_+-(2)_PairwiseRDD[17] at sortByKey at <timed exec>:2 [ ]                ---″---
+___/__PythonRDD[16] at sortByKey at <timed exec>:2 [ ]                   ** counts, reverse_counts**
+___/__MapPartitionsRDD[13] at MapPartitions at PythonRDD.scala:436 []    ---″---
+___/__ShuffledRDD[12] at partitionBy at NativeMethodAccessorImpl.java    ---″---
+___/+-(2)_PairwiseRDD[11] at reduceByKey at <timed exec>:1 [ ]           ---″---
+_____/__PythonRDD[10] at reduceByKey at <timed exec>:1 [ ]               Word_pairs
+_____/__../../Data/Moby-Dick.txt MapPartitionsRDD[1] at textFile at      ---″---
+_____/__../../Data/Moby-Dick.txt HadoopRDD[0] at textFile at NativeM     ---″---
+2.2.5 Step 4 Take the top 5 words
+
+
+
+
+Note: Pen is covering “CPU” and “Wait.”
+2.3 Summary
+We showed two ways for finding the most common words:
+
+1. Collecting and sorting at the head node. – Does not scale.
+2. Using RDDs for everything, take(5) moves result to head node
+   at the end.
+
+See you next time!
+
+--- end {4.3_slides.pdf} ---
+--- start{4.3_transcript.txt} ---
+- Hi. Today, we're going to
+consider actual program that is used using the Spark system. And, that program is called Word Count. And, it is one of the
+most standard examples of map reduce. Okay so, it's kind of like a
+"hello world" of map reduce. Okay so, what does this word count task consist of? We're getting a text, basically, words separated
+by spaces, commas or other, other submission point. And then, we output a list of the words that appear in the document and how many times each word appears, starting from the most common and ending with the least common. Okay so, that's what we want to do and this the idea is to
+do it on a large text, so that you can really benefit from using the parallelism of Spark. Okay so, we're going to
+use more particular input but really, this would be beneficial when you're talking about
+doing it, let's say, for all of AP news wire
+or something like that. Okay so, first of all,
+we need to open the file and that is creating an RDD that acts at the conduit
+for reading the file. The file is open at that point, but nothing is really read out of the file because as we said,
+execution in spark is lazy. So, you wait until you
+actually need some result before you start reading. So, here is the, the command. So, we say the text file which is going to be an RDD,
+is spark context text file and then, it gets the path
+and the file on it, okay. And that's what it, it generated, generate an RDD and it
+doesn't take a lot of time because it doesn't really read anything. It just sets up the path. Okay so, how are we
+going to do the counting? We're going to split the line by spaces. So, we're going to have
+each word be an element in in the new RDD that is
+now just made word by word and then, each word we're going to append to it at the end, one. So we're going to have a pair,
+a value, a key value pair where the key is the word and the value is, essentially, the number of times that this word appears. But right now, we're just for each word we just put the number one, okay. And then, we're going to use that the the reduced by key to count these words. Okay so here is basically
+the, the whole program. It has a set of operation. As we remember, these
+operations don't necessarily get executed one by one as you read them. They just become a plan. And so, the first one is that we take the text file and
+we do a flat map operation. So, we basically create
+the flat map operation will create a list of lists. Okay. So, an RDD of lists. So this, from each line in the text, it creates a list of word and, and then, we're going to combine all of these lists
+together into one big RDD where each element is one word. Then, we're going to do
+some kind of cleanup. So, we're going to basically
+filter all the words that are empty, that are
+just the empty string. How do this come about? Because if we have multiple spaces, split will generate elements
+that are just empty. Okay so, we don't want those. So, we just filter
+those, filter those out. We just keep the one that are not empty. Then, we take that RDD and we map each word into the pair where word plus one, word and one, okay, just a pair where word is
+a key and one is the value. And now, we do the main operation which is reduced by key to do summation. So for each word, we're going
+to sum all of these ones. Each one appears with a
+pair with, with that key. And so, summing them
+all together will just give us the number of code, okay? So, this is the whole program, okay. And, and this point, it doesn't really yet, take a lot of time to execute because it's still just a plan. So, we can see this plan by using command that that to show us the plan. We can see the plan before
+we actually execute it. And the, the plan corresponds to the RDDs that we have as named and also to intermediate result. So for instance, look at words
+and not empty and key value. Those are three different RDDs. They're basically part of
+the same step of execution which we call a stage. Okay so here is the,
+the the, the whole plan. And, the plan essentially
+starts at the bottom. So here is, here is the
+part that where we opened where we created the, the link to the, to the file. So this says, okay, here is that this file that we're going to read. And then here we have that, we do the partitioning. So we do the, the, the splitting and then, we go and we do the reduce by, reduce by key. And, what you see is that
+these steps over here, they're all done. They're all correspond to the
+same step of the execution. So, they're just names that are the same step of the execution. Okay and then until we get to the top, that is basically the,
+the end of the plan. So the plan goes from the bottom, all the way to the top. Okay. So, the execution is forced when we do simple operation that, that requires us to get a number. So if we say, if we say that on this counts RDD plan,
+we just want to do count, we want to know how many
+different words there are. Well, if we want to know how
+many different words there are, we actually have to do
+this whole operation of combining the words and generating the, the word and count appears. Okay. So even though this
+is a very simple operation, it's a count operation. It actually takes a significant
+amount of time, okay. Still not huge amount of time,
+but almost a second. Okay. And then, this operation is generating the sum which is the total number of work, okay. So these are the two, two
+things that we're generating. And, and in that sense, we, we are done. Okay so, so this, running this has generated here just
+nine different word. The total word is nine. So this is because, because I didn't run the
+notebook in the right way. So, when you write the
+notebook in the right way, this will be more like 30,000
+or something like that. Okay so, we finished our
+first real pyspark program. And, here are some things that we learned. So, an RDD is distributed immutable array. It is a core data structure in Spark. You can't operate on the
+data on the RDD directly only through Transformations and Actions. What I was saying, I call this
+acting behind the curtain. Okay. So you are here, the
+data is behind the curtain and you can only indirectly operate on it. So, Transformations
+transform one RDD to another. Actions output the results
+to your jupyter notebook or to the head node. Computations that you do after actions, do not use the Spark resources. So, if you basically did an
+action and you get the result on your head node, then
+you're not really using Spark. So, lazy execution is that
+RDD operations are added to an execution plan that is executed only
+when you need the result. Okay so when we did the count, that actually caused the, the, the whole plan to to, to operate. And then, there is implicit and explicit caching used to
+save intermediate results. So you can explicitly say,
+I want to cache this part or sometimes Spark would
+say, I can't really continue from here unless I have
+the, the actual results. So, I'm going to do implicit cache. Okay so, we did half the job, but there's another half that we wanna do which is to find the, the
+most common word. Okay so, the RDD had thirty-three
+thousand three hundred and one pairs of the form word count. And, and we want to find the five
+most frequent words, okay. We just want to see on our string, on our, on our screen, the, the, the which are the five most common words and how many times each
+one of them appear. Okay so, we're going to
+talk about two method, just to kind of emphasize what Spark, pure Spark is and what not pure Spark. And so the first method is,
+we are not going to use Spark, we're going to use collect. We're going to get all of
+the counts into our machine and then, we're going to
+just do everything locally. The method two is the pure Spark. We're going to do collect or some kind of action at the very end, but everything is going
+to be done before the end. It's going to be done behind the screen. And, that's the preferred way because it scaled better
+to larger dataset. Okay. So here is the, the naive method. You collect the RDD into the driver node. So basically, you just get C. That is the, that, that, that is all
+of the counts collected. And so now, we have them
+as a list of pairs in the, in the head node. And so now, we can basically
+just do what we need to do in Python. Okay so, we take C and
+we sort it according to the second element, element number one. And so that's basically
+source them from the most, from the biggest to the, to from the, no, from the smallest to the biggest. And then, we're going to
+print the last five element in this pair. And here, they are. The word, "the" appeared 13,000 times, the words, "Of" appeared 65, a thousand, six thousand times and so on. Okay. And, that didn't take a lot of time for us because it's at the
+end, a pretty small set. So, so Python can deal
+with it with no problem. However, want to show you the way that you would do it if you didn't want to pass this whole
+dictionary, this whole list, key value pair, list with the words and the count, you wanted to, to do that sorting on the Spark side and then, just take the five largest ones. Okay so here, I'm just
+repeating what we did before. We, we cleaned and mapped
+the data to word one. okay. Then, we counted the
+occurrence of each word. That's counts. And now, we're going to take counts and we're not going to collect it but instead, we're going to, to, to sort it in Spark. But, we want to sort according to key that the operation that we have and the key is right now, the word. So what we do is, we just
+replace for each pair, we replace word count by count word. I can just replace the order. Okay so reverse counts is basically, maps X to maps the X to a reverse order X one, and then X data. So, it's the count and
+then the word. Okay. And then, then once we have it this way, we can just use sort by key. Okay. So, that basically sorts
+all of the elements but now, by the count
+and not by the words. Okay. So, here is the full
+execution part, a plan for this. So, you can see that they're
+kind of leveled here. So, these are the levels that
+are executed together. Right. So, once you reach this kind of jump that basically means that actually, the, the Spark did the work. And then, these are all collected and then this is doing the work. So this, these kind of things, these, these steps are called stages. So, stage is basically a
+collection of operation that are done together. Okay so to get to the final results, we just do the operation take five. So that doesn't bring us the whole RDD, but it just brings us
+the top five elements. And these top five elements are basically, these things, okay. So in this case it, the difference in execution time is not
+really very different. But if it was, as I said,
+instead of just Moby Dick, it would be the AP news
+wire for the last 10 years. And, that's probably millions of words than such an operation doing it in the Spark side would be faster. Okay so, we showed two ways of finding
+the most common words. The first is collecting and
+sorting at the head node. But, that does not scale. That does not scale because as I said, basically it depends
+on the amount of speed and memory that you have in the head node. And then, we have the way of
+using RDDs for everything. Okay. So, I'll see you next time.
+--- end {4.3_transcript.txt} ---

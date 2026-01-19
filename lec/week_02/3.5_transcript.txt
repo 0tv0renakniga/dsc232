@@ -1,0 +1,72 @@
+(bright lively music) - Okay, so let's think about how we can get information about an RDD. When we want to say we
+want to get information about something that is in memory, that's a pretty simple thing. We just go and we look at it. We bring it or print it out. But when we have RDDs, they're, first of all,
+very large typically. And secondly, they're not
+really on our computer, they're on other worker computers that are doing the calculation for us. So we can collect all of the data and then we'll have it to see locally, but usually that's not desirable
+because then we are losing all of the ability, all of the advantages of the distributed parallel computation. So there are other ways of, like, poking and peeking into the content of an RDD, even though it's away. Okay, so let's see how we do that. So here, we're going to create
+an RDD of some length n, which will be a million. And it's going to have 1, 2,
+3, 4, 1, 2, 3, 4, 1, 2, 3, 4. Okay. So that's basically the two command. I create that and now we have this B. That is a medium-large RDD and it's out of our computer. Okay, so one first thing
+that we might want to do is to find the number of elements in an RDD, and that's an easy thing. We can just do B.count. Another thing is that we can
+just ask for the first element or the first few element, that's
+the command first or take. Next, we have a more
+sophisticated operation, which is sampling. So we have an RDD. Maybe with a million or maybe
+with a billion data points. And we want to calculate,
+let's say, the average. Now, that is possible, to sum everything and
+divide by the number, but that is pretty expensive operation. So we can get almost the same
+answer if we average a sample. So we just take a subset,
+a randomly chosen subset of the element and then
+we operate just on those. That would be faster. So here is an example of that, that in our case here is how many elements we want on average, that's m. Okay, so that's m that we want. And then we do a sample
+operation with m/n. So m/n is the ratio between
+the number of elements that we want and the total
+number of elements in the RDD. And so this is basically the probability of taking an element in from that RDD. And so here is a first
+sample and a second sample, and what you see is that the first sample and the second samples, not only are they different, which is natural when
+you sample at random, but they have a different length. So why do they have a different length? Because what we specify, just the probability of getting this, taking a specific element, not the exact number of
+elements that we want. And why don't we want it to give us the exact number of element? Because that would require
+a significant coordination. If you just sample with some probability, you can do it separately on each worker and then combine all of the results. If you want to have a specific number, then you have to have
+the workers coordinate how much elements each
+one of them will generate. Okay? So that would require more work. So that's the way that it's done in Spark. And if you want a specific element, then you just choose a P that
+would be a little bit larger than what you need and then you trim down to the size that you want. Another operation is filtering the RDD. So that takes an RDD and generates a new
+smaller RDD by selecting, by giving a rule for
+which elements to select. So what we have here is, we're taking the same B,
+RDD, that we had before, and then we pick the operation filter and what the function that
+we give filter is a function that just gives true or false, okay? And if it gives true, then
+you get these elements and if you give false, then
+you don't take the element. Okay? So we're basically saying that out of these elements
+that are, I don't remember, 0, 1, 2, 3, 4, we are just taking the
+elements that are larger than, that are larger than 3, so it's just 4, and that's indeed like a
+quarter of the elements, okay? So 250,000 out of a million. Another operation that
+we want to do sometimes is RDD.distinct. That seems like a very natural operation. We don't want repetitions
+of the same element. So that is a natural one, but in fact it turns out that
+it's a very expensive one. Why is it expensive? Because it requires a shuffle operation. It requires all of the
+workers to communicate so that they can find out
+whether one has a copy of an element that the other one has so that they can remove it. Here, we have two operations. So we parallelize this list that has two 1s, two 2s and two 3s, okay? It's this list here. And then we just collect this one. So we just get it as it is. Or we ask for the distinct
+element and then we collect. And so we get just 1 and 2 and 3. flatMap of an RDD is
+like the map operation, but it's an operation that
+assumes that the function that you have as a map, generates a list and it
+concatenates these list, rather than having these
+lists in separate element. So here is a natural way
+that you want to use that. So suppose that you have text that is made out of two sentences and you want an RDD that is
+just all the words, okay? So how do you do that? First of all, you do a map
+that separates each list, splits it up into each sentence, each string split out the words, so you have a list of words. And then you run flatMap. So here, it's the same
+operation, here and here, but here we're doing it with a map and here we're doing it with a flatMap. So what you get in the first case is, you get two lists, right? Because each operation gives you a list. And so you just get a list of two lists. While if you do flatMap, you just get one list that
+has all of the element and that's sometimes
+more of what you want. Some operations that we
+have are set operations. So we can work with sets and we can basically take unions of sets, intersections of sets, subtract one set from another, and we can take cartesian operation. So here is union. So it basically creates
+the union of two RDDs, which basically is just a
+combination of all the element. Now, it's not really a set at this point. It might not have started even with a set. So in order to make it a set, we need to use distinct, right? So if we basically take here two RDDs and we take the union of them, so this 1, 1, 2, 3 is one RDD,
+and this is the other RDD. If we just take the union, then we get a bag, or a thing
+that has elements repeating. This one has one 1 repeating and this 1 also appears in the other list. And if we want it at sets, we have to use the operation distinct so that it would remove
+all of the multiple copies that we give: 1, a, 2, 3, and b. intersection is similar. But intersection
+automatically uses distinct. So it has to perform this
+extensive operation internally. Okay? So even though this was a
+bag with the repeating 1s and this was a bag, then if we take the
+intersection of the two, we get just the elements 1 and 2, we don't get the element twice. Similarly, subtract is
+when you take one RDD and you remove all of the
+elements from a different RDD. And then finally, you have an
+operation that is Cartesian where you take two RDD and you create a new RDD that is pairs, all possible pairs of taking
+one element from the first and one element from the second. That can be a very, very big RDD. Sometimes it's the thing that you want. Okay, so here it is. We have: one list that is 1, 1, 2; one list that is a and b, okay? And we generate them as RDD. And then we take the
+Cartesian rdd1 and rdd2, we get 1, a; 1, b; 1, a; 1, b. So because of the two 1s here. And then 2, a; and 2, b. Okay? So we get the product and
+all of the repetition. Alright, to summarize, chaining is a way of creating
+a pipeline of RDD operation. To get a information about
+an RDD, we use counting, taking and sampling, and then there is more transformations: filter, distinct, flatmap. And set transformation. Like union, intersection,
+subtract, and cartesian. And there are many other one. We will talk about some
+more in the next video. See you then.
