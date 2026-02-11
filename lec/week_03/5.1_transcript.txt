@@ -1,0 +1,81 @@
+(upbeat music) - Hi, today we'll talk about data frames. Data frames are data
+structure that is special for Spark and it's more
+specialized than RDD. So it's a, you can say an
+a restricted type of RDD. And by restricting the type of things that the RDD can store you can make things more efficient you can optimize things further. So data frames are, you can describe them as two-dimensional data,
+similar to spreadsheets. And each column in the
+spreadsheet contains contains a type of variable
+can be of different types. And each row contains a record. So this is very similar
+to panel data frames and our data frames if
+you know about them. But this is implemented in the context of Spark
+Parlor computation. So let's start by how do
+you construct a data frame? So the simplest two way to do
+it is to create a data frame for an RDD of row. So here is an example. We have a list of rows. So Row is a special
+type that is associated with data frame. And the name of the row is John and the age is 19. So each row has, you know, feel and then if you paralyze this list and then you create an RDD
+that collects these rows. Okay? So, so far we just have an RDD of these special things called rows. And then we make an RDD by using the SQL context
+to create data train from this list. Okay, so, SQL context is
+similar to, to the spark context and it's just built on top of it and gives you the capabilities
+to deal with data frames. There's more cells in this
+notebook that you can find if you look in your notebook directory under SQL directory and under that number one. Okay, so then once you
+have this data frame, you can print it schema. So schema is basically a
+description of what are the types of things that are
+stored in the data frame. And here we have just
+two column name and age. The name is a string and
+the age is a long integer. And nullable equal true means that we allow this field
+to have a null variable. So it's not a required field. So a data frame is an RDD of row with more information
+to about the scheme. Okay? So if you collect
+either the data frame the RDD that, that you had
+initially, or the data frame from it, you basically get the
+same, the same thing, right? So if you, here you have
+some data frame collect and some RDD collect, you
+get exactly the same thing. So once you bring it back to the head node it looks exactly the same. Okay.Sometimes when you have
+large data frames with many many rows, it is better to
+define the schema explicitly. That way you don't have to
+define the names of things for each row, and you also
+have more control over errors. Okay? So what we do here is
+we first define this schema okay? And that that schema says what's
+inside each, each column. Okay? So there's, there's a
+person name at the string type and force means that
+it's not nullble, okay? And then you have the the data structure of the the R D D contains the
+information, but without name. And then what you do is
+you create the data frames with this RDD and the
+schema defined, okay? And when you print the schema you see that it's what you expected. So this is a way to define
+things in a more structured way Okay? Now in typically what we have with data frames is very
+large amount of data. So something on the order, let's
+say, of gigabytes at least. And so the way to load efficiently
+a data frame is different from the way to load
+the efficiently and RDD. So while you can use
+standards like JSON and CSV what I'm going to focus on is
+this standard called Parquet or how to store your data frames on this. So Parquet is, is a
+popular columnar format. Columnar relates to the fact
+that things are stored column by column rather than row by row and Spark SQL which is this
+framework we're talking about allows doing SQL query
+directly on Parquet. So you get just the rows
+that you want rather than reading all the rows in as an RDD and then filtering
+what you don't want. And it's compatible with the HDFS. So it's compatible with this data with this had data file system. So you can basically
+store the Parquet file in a distributed way and
+have the speed up from that. And Parquet also makes files smaller by compressing each column because each column has
+one type of variables. You can use methods of
+compression to store the each column in a more compact way. So usually when you have
+a Parquet, a directory it has some name and dot Parquet. It is usually a directory. It is usually not a single
+file, but rather a directory and maybe a directory
+with sub directories. It holds all of the structure all of your data and the structure the pointers that enable fast retrieval. Okay? So here we have a
+particular small example. We have this Parquet file
+in data users Parquet and when we want and then we can do, use
+this command to read it read the Parquet file,
+and then we show it. So that's very much like
+doing held in, in pond. So you can show, can see a, a part a small part of the, of the table. And then you can do operations
+on this like select, okay? So you can select just the name and the favorite color columns and you'll see a new data
+frame that just had those. And you can similarly take a Parquet take a data frame and save
+it into a Parquet file. Okay? So here, here is the way to do that. Okay? So it's a pretty simple operation. Okay, so now let's look a little bit at the real world data frame the one data frame that
+we're going to use later on in the course. And this is a data frame that has row each row represents a
+measurement that was done for a a particular location
+in, in particular time. Okay? So this is, this
+describes these measurement. And so you see that when you do the show, you
+get all of these records all these names for the, for the, for
+the different columns. And here is a content but one
+row, cause I did show one. And you can select a subset. Okay? So here we do select
+station, year and measurement. And we see, we show just five. Okay? So then we can
+save the data frame again in a Parquet file. Okay? So summarize data frames
+are an efficient way to store data table. All of the values in the
+column have a same type and it's a good way to store disk. To store data frame on
+disk is a Parquet file. Okay? So next we're going to talk about operations on data frames.

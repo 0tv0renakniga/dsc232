@@ -1,0 +1,1039 @@
+--- start{11.1_lec.pdf} ---
+Decision trees
+   Decision Trees / Discrete Features
+
+Where and when do you have fun?
+                                            Location
+
+                                  Prison
+
+
+
+
+                                                             S
+                                                  Beach
+   Season    Location    Fun?
+
+
+
+
+                                                          Slo ki
+   summer     prison      -1
+
+
+
+
+                                                             p e
+                                    -1                              +1
+   summer     beach       +1
+                                                 Season
+
+   Winter    ski-slope    +1
+
+
+
+
+                                                     er
+                                                     Sum
+                                           er
+                                            nt
+
+
+
+                                                           m
+                                         Wi
+   Winter     beach       -1
+
+                                      -1                       +1
+Decision Trees / Continuous Features
+       Will bomb explode?
+
+Mass       Temperature   explosion        Mass>8
+ 1            100           -1
+
+
+
+
+                                               yes
+                                     no
+3.4           945           -1
+                                     -1     Temperature>500
+ 10            32           -1
+
+
+
+
+                                                     yes
+                                              no
+11.5          1202          +1
+                                             -1        +1
+                 Decision Trees
+
+
+
+
+                        Y
+     X>3
+                                     +1
+
+
+           yes
+no
+
+                        5
+-1         Y>5              -1
+
+                 yes
+     no
+
+
+
+                                     -1
+     -1            +1
+                                          X
+                                 3
+             Decision trees
+•   Popular because very flexible and easy to
+    interpret.
+
+•   Learning a decision tree = finding a tree with
+    small error on the training set.
+
+    1. Start with the root node.
+
+    2. At each step split one of the leaves
+
+    3. Repeat until a termination criterion.
+         Which node to split?
+•       We want the children to be more “pure” than the
+        parent.
+
+•       Example:
+
+    •    Parent node is 50%+, 50%-.
+
+    •    Child nodes are (90%+,10%-),(10%+,90%-)
+
+•       How can we quantify improvement in purity?
+    Naive approach: minimize
+          training error
+•       A good case
+
+•       Parent node is 55%+, 45%-.
+
+    •    Predict + always: Error = 45%
+
+•       Child nodes are (90%+,10%-),(10%+,90%-)
+
+    •    Predict + on left, - on right: Error = 10%
+
+•       Clear Improvement
+    Naive approach: minimize
+          training error
+•       A bad case
+
+•       Parent node is 80%+, 20%-.
+
+    •    Predict + always: Error = 20%
+
+•       Child nodes are (90%+,10%-),(70%+,30%-)
+
+    •    Predict + always: Error = 20%
+
+•       No improvement in training error!
+The problem with
+classification error
+    (pictorially)
+Fixing the problem
+ Any strictly concave
+function can be used
+Which of the following is
+   strictly concave?
+       Decision tree learning
+             algorithm
+•   Learning a decision tree = finding a tree with
+    small error on the training set.
+
+    1. Start with the root node.
+
+    2. At each step split one of the leaves
+
+    3. Repeat until a termination criterion.
+
+    4. Next, How do we search for a splitting rule.
+             The splitting step
+•       Given: current tree.
+
+•       For each leaf and each feature,
+
+    •    find all possible splitting rules (finite because data
+         is finite).
+
+    •    compute reduction in entropy
+
+•       find leaf X feature X split rule the minimizes entropy.
+
+•       Add selected rule to split selected leaf.
+           Enumerating splitting
+•                            rules
+        If feature has a fixed, small, number of values.
+        then either:
+
+    •    Split on all values (Location is beach/prison/ski-
+         slope)
+
+    •    or Split on equality to one value (location = beach)
+
+•       If feature is continuous (temperature) then either:
+
+    •    Sort records by feature value and search for best
+         split.
+
+    •    or split on parcentiles: 1%,2%,….,99%
+Splitting on percentiles
+•   Suppose data is in an RDD with 100 million examples.
+
+•   sorting according to each feature value is very expensive.
+
+•   Instead: use Sample(false,0.00001).collect() to get a sample of
+    about 10,000 examples.
+
+•   sort the sample (small, sort in head node).
+
+•   pick examples at location 100,200,… as boundaries. Call those
+    feature values T1,T2,T3,… ,T99
+
+•   Broadcast boundaries to all partitions.
+
+•   Each partition computes it’s contribution to
+                   Summary
+•   The splitting criteria is a strictly concave function
+    that bounds the training error.
+
+•   The search for a splitting rule tests all possible splits
+    of current tree.
+
+•   When the feature is continuous and the data large -
+    split on percentiles instead of splitting on each
+    example.
+
+•   Next, Performance on the test set and reducing
+    over-fitting .
+         Trees are unstable
+•   Trees are very flexible.
+
+•   A “fully grown” tree is one where all leaves are “pure”, i.e. each leaf
+    contains all + labeled examples or all - labeled examples.
+
+•   A fully grown tree has training error zero.
+
+•   If the tree is large and the data is limited, the test error of the tree
+    is likely to be high = the tree overfits the data.
+
+•   Statisticians say that trees are “high variance” or “unstable”
+    Pruning Trees
+•
+                               Bagging Trees
+•   Bagging, invented by Leo Breiman in the 90s, is a
+    different way to reduce the variance of trees.
+
+•   Instead of pruning the tree, we generate many
+    trees, using randomly selected subsets of the
+    training data.
+
+•   We predict using the majority vote over the trees.
+
+•   Related to RANDOM FORESTS and to Boosted
+    Trees/XGBoost. Will describe next.
+                     Summary
+•       Decision trees are a simple and intuitive representation.
+
+•       Fully grown trees over-fit the data.
+
+•       Two ways to reduce over-fitting:
+
+    •    Pruning: remove leaves to make the tree smaller.
+
+    •    Bagging, Boosting: take the majority vote over many
+         trees.
+Are methods based on decision tree still relevant
+     at the age of Deep Neural Networks?
+      Kaggle Survey of most popular learning algorithms
+                           (2020)
+
+--- end {11.1_lec.pdf} ---
+--- start{11.1_transcript.txt} ---
+(upbeat music) - [Instructor] Hi, we're
+going to start talking about classification machine
+learning mechanisms. So, different ways of
+developing classifiers. So, we're going to start
+with one of the simplest and most commonly used,
+which is decision trees. So, here is an example of a decision tree. Let's say the thing that we're trying to classify is fun versus not fun. So, this is the data that we have. We have the season, summer or winter. And we have the location, which can be prison or beach or ski slope. So, and this is the data that we have. We want to fit a classification
+rule to this data. So, we start, maybe, with
+checking the location. So, we say, what is the
+effect of the location? The location can be
+prison, beach or ski slope. And then, if it's prison, it's
+definitely going to be bad. If it's the beach, if it's a ski slope, it's always going to be good. But if it's the beach,
+maybe we're not so sure. If it's the beach, it can be good or bad because of what we see here or here. So, for the beach, we need
+to also check the season. So, we check the season. And if the season is winter, it's not fun. And if it's summer, it is fun. So, now we have a classification rule that captures all of this data and hopefully generalizes to new data. So, this is when the features that we're looking at
+are discrete features. So, they can only take
+one of a few values. Here, minus one or plus one for the fun. Location is prison, beach or ski slope. And season is summer or winter. Let's look at something more. That is decision trees when
+you have continuous features. So, the question here is,
+will the bomb explode? Let's see what we know about the bomb. We have the mass of the bomb. So, 1, 3.4, 10 or 11.5 pounds, let's say. And then temperature is
+100, 945, 32 or 1202. So, of course, we can
+treat these as discrete. But then we will have, for each example, it will fit only one discrete possibility. So, that's not going to be a small, succinct rule that will generalize well. So, we want a rule that will be a good rule for continuous variables. And so, let's say the first
+thing that we check is the mass, whether the mass is larger than 8 or not. If the mass is smaller than 8, then no, because both of these, you have minus 1. If it is larger than 8, then we need to check the temperature. Right, so then if it's larger
+than 8, it's this or this. And we need to see if the
+temperature is larger than, let's say, 500. Then we can predict yes or no, whether it will explode or not. Okay, so the only difference
+that is here is that here we're using comparators rather than
+saying equal or not equal. And that is what gives us the
+ability to, in a succinct way, describe, use the features
+that are continuous. So, one way to visualize decision trees, if you have just two variables, which is not a common case, but it's a case that helps the intuition, is that you split your xy
+plane according to the rule. so if this is x larger than 3, then this first rule is x
+larger than 3 or smaller than 3. Here is, the yes is
+here, and the no is here. So, what we get is that
+at not larger than 3, we get minus 1. And at larger than 3, now
+we check y, y larger than 5. So, this is when y larger than 5, and now we have minus 1 or plus 1. So, what we have here is a
+way of partitioning the plane, or in general, Euclidean space, using what is called
+axis parallel hyperplane. So, we're separating things only according to inequality with one of the variables. So, why are decision trees so popular? One of the reasons is that
+they're very flexible. They can be used to model
+many different things, and they're easy to interpret. So, you can put a small
+decision tree on a slide and show it to even people that don't know much about machine learning, and they will make sense of it. Learning a decision tree is finding a tree with small error on the training set, and the way that we do it is that we build incrementally from the root node. And at each step, we have
+a tree with some leaves, and we decide on which leaf
+to split and how to split it. And we repeat until we reach
+some termination criteria. Okay. So, how do we decide which node to split? So, we want the children to
+be more pure than the parent. If the parent was 30% plus and 70% minus, we would prefer that the child, one child, will be maybe 95% plus, and the other child will
+be 50% or 60% minus. So, now they are more pure, and they have more information
+to tell us about the label. So, for example, suppose
+the parent is 50-50%, and the child are 90-10 and 10-90. So, in this case, it's clear
+that this is a good split, because now on each side we
+know the actual label with 90%, while before we knew only with 50%. So, how can we quantify
+this improvement in purity? Now we need some quantity
+to measure the purity so that we can basically
+write an algorithm for deciding which leaf to split. So, a naive approach might say you just want to minimize the
+training error, right? So, in the case 50-50 to 90-10, 10-90, we moved from error of
+50% to error of 10%, which is clearly an improvement. But it doesn't always work. Like, in this case here, it will work. So, parent node is 55 plus 45 minus, then predict plus always, and error is 45. Child nodes are 90-10, 10-90, and so they predict plus on
+left and minus on the right, and the error is 10%. So, in this case, just looking at the training
+error of the larger tree gives us a good sense that
+this is an improvement. But here is a case that
+there isn't improvement. So, the parent node,
+let's say, is 80% and 20%, and you always predict
+plus, so the error is 20%. And the child nodes are
+now 90%, 10%, and 70%, 30%. So, 90% on the plus and 70% of the plus. So, what does that mean? It means that in either
+leaf, we will predict plus. And what is the error now? It's still 20%. So, the error was 20%. The old error was 20%. So, it seems like we didn't
+make any improvement. In fact, we did make some improvement. Like, this one is more accurate, more higher percent of plus, and this has lower percent of plus, but it's not enough to
+improve the training error. So, one way to think about this is to plot the probability
+of plus as the axis here, from 0 to 1, and plot the error, the training error, as number from 0 to 0.5 here. The error cannot be more than 0.5 because you always go with a heavy side. So, it's at most 50%. Here, we have just what
+the training error is for using the training error. And so, what we see is that
+if we use a training error and we have two things that
+are on the same side of 50%, then we don't really get an
+improvement in the performance. But what we can do is we
+can use another measure, instead of measuring error p, which is the minimum of p and 1 minus p, we measure the entropy of p. And that is this green
+line that we have here. So, if we use the green line, then we get an improvement, even though they are
+both on the same side. So, this point here is
+above the linear combination of the two endpoints. So, if we use entropy
+instead of training error, that basically gives us a way to improve, even if the training
+error does not improve. And there are different
+functions like that that have been used. So, what you need is a
+function that is strictly concave and larger than the... it's an upper bound on the training error, so that if you minimize this function, one of these functions, you also minimize the training error, but because they are concave, they don't suffer from this problem of not seeing any improvement. And so, three that are
+commonly used are the entropy that we talked about, the circle, which has some optimality properties, and then the Gini index, which
+is simply p times 1 minus p. And different software
+uses different ones, and it does not seem in general that there is a big difference between using different
+functions like that. So, the question here is, which function of these
+functions is strictly concave? So, this red function
+is clearly not, right? This blue function seems strictly concave, but it has this straight
+line here, so it's not. Only the green line, the green
+curve, is strictly concave. Okay, so how does the decision
+tree learning algorithm work? We have a measure that lets us measure how much of an improvement adding a particular split to
+a leaf in the tree gives us. So, learning a decision tree means finding a tree with small
+error on the training set. You start with a root node. At each node, at each step, you split one of the leaves, so you choose one of the leaves to split, and then you repeat until
+a termination criteria. Okay, so which one do you split? Okay, so what you basically do in general is that you do a greedy search. You look at all possible new splits, and you measure the improvement due to it, and you just take the best one. So, you have the current tree. For each leaf and each feature, you find all possible splitting rules. So, you basically take each feature and split according to that feature, and then you do that
+specifically for each leaf and for each feature. So, that seems like it
+might take a long time, but in fact, this is
+a very efficient thing that can be done very quickly, even for pretty large data. Compute reduction in entropy, and find the leaf and the
+feature and the split rule that minimizes the entropy, and then you add it. So, how do you enumerate splitting rules? So, if the feature has a
+fixed small number of values, then you can either split
+on all values, okay, or you can split on equality
+to a particular value, right? So, in the location, we
+split into three children, but another option is to split just binary for equality to one of the features. In either case, there are
+not that many possibilities. If the feature is continuous,
+let's say temperature, then you either sort the
+records by feature value and search for the best split, or you split on percentiles. So, here we'll come back to
+the big data aspect of things. Sorting is a reasonably good approach if you have something like
+10,000 or 100,000 examples, but if you have many millions of examples, then that becomes an expensive step, and as a matter of fact, you don't really care to split
+after each possible value. It's quite enough to have 100 splits at the 100 percentile points. So, what does that mean? So, suppose there is data in an RDD with 100 million examples. Sorting is very expensive. It's a shuffle. You need to move data
+from between workers. Instead, you take a sample, okay, so some small percentage, to get a sample of about 10,000 examples from all of your data, and based on that, you sort the sample and you select the thresholds
+that you would want to use in order to split on each feature. So, for each feature,
+you generate 100 values, and then you broadcast these 100 values to all of the workers. So, each partition
+computes its contribution to this probability of plus one given between threshold
+one and threshold two. If you get these 101 numbers, then you can, at the head
+node, quickly compute the entropy for each
+one of the thresholds. So, to summarize, the splitting criteria is
+a strictly concave function that bounds the training error. The search for splitting rule tests all possible splits of the current tree, and when the feature is
+continuous, the data is large, we split on percentiles instead of splitting on each example. Next, we're going to talk
+about the performance on the test data and reducing overfitting. I'll see you soon.
+--- end {11.1_transcript.txt} ---
+--- start{11.2_lec.pdf} ---
+Ensembles
+                What are ensembles
+• Ensembles are predictors defined as an average/vote
+  over “base” or “weak” predictors.
+• Weak learner is faced with a variant of the original
+  prediction problem.
+• Ensembles come in two main flavors:
+ • Boosting based Ensembles
+ • Bootstrap based Ensembles.
+An Ensemble of trees
+                       +1
+                         /-1
+                        Stability of statistics
+• Quantities we want to estimate: mean, std, median, min, max
+• Stable estimator: varies little from sample to sample.
+• Median is the most stable, mean is less stable, std still less.
+• The variation of max depends on the distribution.
+• Direct estimation of stability: use several independent datasets. (requires a lot of
+   data).
+
+                 p(x)                      p(x)
+                             max                       max
+                            unstable                  stable
+
+
+                                          x                         x
+                           The Bootstrap
+• A method for estimating out-of-sample variation
+• Instead of collecting truly independent samples, we create semi-independent
+  samples from the given sample.
+• S : Original sample of size N.
+• Bootstrap sample: select N examples from S independently at random with
+  replacement.
+• Use bootstrap samples as if they were independent samples.
+            p(x)                    p(x)
+                        max                    max
+                       unstable               stable
+
+
+                                   x                        x
+1990
+       Bagging = bootstrap
+          aggregation
+• Decision trees have high data variation.
+ • i.e. the generated tree is sensitive to small
+    changes in the training set.
+• To reduce the variation, we take a majority vote
+   over several runs, each using an independent
+   random resample of the training data.
+• Bootstrap: Running an algorithm over random
+   resampling.
+• Trees can be learned in parallel
+• The result is a reduction in variation with no
+   increase in the bias.
+            Random Forests
+• Based on bagging trees.
+• Additional randomization: before choosing
+   which leaf to split and how, choose a random
+   subset of the features.
+• Decreases the correlation between different
+   trees.
+• Speeds up the learning process.
+• All trees get equal weight (1.0)
+• All trees can be learned in parallel.
+  Gradient Tree Boosting
+
+• The trees are trained sequentially, one after the
+  other.
+• Each tree is trained using a weighted training
+  set. The weights represent the gradient of the
+  loss function.
+• Each tree receives a different weight.
+• Stochastic gradient boosting: use random
+  resampling of the training set a.k.a. Bagging.
+              Summary
+
+
+• Ensemble learning in Spark ML
+• Bagging = Bootstrap Aggregation
+• Random Forests
+• Boosted Gradient trees.
+
+--- end {11.2_lec.pdf} ---
+--- start{11.2_transcript.txt} ---
+(bright music) (screen whooshes) - [Instructor] Hi. So we have
+talked about decision trees. Another popular structure for learning that we mentioned are ensembles. So we're going to talk a little
+bit more about ensembles. So what are they? Ensembles are predictors defined by an average or a vote over base or weak predictors. The weak learner is faced with a variant of the original problem. So they don't solve
+exactly the same problem. They solve a variant. And there are two main flavors. There are other types of ensembles that we won't talk about here, but two main flavors that exist are one is boosting based ensembles that we'll talk about next lecture and bootstrap based ensembles. Okay. So we're going to talk now about bootstrap based ensembles and what they are. So first let's look at an example of an ensemble. So here is an ensemble of trees. So here is the first tree in the ensemble. And here is the second tree. And here is the third tree. Okay? So they're all solutions for the same classification problem. And here's the fourth one. And then what we do to
+generate our own prediction is take a weighted combination of the ensemble members
+or of the weak trees. Okay? So each weak tree
+gives us some evidence towards the label, and
+we combine them together to get something more accurate. And then after we take the
+sum, we take a threshold so that we get the actual
+prediction, plus one or minus one. Okay. So the idea of
+bootstrapped prediction is an idea that relates to
+stability of statistics. So we might want to
+estimate various quantities in statistics such as the
+mean, the standard deviation, median, minimum, or maximum. Okay? And also we might want to estimate what is the label of a particular example. So that's also an estimation problem, can be seen as an estimation problem. So a stable estimator is
+one that varies little from sample to sample, right? So we have some true distribution but what we see is a sample from it. So we want the dependence on the particular sample to be small, to be as small as possible so
+that we capture the essence of what's in the distribution
+rather than the fluctuation according to the particular examples. Okay? So median is one of
+the most stable estimates. And mean is less stable. And standard deviation
+is even less stable. The stability of maximum is interesting because it depends on
+the actual distribution. Some distribution, it is very stable. Some distribution, it's not. So let's look at these two examples. In this case, the maximum is unstable. Why I'm saying that? Because when we take a sample, we'll have a few samples here
+and a lot of samples here. Okay? And so the sample here, the fact that there's
+only a few of them means that from sample to sample, from each time we take a sample of size N, we get a different estimate. On the other hand, if we
+take this distribution, we'll get a lot of estimates right at the maximum,
+then fewer and fewer here. So in this case, when after
+we take a small number of examples, we will know
+the maximum very accurate. Okay? So the stability of an
+estimate is not just a property of what kind of estimate it is, but it's also a property of the distribution that is underlying. So of course, one way that
+we can estimate that is we can just take a lot of samples. Instead of just one sample of size N, maybe take 100 samples each of size N and then estimate according
+to each one of them and then see how much is the variation. But that requires a lot of data, right? That requires 100 times N examples. So bootstrap is a method that tries to imitate
+doing this estimation, but without increasing
+the number of examples. So what is the bootstrap? It's a method for estimating
+out-of-sample variation. And instead of collecting
+truly independent samples, we create semi-independent samples from the one sample that we actually have. And how do we do that? Let's say S is the sample. Then bootstrap sample is
+to select N examples from S independently at random with replacement. Okay? So we take the examples
+that we have in the data and then in our sample, and then we generate an
+artificial sample of the same size by picking examples at random. And it's important to
+say with replacement. Had it been without replacement, we'd just get the same sample
+again, but with replacement some examples we'd get more than once and some examples we won't get at all. And some examples we would get once. So that means that the samples would vary and we can estimate how
+stable is our estimate. Okay, so now you treat them as if they're independent samples. Okay, so this is how you would do it here. You would get let's say the
+examples that you got here and then you pick out of them again, let's say with a circle,
+I'll denote it like that, this one you pick twice. This one you pick once, this
+one will pick once, okay? So because you are going
+to pick the top ones with some noise, with some probability
+of not picking them up, then you can estimate that the maximum estimator is unstable. So this is a very well-studied
+method in statistics. And I mention here the book because I want you to
+make note of that book, because it turns out
+that in many situations where you're doing
+large-scale data analysis, you want to use the bootstrap to help you estimate how stable. Do you have enough data? How stable is the estimation, and so on? So what is bagging? Bagging is short for bootstrap aggregation. Okay? And what it is is
+designing decision trees and then combining them, designing them and training
+them using bootstrap and then combining them. So decision trees have
+high data variation. They're unstable. That means that the
+generated tree is sensitive to small changes in the training set. So to reduce the variation, we take a majority vote over several runs, each using independent random
+sample of the training data. And then the independent
+sample is using bootstrap. Okay? One nice thing about bagging is that the trees are run, trained
+on different training sets. So all of the training
+can be done in parallel. The result is a reduction in variation with no increase in the bias. Okay? So that's the magical
+thing about bagging is that you can decrease the variability and you in general
+don't increase the bias. What are random forests? So random forest is an
+elaboration on bagging trees. It was developed by Leo Breiman after he developed bagging trees, and is now a very popular
+commercial software. And it has more
+randomization that it uses. Before choosing which
+leaf to split and how, you choose a random
+subset of the features. So you don't try to find
+the best feature overall but the just the best
+feature over a sample. So that increases the variability of the individual trees. And when you average many of these trees, you get better results. So that decreases the correlation
+between different trees and speeds up the learning process. All trees get equal weight. That is the same with bagging
+and with random forest. All of the trees are equal. Okay, so finally we'll do a short review of gradient tree boosting. We'll go into much more
+detail in following slides. And what are gradient tree boosting? The trees in this case
+are trained sequentially, not in parallel, but one after the other. Each tree is trained using
+a weighted training set. The weight represent the
+gradient of the loss function. And each tree receives a different weight. So stochastic gradient boosting use random resampling of the training set as in bagging. Okay? So you can combine
+the idea of bootstrap with the idea of boosting and get what is called
+stochastic gradient boosting. To summarize, we talked about
+ensemble learning in Spark ML. We talked about bagging,
+bootstrap aggregation. We talked about random forests, and we started to talk about
+boosted gradient trees. We'll talk much more about
+that in following videos. I'll see you then.
+--- end {11.2_transcript.txt} ---
+--- start{11.3_lec.pdf} ---
+                               Trees are Unstable
+• Trees are very flexible
+
+• A “fully grown” tree is one where all leaves are “pure,” i.e. each
+  leaf contains all + labeled examples and all - labeled examples.
+
+• A fully grown tree has training error zero.
+
+• If the tree is large and the data is limited, the test error of the
+  tree is likely to be high = the tree overfits the data.
+
+• Statisticians say that trees are “high variance” or “unstable”
+                                   Pruning Trees
+• One way to make trees more stable is to prune
+
+• Start by building a tree down to training error of zero
+
+• Iteratively remove leaves until the training error is 𝜖 = 1%
+                                      Bagging Trees
+• Bagging, invented by Leo Breiman in the 90s, is a
+  different way to reduce the variance of trees
+
+• Instead of pruning the tree, we generate many
+  trees using randomly selected subsets of the
+  training data.
+
+• We predict using the majority vote over the trees.
+
+• Related to RANDOM FORESTS and to Boosted
+  Trees/XGBoost. Will describe next.
+                                        Summary
+• Decision trees are a simple and intuitive representation.
+
+• Fully grown trees over-fit the data
+
+• Two ways to reduce over-fitting:
+
+• Pruning trees to make the tree smaller.
+
+• Bagging, Boosting: take the majority vote over many trees.
+                                        Summary
+• Decision trees are a simple and intuitive representation.
+
+• Fully grown trees over-fit the data
+
+• Two ways to reduce over-fitting:
+
+• Pruning trees to make the tree smaller.
+
+• Bagging, Boosting: take the majority vote over many trees.
+
+--- end {11.3_lec.pdf} ---
+--- start{11.3_transcript.txt} ---
+(upbeat music) (graphics whooshing) - [Instructor] So we
+talked about decision trees and the simple ways in which they can be learned and interpreted. But there is one property
+of decision trees that is a significant problem, and that is the trees are unstable. What do I mean by that? They're very flexible. The trees that we build are very flexible and a fully grown tree, where
+all the leaves are pure, so basically each leaf has only one label, so you can always create such a tree because you can
+always get down to the level that each leaf has only one example in it. Okay, so that means that
+the fully grown tree, which has zero error, does not error on the training set. Okay, so you can always build a tree that will be perfect in a sense. However, if the tree is large
+and the data is limited, the test error of the
+tree, the test error, so running now, using now test
+data, is likely to be high, so because the tree over-fits the data. Statisticians say that the trees are high variance or unstable. So basically if you change
+a little bit your data you'll get a different tree
+and therefore the decisions that the tree makes on new
+test examples are unstable. So the first common solution for improving on this over-fitting problem is to do pruning. So pruning is you start by a tree that has error zero
+like this complete tree, and then you start chopping off nodes that don't add much to the error, so don't reduce the error by very much. Like if a particular
+node reduces the error by 10%, then you don't remove it. But if it reduces the error by just making two training examples correct,
+then you might remove it. Okay, so you you remove it like that. And until you get to a
+tree that has a error of, let's say, 1%, okay, so you're saying, "I'm not really trusting this 0% error. I'm going to reduce the tree. It's going to on the training
+data perform slightly worse. But my hope is that, because of that, it would be more stable and perform better on the test data." Okay, so that's the pruning approach. Another approach that was also developed by Leo Breiman is to do bagging. So what is bagging? In bagging, you generate several trees and you vote with the
+majority over these trees. Okay, so you vote with a
+majority over these trees. And the trees are slightly different because for each one of them you use a bootstrap sample. Okay, and a bootstrap sample is basically just you take the
+training data that you have and you pick new examples
+with replacement. So some of the, and you pick the exact
+same number of examples. So some of the examples
+you'll pick more than once and some of the examples
+you won't pick at all. And that creates the
+difference between the bags and then you train using that data. So each one of these trees
+is a little bit different. And when you want to make a prediction, you just take the sum or the vote over all of these trees and that's your prediction. Okay, so we predict
+using the majority vote over these trees and this is related to various methods
+including RANDOM FORESTS and Boosting Trees/XGBoost and we are going to describe those next. So to summarize, decision trees are simple and intuitive but fully grown trees
+can over-fit the data. There are two main ways
+to reduce over-fitting. One is pruning, removing leaves
+to make the trees smaller, and the other is bagging or boosting, which is to take a majority
+vote over many trees. And that's called an
+ensemble method, okay. So boosting or bagging that
+take a majority over many trees. Those are called ensemble methods and we'll talk about them soon some more. See you then.
+--- end {11.3_transcript.txt} ---
+--- start{12.1_lec.pdf} ---
+ Generative vs.
+ Discriminative
+Optimization vs.
+  Elimination
+            Toy Example
+• Computer receives telephone call
+• Measures Pitch of voice
+• Decides gender of caller
+
+                                      Male
+            Human
+            Voice
+
+
+
+
+                                     Fe
+                                        m
+                                       al
+                                          e
+              Generative modeling
+
+
+
+               m
+
+
+
+
+                              m
+                ea
+
+
+
+
+                              ea
+                   n
+
+
+
+
+                                 n
+                   1
+
+
+
+
+                                  2
+Probability
+
+
+
+
+                                      var2
+
+
+                       va
+                         r1
+
+
+                                             Voice Pitch
+                  Discriminative approach
+No. of mistakes
+                         [Vapnik 85]
+
+
+
+
+                                       Voice Pitch
+Ill-behaved data
+
+
+         m
+
+
+
+
+ m
+             ea
+
+
+
+
+  ea
+                n   2
+
+
+
+     n
+     1
+
+
+                        Voice Pitch
+       Traditional Statistics vs.
+          Machine Learning
+
+                     Machine Learning
+
+
+                     Estimated           Predictions
+
+
+
+
+                             D eo
+Data
+
+
+
+
+                              ec ry
+        Statistics   world state          Actions
+
+
+
+
+                               Th
+                                isi
+                                    on
+   Comparison of methodologies
+
+Model       Generative    Discriminative
+
+Goal        Probability   Classification rule
+            estimates
+Performance Likelihood    Misclassification rate
+measure
+Mismatch    Outliers      Misclassifications
+problems
+
+
+                                                   7
+                  Summary
+• Generative models: goal is to explain how data is
+  generated.
+• Discriminative models: goal is to predict a
+  property of the data (such as label)
+• Generative models are more accurate when they
+  are correct.
+• Discriminative models are more robust against
+  poor modeling or outliers.
+
+                                                      8
+    Confidence vs. Certainty
+
+
+
+
+•
+          Generative vs. Discriminative vs.
+              Robust discriminative
+• Generative: Data is generated by model
+• Discriminative: there is a model whose error rate is low.
+• Robust discriminative:
+  • There are many models whose error rate is small. (the
+     good set)
+• Easy Examples: most of the good set predicts the same
+   way.
+•       High Certainty and high confidence:
+    •    The sun will rise tomorrow.
+    •    This spring quarter will be over in June
+    •    There will be new common variant of covid in the coming year.
+
+•       Low certainty but high Confidence:
+    •    You go fishing in a new location. You know nothing about the probability
+         of catching a a fish: low confidence.
+    •    You go fishing for 100 days. You have high confidence that your
+         probability of catching a fish is larger than 5%
+      More examples of
+     high confidence, low
+           certainty
+•   Poker: deciding whether to raise or fold:
+    need to decide correctly more than your
+    opponent.
+•   Medical Diagnosis: ”In my experience, the
+    majority of patients who present symptoms X
+    suffer from condition Y”
+•   Sport: read the body language of your
+    opponent, don’t let your opponent read your
+    body language.
+Prediction in sports
+
+
+
+
+                       13
+    Prediction of spin in table tennis
+                                           Backspin
+• To respond correctly, we need to
+  predict whether the ball has
+  backspin or topspin.
+• By the time the ball is hit, it is too
+  late.
+                                           Topspin
+• We predict from body posture,
+  from experience with individual
+  player,…
+• Definite action according to
+  prediction.
+• Prediction has to be correct more
+  often than incorrect
+                                                      14
+Optimization
+      vs
+ Elimination
+               Two approaches to
+                    learning
+
+
+•   Optimization: find the model with the smallest loss on
+    the training data.
+•   Elimination: use the training data to eliminate the
+    models whose error
+     Elimination vs.
+      Optimization
+single parameter model
+       Properties of the
+     elimination methods
+•   Instead of finding a single best model. You
+    find a Support SET of acceptable models.
+•   When asked to predict, you check the
+    predictions of all models in the support set.
+•   If there is a clear consensus – you predict
+    with confidence
+•   If there is no consensus – you output “I don’t
+    know” or “low confidence”
+  Elimination: Classifier
+space and example space
+         Confidence in classification
+
+
+•
+
+
+                                           X
+
+
+                                        Classifi
+                      Learning
+    Training set                          er
+                      algorithm
+                   Bootstrap Ensemble
+                       X
+
+
+
+                                  Classifier
+                 Learning
+Bootstrap
+Training   1
+         set     algorithm
+                                      1
+
+
+
+                                  Classifier
+
+
+
+
+                                                     …
+                 Learning
+Bootstrap
+Training   2
+         set                          2
+                 algorithm
+      …
+
+
+
+
+                      Learning        Classifier n
+  Training set
+  Bootstrap  n
+                      algorithm
+   Votes      Degrees Of Confidence
+No of No of
+ +1    -1
+  n     0
+ …     …
+                 Confident positive   Easy positive
+ …     ….
+ …     ….
+ n/2   n/2                             Hard /
+                                       I don’t know
+ …     ….
+ …     ….
+ …     ….        Confident negative   Easy negative
+  0     n
+Confidence Intervals
+experiments
+          Multi-label classification
+•       Example CIFAR100: 100 classes
+•       Most common measure of performance: fraction of
+        time top score is correct
+•       Common Variant: fraction of time correct is among
+        the top 5 scores.
+•       Alternative: the algorithm outputs a set of labels A
+        we consider two measures of performance:
+    •    Fraction of time the correct label is in the set.
+    •    Distribution of the size of the set.
+
+•       A refinement of the “I don’t know” in the binary case
+Easy and hard examples in
+   the multilabel case
+
+•   The prediction on easiest examples is a set of size
+    one.
+•   Larger prediction sets indicates harder examples.
+•   Example: distinguishing between dogs and cats is
+    easier than distinguishing between subspecies.
+•   A prediction set that contains all labels == IDK
+            Does IDK matter?
+
+•       Not if
+    •    correct prediction = gain of $1,
+    •    Incorrect prediction = loss of $1
+
+•       Yes if
+    •    IDK = no gain or loss.
+    •    Correct prediction = gain of $1
+    •    Incorrect prediction = loss of $10
+
+--- end {12.1_lec.pdf} ---
+--- start{12.1_transcript.txt} ---
+(electronic music) - [Instructor] Hi. We talked about root mean square there and the variety of ways in
+which it can be used to model. What I want to do now is
+open the scene a little bit and compare root mean squared
+error and predictive models and classification models
+to generative models, which is the whole other
+approach to modeling. So to talk about it let's talk about a simple toy example where a computer receives a telephone call and measures the pitch of
+the voice of the caller and then decides on
+the gender of the call. Okay, so that's, the
+gender is what we're trying to understand, what
+we're trying to predict. So there's the caller, makes a call to the
+telephone, to the computer, and then either decides that
+it's either a male or a female. Okay, so what is the generative
+approach to modeling this? The generative approach
+says there are two classes, males and females, and we wanna characterize
+the distribution of each one. So to do that, we first
+measure, we have this data that we collected, and we measure the mean and the variance of the female, of the male class, and then
+the mean and the variance of the female class. Okay, so the female
+tend to be higher pitch and so we get a higher
+mean for the female. And now because we don't know
+much about the distribution we say okay, let's assume
+the distribution is Gaussian. And so we fit a Gaussian
+to the mean and variance of the male, and to the mean
+and variance of the female. And now when we have that we can make the optimal decision based on where these two graphs cross. Okay, so this is the what is called the base optimal decision assuming that the data is
+really generated by Gaussian. Okay? So that's generative modeling, and it has very good properties when the data is really
+generated according to the assumed model, which is a Gaussian in this case. The predictive approach
+is quite different. It takes the same data that we had before, but instead of trying to
+characterize the statistics of this data, it just tries to find a good
+rule based on this data. Okay, so it compares all
+of the possible thresholds. We're assuming that the thresholds are the rule that we want and then it plots the number
+of mistakes for each threshold. So this is this graph. What we have at each, at each location is for a threshold that goes here, what is the error on the training data or the empirical error? And we also potentially try thresholds where the threshold says
+it's lower than something then it's a female, but that rule gets this
+error that is pretty high. So we can ignore that case. And now based on these, we decide on one of the
+minimum that is the threshold that we're going to use. And in this case, we see
+that we have two minimum. And so the question is what do we do then? And the answer is it doesn't matter just choose one of them. So just from that, you
+immediately say, well that cannot be optimal, right? That's true. However, it is much more
+robust in the following sense. So suppose that we have
+data that looks like this. So here we have females
+that are higher in pitch that these males, but here are four
+people, four measurements that are very high pitched and are mixed both male and female. Okay. So these clearly are outliers, but and we would be happy
+to simply be wrong on them, but the problem is that they're going to change our estimates very much. So here is the mean and standard deviation that we get for the male, and then from the female. And the Gaussians that
+we collect for them, that we fit for them are these two. The blue line for the male and the red line for the female. And now the threshold is
+going to be somewhere here where these graphs cross. And if we look at this threshold, it says anything that is
+below is a male, okay. But we're going to be now wrong on all of these female, right. And why are we wrong? Because our assumption
+that the data is generated by a Gaussian is wrong. So these few examples
+have a very high influence on the means of the estimate. What happens if we do, if we let me clear that. What happens if we do for the same data, we take the discriminative approach? Okay, so in this case, what we have is this is the graph of the minimum of the
+errors for each threshold. So we see that these
+males and females here have some impact but not a very big impact on what is the minimum. They really, they don't
+affect the global minimum. So the global minimum is what we choose and indeed this is a very good threshold. Okay. So what can we say in general? In general, we can say that using the discriminative approach, finding the rule that
+has the minimum error on the training data has guarantees of being almost optimal. It's not quite optimal if the data is generated
+according to what you assume in the generative case,
+but it is much more robust. It doesn't depend on any assumptions about the underlying distribution. Now, if you are an avid statistician and you want to defend using
+a model that is generative, you'd say well, if I
+used this distribution that allows for a very long tail then I would actually
+find the right threshold. And that might be true. The problem is that
+finding the right shape of the distribution also takes
+significant amount of data. And so the question is, are we going to really study, collect enough data that we can know what is the characteristics
+of the distribution? Or are we just going to
+use the data that we have to optimize our threshold? So that's really the difference. Okay, so this goes to the late Leo Breiman who had a a nice kind of way of discriminating between
+statistics and machine learning. He said in statistics, you take data and you make from it an
+estimate of what the world is. And then you use decision
+theory to make predictions. But in machine learning,
+you just jump over this step and you go directly from data
+to predictions and actions. Now, what we also know today is that that is a kind of black box approach and sometimes this black box approach that doesn't relate to anything that we can understand
+in nature or in the data is limited, but in principle, it allows you to jump over estimating what the state of the world is and just finding a good prediction rule. Okay, so to distinguish between those, I'm going to distinguish
+generative and predictive and I'm going to talk
+both about classification, what we talked about here,
+and about root mean square, which we talked about a few videos ago. And so the goal here in generative is to get probability
+estimates of the distribution. The goal when you're predictive if you're discriminative,
+it's classification. So something that tells
+you which class the data is and the prediction rule,
+which tells you a point in vector space, which is where
+the data is estimated to be. The performance measure
+here is likelihood. This one is misclassification rate and here it is, root mean square. Okay? And the mismatch problem
+here you have outliers if you have a mismatch, meaning that you're using
+a model that is not correct and here you just have misclassification or potentially in RMS, large errors, okay. So you have some handle
+on what's happening with things that don't fit your model. Okay, so to summarize, generative models the goal is to explain
+how data is generated. And in predictive models the goal is to predict the
+property such as a label or as a vector that describes the depth of the snow. Generative models are more
+accurate when they're correct. Okay, so when you can
+find the exact, the type the exact form of the distribution, then generative models are more accurate. On the other hand, predictive models are more
+robust against wrong modeling. And finally classification models are more robust against outliers. So they don't really change
+their prediction very much. If you have a few outliers with the wrong, with classes that don't
+fit the general model, they don't change the best
+model of the classification. Okay. So that ends the generative
+versus predictive description. And I'll see you the next time.
+--- end {12.1_transcript.txt} ---

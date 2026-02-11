@@ -1,0 +1,49 @@
+(upbeat music) (transition swooshing) - [Instructor] Hi, we have
+looked at the coefficients of the principle components, the three top coefficients
+as a function of time, how they change from time
+to time, from year to year. Now, we want to look at how
+they change from place to place. So we need some kind of mapping
+device in order to do that. And there is a very nice mapping tool that you can use in Jupyter Notebooks, it's called ipyLeaflet. And we'll see how it works. So we are going to look at New York and the snow depth in New York. And first, we're going
+to do the same steps as we did before. We are going to compute
+spectral decomposition for the stations in New York. And that's what we are doing here. There are many cells
+here that I'm skipping. If you want to see all of the details, I highly recommend that you
+study the notebook by yourself. So now we're going to compute the count and the average of the
+coefficient for each station. Okay, so we have these stations. And what we want to know is what's the average
+coefficient across time? Because we are not looking at time, we're looking at average for all time. And how many measurements there were because we want to know if
+there were a lot of measurements for this place or fewer, okay? And now, we're going to put that on a map. So each circle is going to
+be centered on a station. The area of the circle
+corresponds to the number of years that that snow depth was measured, and the color corresponds
+to the coefficient. So it corresponds to the
+coefficients being small or high. So here is our map. And the one nice thing about it is that it's an interactive map. So we can basically zoom
+in as much as we want, and we can pan and look
+at different parts. And the map underneath it becomes
+as detailed as we want it, very much like Google Maps. And so what do we see? If we look a little bit out, we see that in most of New York, especially the south part, there is very little
+snow, relatively speaking. But if you go north, there is these mountains
+called the Adirondacks, and those mountains get a
+significant amount of snow. Some location get really
+quite a lot of snow and some just intermediate. So the red one is for very
+high values of the coefficient, and then the blue are for low ones, and yellow are intermediate. So we immediately get a sense of how the snow is distributed. There is this mountain area here that doesn't actually
+have that many stations, but the stations that you have here record the fact that there is more snow. And indeed this is skiing area. Okay, so that's the ipyLeaflet. And it's a convenient tool
+for doing many things. You might want to study it
+for your future reference. So now, we can actually ask questions about how do the coefficients relate to properties of the location, okay? So one is to say is coef_1,
+which is the amount of snow, does it relate to the height? And we see that when we do a scatterplot, here we have the average of coef_1, and here we have a elevation. There is some relationship. So the places with more snow
+tend to be higher elevation, but it's not very strong. And indeed, the elevations
+that you have in New York are not very big. And they go up to like 600,
+I'm not sure what they are. Feet or meters, must be meters. So in most of the places, all of the elevations get
+very little snow, okay? So this is what you see from this scatter. Another way, another thing to ask is, how is coef_1 related to latitude? And you see again, most of the places have zero gain, but there is a tendency with latitude to get more and more
+height, more and more snow. There is a lot of snow. And here, there's like negative. This is basically when
+the snow is almost zero. Now, that is interesting, but now the question is, which of these are the real influencers, the latitude or the elevation? How are latitude and elevation related? And you see that latitude and elevation are strongly related. So you have that as
+the latitude decreases, the elevation increases, okay? This is all of this major part. And so that's actually a
+relationship that is stronger than the relationship between the latitude and the amount of snow. So this is the kind of
+thing that we can do. We can now study the relationship between the coefficients that we have, and different things that
+have to do with the location, or different things that
+have to do with time, okay? So these are both the
+temporal aspect of our system and the spatial aspect. So to summarize, using ipyLeaflet is a powerful tool that
+might be of use to you in other places. We saw that in New York state, most of the snow accumulation
+is in the Adirondacks. And snow accumulation
+increases with elevation, but the relationship is weak. It's not really a strong elevation. Locations with elevation 400 to 600 meters have widely varying accumulation of snow. 400 and 600 meters is
+really not very high places. The altitude is not
+really very significant. So that's it. This is the part where we analyze visually relationship to space
+and relationship to time. And next, we're going to do
+the same kind of analysis, but we're going to do it
+in a more quantitative way. I'll see you next time.

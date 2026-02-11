@@ -1,0 +1,230 @@
+(gentle tune plays) - [Instructor] Principle
+Component Analysis, Part one, Take six. So today we're going to talk about principle component analysis. This is one of the oldest and most useful methods
+in statistics, way earlier than neural networks or boosting
+or anything of that type. And indeed it is still a very
+powerful and useful method. And so it is worth our
+while to understand how to use it and what the results mean. So what is principle component analysis? The idea basically is that you have very high dimensional data let's say 1,000
+dimensions, and you want to represent the data using
+something much smaller let's say 10 dimensions. So sometimes you can do that, not always, but when you can do that this kind of representation
+can be found using PCA. So dimensionality reduction,
+we want to reduce the number of features or dimensions in the dataset. Why do we want to do that? First, because it reduces
+storage and computation. It gives us a more succinct
+way to store the data and therefore to process
+the data more quickly. And the high dimensional data
+often has strong dependencies, strong correlations
+between different features. And so we can hope to
+find a representation that would have less of that redundancy
+and therefore be smaller. Finally, if we have features
+that have no relation to other features, those
+are often if not always, features that are really just noise. So we would do better if we remove them and in
+a sense, clean the data. So here is an example of a situation where we
+might want to use PCA. We have images of digits. Each pixel here is a value
+between zero and 255. And together they represent the image of a particular digit, handwritten digit. And the dimension of this data point is the number of pixels
+that you have, which is, I believe 764 here. Okay? So the question is, are all
+of these pixels really equally informative or can we remove some of them and not encode them at all? So it is pretty clear that if
+we look close to the corners those pixels tend to be always black. So they vary very little
+from image to image and therefore maybe we can just throw them out and not incur much of
+a distortion of our image. Okay? So what we're going to try and do is remove those pixels
+that have small variance. So the data is a classical
+data set, it's called MNIS. And we want to know what
+fraction of the total variance over all of the pixels, what are the pixels that
+have the least variance? How many of them and so on. So what we can do is we
+can simply sort them, we can calculate the
+variance for each pixel, and then we can sort them from the least variance
+to the most variance. And this is the graph that we get. Okay? So we see that the
+smallest variance pixels up to like 300, they really
+have very, very small variance and maybe we can just remove these pixels and just have the pixels that
+are above like 300 to 764. Okay? So that is a legitimate way of going but as we'll see, we can
+do significantly better. And that is by not looking just at pixels but at linear combinations of pixels. So to understand how the
+redundancy or the correlation between data points
+gives us the ability to reduce the dimension, let's look at the simple
+two-dimensional example. So we have here two coordinates the horizontal and the vertical and the data points are
+the blue points, okay? So we see that the data
+points clearly have direction in which they tend to follow and their variation in the
+other direction is small. So this is this direction that
+has the largest variation. And what we can basically
+think of is let's take each one of these points and project
+it on this direction and use that as our approximation our approximate reconstruction
+of the data point. Okay? That's the basic idea. So if the distance between the points and their projection and
+the line, the distance between the point and the
+line is simply the distance between the point and the
+projection of the point. If those are all small, then we will have small
+distortion in our reconstruction. And the direction that
+gives us the smallest distortion is the direction
+that gives us maximum variance. Okay. So to just think a little bit about these reconstruction, let's think about this same data set and think about two possible directions on which we would like
+to project the data. So one direction is the green line it's a poor direction
+to project the data in. And the other direction is the red line which is the best direction
+to project the data. Okay, so what do we have? If we look at the red line and we look at the particular
+point that we're trying to reconstruct, we see that this is the vector that
+is the projection, right? So this is the point here
+that is the reconstruction of the point, and then
+this vector is the error. Okay? So the length of this one is the error in our reconstruction. So we see that it's pretty small. If we look at this line, on
+the other hand, the green line we see that the projection is this, but the error is very large, okay? So now of course some points
+will have larger error and some points have smaller error. But what we want is that on
+the average, the length square of these errors would be
+as small as possible, okay? So the errors will tend
+to be small and that can be shown to be exactly the direction that has the maximum variance. So when we talk about
+projection mathematically if you recall from the
+previous slide or video, you have two ways to think
+about the projection. So here's the line and
+here are the data points. So if we basically just
+take the dot product between the direction of
+the line, which is defined by some unit vector and the
+vector that defines the point then we just get a number, a scaler and that's here is the number. And if we take this number and we multiply it by the unit
+vector that defines the line then we get the projection
+on the line, right? So this is really the
+reconstruction, okay? This is just a number, this is in here, a point in two dimensional space. So again, just as a reminder,
+what is it that we're doing? We have vector X that we are projecting
+onto a unit vector U. And so here is U the unit
+vector and here is X. And X dot U gives us the
+length of this line segment. And if we multiply this X dot
+U by U again, so we take X and we multiply by U, we
+get actually this vector the vector that defines
+the point right here. Okay? So that point is the
+projection of X onto the line. Okay. So to remind you again, we're using when we do this kind of
+projection on unit vectors, we like to use an orthonormal basis which is basically a set of unit vectors that are each orthonormal to each other. And what we have is, if we write these vectors
+as a1 a2 and so on we can write it as a column
+vector of row vectors or as a row vector of column vectors. Okay? So this is A and
+this is A transposed and it's easy to check that A times A transposed is
+exactly the unit matrix, okay? The matrix that has ones along the diagonal and zeros elsewhere. And why does it have
+to be that unit vector? Because we know that for
+any I not equal to j ai times AI itself is one that means that it's a unit vector and AI dot times AJ is equal to zero. Meaning that each pair
+of vectors is orthogonal. Okay. So a set of n
+orthogonal unit vectors in our end defines an orthonormal basis and multiplying the vector by an orthonormal matrix corresponds to expressing it in terms
+of the orthonormal basis. Okay? We talked about a change of basis using an orthonormal matrix. So here is how this looks as a picture. Again, we've seen this
+before, but worth repeating. Suppose that we have a particular vector this red line here, that's
+the vector we're interested in and we have it expressed
+in the first basis. Okay? So the first basis is the black one and we have the two
+coordinates, this coordinate and this coordinate that
+are defining the vector in the basis one, and we
+want to move it to basis two. So basis two is now a different set of two
+unit vectors represented as a matrix that is a
+two by two matrix here. And by using this matrix
+we can re-represent the same vector using these unit vectors. Okay? The dotted blue lines
+describe the coordinate in the new basis. So this is a change of basis in R 2. Okay. So that's what we're shooting for. We're going to look for a
+basis, for our data such that the first, there is one coordinate. The first coordinate is going
+to have the largest variance and then the second one is going to have the largest variance, but
+so that it is orthogonal to the first and so on and so forth. So that would be what we're looking for. And now we're going to talk about some of the algebra
+that goes into that. Okay. So concept that is
+important here is the concept of an eigenvector. So a eigenvector of a matrix
+M with eigenvalue lambda is vector A such that if you take m times A, the matrix times A, that simply changes just the
+length of A, so it multiplies A by a scaler lambda and
+doesn't change its direction. Okay? That's basically what an
+eigenvector and eigenvalue are. And we have a general
+theorem that is called a spectral decomposition
+theorem, which says that if you have a matrix that is symmetric, symmetric matrix means that the coordinate that each cell is equal to
+the cell just across from it. So aij is equal aji for any Inj. If that is the case and it's a real value, we don't need to worry about this here. Then if you, then the
+matrix M can be written as A transposed times a
+diagonal matrix times A. And the diagonal matrix consists of the eigen values and the orthonormal matrix
+consists of the eigen vectors. Okay? So this is a general
+theorem that tells us here is a way that we can always
+change the coordinate of symmetric matrix so that in the new coordinate system,
+the matrix is just diagonal, okay? And the standard is to say
+that lambda one is the largest, lambda two is the second
+largest and so on. So this is just something that holds for symmetric matrices that
+are real value in general. Okay. So how can we think about this? What does it mean that this, what does this decomposition mean? It basically means that you are moving from one coordinate system to the other coordinate
+system and back again. So we have this operation ATDAa, right? So this ATDA is, M is our original matrix and it represented it the following way. First we take the matrix A
+and we multiply it by the, we take the vector A and we multiply it by the matrix A and we get the vector now in the a coordinate system,
+in the A orthonormal basis and then we multiply each
+coordinate just by lambda I. So we take each one of the coordinate and we multiply it by
+the appropriate scaler and then we transform it
+back to the original space. Okay? So start at the original space, move to the basis representing,
+represented by A, scale each one of the coordinates
+and then transpose back into the original coordinate system or the original basis. Okay. So that is the
+tool that we're going to use, this decomposition. But now what is our symmetric matrix? So our symmetric matrix is going
+to be the covariance matrix and I'm going to explain
+what it is right now. It's basically a generalization of the notion of covariance between two random variables
+to say that it's a covariance between any pair of
+coordinates in our vector. Okay? So here is what we will
+call our observation matrix. Okay? So each row here is one vector of observation and we
+have n observations, okay? So in general, this would
+be a skinny and long matrix but not so skinny because p
+is the number of coordinates. So maybe P would be 365 in our examples but n would be maybe 10,000 or 100,000. And now we want to
+calculate the covariance between every two coordinates. So we're going to calculate
+the covariance matrix and the covariance matrix
+is a symmetric matrix that captures the pairwise relationships or the pairwise correlations
+between pairs of coordinates. Okay? So here is how it is calculated. We start with our
+observation matrix, okay? And then we call each
+observation each two-dimensional observation, we call it o. So this is the o 1 is
+the first observation. Now we take the average
+observation vector, okay? So that's the vector
+that is simply the mean of all of these Os all
+of the observations. And it gives us the mean
+for the first coordinate the mean for the second
+coordinate and so on. Now we center our data, we basically subtract from each coordinate we subtract the mean for that coordinate and now we get oi O1 minus mu O2 minus mu up to ON minus mu. So this is the average
+corrected observation matrix. It has a zero vector as
+its mean vector, okay? So we subtracted the mean.
+So now it's the mean. Now the mean is zero. And now we take what we
+call the outer product. We talked about that before. The outer product is basically rather than taking the dot product A, so the inner product, A
+dot A is simply the sum of the dot ai but the outer dot product is
+where you take each coordinate of A and you multiply it by
+each other, coordinate of A and you get now an N by N
+matrix where each coordinate so where the dimension here, the the output is a
+matrix that has the square of the dimension of the vector A okay? So that's just multiplying
+all possible pairs. And you see here in the
+diagonal it's multiplying just the variable with itself. So that basically gives us the definition of the covariance matrix. So it means we take x i
+minus mu, do an outer product of that vector with itself and then we average
+the resulting matrices. Okay? So this gives us a matrix. Each one of these matrices
+in the sum is symmetric. It's easy to see. And so therefore, covariance
+X is also symmetric. Okay? So we have a symmetric
+matrix like we wanted and because of that we
+can apply the orthonormal decomposition, spectral decomposition, which means that we can
+write Cov X as ATDA. Okay? So we can write it in
+this kind of diagonal form and let's see what that means. Okay, so how do we interpret this? So the distribution of the random vector X
+defines the covariance matrix and the decomposition
+changes the coordinate system of x and defines a new
+coordinate system where Y is A of X. Okay? So we take the original
+features that we have or coordinates and we do a
+orthonormal transformation and we find what is a new representation. And this new representation is nice in the sense that the covariance of that new representation
+is simply a diagonal matrix. Okay? So that, that basically means what? It means that every pair of coordinates in the new basis are uncorrelated and the variance of each
+one, which is the elements in the diagonal that basically is equal to the eigen vectors to the lambda eye. Okay? So we have on the Lambda
+eyes we have a description of what is the variance of each vector and we know that the rest of
+the covariances are all zero. So using that, we can define the best K
+dimensional projection. So suppose that we have a P
+times P covariance matrix of X, it's eigendecomposition can
+be computed in order of P to the cubed. And what it gives us it gives us these lambda one to lambda P and it gives us the
+corresponding eigenvectors mu one to mu P. Okay? So each one of those
+is a unit vector length one and UI UJ is zero. So basically now we have a new basis for representing our data. Okay. So Ethereum says, that suppose we want to map
+data X to just K dimensions. So we don't want all of
+the original P dimensions we just want K and we
+want to capture as much as possible of the variance of X. Then the best projection is to
+take the K first coordinates in the order where lambda one
+is larger equal to lambda two and so on. Okay? So basically by doing
+this eigendecomposition we find the directions
+of maximum variance. And here is what happens
+if we look at the variance when we use PCA rather than using just the
+individual coordinates. So this is the blue line is
+the individual coordinate and we saw that after we
+pass about 400, 500 here then the rest are very small. But if we use the PCA, we see
+that it's even more extreme. So basically most of the variance is
+explained by the first 100 and then the rest is explained
+less and less and less. Okay? So this part of the distribution where we take a few coordinates and it explains most of the variance, that's exactly what
+we're after when we want to do dimensionality reduction. So here is an example of image
+reconstruction using PCA. So here is an image, this
+is the original image. And here we have different
+Ks, different approximations. So we see that if K's 50 then the approximation looks pretty poor. K is 100, it's already pretty good. It's good enough that we can
+say clearly that it's a two. Okay? And then when we go to
+150 and 200 it becomes better. And at 200 it's really quite
+hard to see a difference from the original image,
+even though it uses only 200 out of the 764. So what are these reconstructions? We talked about them in general earlier. It's basically a reconstruction
+where you use only the first K coordinates after doing the orthonormal
+transformation using the PCA. And they look something like this. This is just to kind of
+recap, here is our data. Here it's two-dimensional,
+so it's very simple and we use an ellipse to
+represent the covariance okay? So because the ellipse can
+represent the direction the and length of two
+orthogonal directions, we can use it to represent
+our covariance matrix. And what this, the
+eigendecomposition gives us are two orthogonal unit vectors, U1 and U2. And we are going to use U1 and
+U2 to reconstruct the data. Actually what is used here
+is slightly different. These are not unit vectors but the unit vector times the lambda I so this U1 has larger length than U2. This is a standard kind of
+way of representing the PCA. Okay? So to summarize, what
+we have is we have a model of our distribution and
+this model splits the data into the low dimensional part
+and the high dimensional part. And the high dimensional
+part has small variance per coordinate and we
+think about it as noise. And the low dimensional part
+is the part that contains most of the useful information. Now we can take that low dimensional part and use reconstruction to come up with a reconstruction
+of the original vector and it would be a good
+reconstruction if the distance between the reconstruction and
+the original vector is small.

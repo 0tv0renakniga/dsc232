@@ -1,0 +1,60 @@
+(light music) - [Instructor] Hi. So, we used visualization to
+understand the relationship between the coefficients and the location and the coefficients in the year. Now we want to ask more
+high level question. When we are talking about coefficient two, the coefficient that
+corresponds to the season being early or late, is it more affected by a year to year or is it more affected
+by location to location? You might have your guess, but we want something quantitative. So, how are we going to do it? We're going to use the RMS approach. We'll talk more about the RMS approach in general in the future,
+but just to start, the principal component method
+is an RMS minimizing method. It basically finds the representation using the top eigenvector for a point, such that the residual or the
+square difference distance between the reconstruction and the point are as small as possible, so that's minimizing
+root-mean-square error. Okay. So, we're going to look at
+New York and at snow depth. And we're going to extract
+longitude and latitude for each station, so we're going to get this table with the name of the station, the year, and then the coefficient. Okay. From this table, we want to
+form this list of things. We want to construct a table where one direction would be the location and the other
+direction would be the year. So, for this, we use an
+operation called pivot, okay? So, that's the pivot operation, pdf.pivot. What we are doing is take
+an index one is the year, index two is the station, and the values are the
+coefficient two, okay? So, this is how the beginning
+of this table looks. All of this is going on in pandas. We're not using Spark for this table. Now we're just checking again how many undefined we have. And so we see that there are many stations
+with many, many undefined and that is because
+stations came onto New York over the last 150 years. There are very few stations
+from 150 years ago, but there are very many stations that are just 10 or 20 years ago, That results in this, many, many of the places of
+the entries in this table are actually not defined. Okay? And then, here we're looking at the years. Now like how many stations we have, how many fraction that are undefined, and as a function of
+the year and then we see that we used to have
+most of them undefined, then it improved until
+here and then it became gradually worse and
+then it really improved in the last 20 years. Okay, so here is a part of our table and we can see that for these years, we relatively have more entries for the later years. And here, we're looking
+at the number of nulls, fraction of years that are undefined, number of stations, and so here, we again see
+that for most stations, many of the years are undefined. Okay, so the estimating
+the effects of the year versus the effect of the station, okay? So, what we can do is we
+can look at the average over all of the years, so the average amount that we have and we can see how well that
+average explains that row. It basically is just the
+variance of that row. And then we can do the same thing and do based on the columns. And so, we can see how much
+would explaining things just based on the year
+do and just how much about by the station do And so, what we get is so the total root-mean-square error is 489 and then this root-mean-squared error reduces by only 23 if you look by station, but it reduces by 88 when
+you do mean by year, okay? So, if you take years,
+the explaining variable, then it explains much more of the variance than if you take the station. So, that gives us reason
+to say it's mostly by year, which kind of makes sense
+if you think about it because some years, the front comes early in the season, some
+years, they come late. It doesn't really depend
+so much on the height, on how much snow you have, or it doesn't depend so
+much on the location. Okay, so the conclusion of this analysis is the effect of time is about four times as large as the effect of location. Now, we don't have to stop here. We can actually do this
+iterated minimization, where after we subtract the
+explanatory power of the year, we then go and on the residual, we explain using the station and then we go back and forth. What we get is something like this. So after removing by year, we get to 400. After then, removing
+by station, we get 377. And then, we can continue iterating but things don't really, we basically reach a stable minimum, okay? So, that gives us how much we can explain using both the station and the year. So, one thing that might be interesting is to look at how much, if
+the explanation is by year, what does it look like? Like is there a trend over the years? And indeed, if we look at the mean as a function of the year, we see that this coefficient
+tends to go smaller and smaller which means that the season tends to start earlier and earlier. That's the conclusion from this. And it might be a correct conclusion, but we need to check ourself. So, how would we check ourself? We can just look at how
+do the coefficient change for individual stations? And what we see is that
+the change is very big. It's on the range of -800 to 400, while the range that we had the decrease is actually very, very much smaller. So, we are are always
+suspicious when we have data that has very large variants
+and some very small trend or some very small change in the mean. So, it doesn't mean that
+it's necessarily incorrect, but it would require a
+much more detailed analysis to really say is it
+true that over the time, at least in the State of New York, these seasons are becoming
+earlier and earlier? So, the problem of
+missing data is prevalent and needs to be addressed, so that's one of the
+advantages of root-mean-square. It just doesn't care
+about the missing values, so that's one nice thing about it. The RMS can be used to quantify the effect of different factor, here, time versus space. And the snow season in New York seems to be getting earlier
+and earlier since 1960. It seems to be doing that, but the high variance places
+doubt on the conclusion. So, we have something
+that has this slight trend but meanwhile, it varies
+a lot from year to year and from station to station and we are a little bit uncomfortable making a strong statement. Okay, so thanks and I'll see you next time.

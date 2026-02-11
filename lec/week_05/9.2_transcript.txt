@@ -1,0 +1,144 @@
+(upbeat music) - Hi, we've seen the general theory in power of principle component analysis and now we're going to test the ability of using principle component analysis to do dimensionality reduction, or to represent our data using
+a small number of numbers. Okay, so this is dimensionality reduction of PCA the snow depth of Massachusetts. Why are we using snow
+depth in Massachusetts? Because that's relatively speaking, a very clean signal that is
+relatively easy to analyze and to reason about. Okay, so to remind you, the basic operation
+that we're doing here is finding approximations of a vector. And the way that we measure the error from this approximation, of this approximation is the residual. So the original vector is V and the first residual is simply the difference between V and the average of all of our vectors. Okay, so that's the first zeroth residual. The first residual is then
+when we take the first residual and we subtract out the projection on the first eigenvector, okay. That gives us the first residual. And we can continue like that. Every time we take the residual, whatever is remaining, and we project it on the next eigenvector
+and we get another number v dot U2 in this case,
+that is the representation. And the residual is when we subtract from the previous
+residual that projection. Okay, and so we go on and generate an approximation like that and we hope that after a few steps we can get a very small residual. So what do we mean by small residual? We simply mean the
+square of the norm, okay, or the sum of the squares of the components of the residual. Okay, so the smaller this norm the better the approximation,
+the reconstruction. Okay, so a few things to
+remember about linear algebra. The zeroth for residual norm is square distance of V from the mean mu. The kth residual norm is
+the minimal square distance between V and the point on the hyperspace, hyperplane that is described
+by the first k eigenvector. So we say, okay, we can take
+any point on this first, on the linear combination of
+these first k eigenvectors and we're looking for the
+closest point to our point. That's the difference, the distance of that is the residual. So residual norms are non-increasing. The more eigenvector you
+add, the smaller they get. And the residual vector rn is always zero because if you have as many eigenvectors as the dimension of the space, you can always represent
+the vector precisely. Okay, so we have a code
+in decomposed data frame that you can look, but we're
+not going to go into it here. And basically that norm
+takes a set of vectors from a data frame, and it
+takes the statistical analysis of eigenvectors that we have and it computes the residuals
+and the reconstruction errors. So let's see what we get. So as I said, snow depth in Massachusetts. This is how we load the
+data into our data frame. And the most of the work of
+the loading is done here, df2.count simply because
+again, it is lazy execution. So we're not really
+loading anything when we, before we need to generate the number, here the number of records. Okay, so now we're going
+to join this decomposition information with station information. So we want to see for each station what is the longitude, latitude and so on. And so we generate this
+combined data frame. And another cleanup thing that we do is that we remove years
+with very little snow. So as it turns out, there are parts of Massachusetts where it rarely snows at all. So those basically have
+a snow depth of zero throughout the year. And if you include them, they
+tend to distort your analysis because zero can best be
+approximated just by a single zero. So it's better to think
+about it as separate cluster of almost no snow, and then
+deal with the rest separately. So we remove years that have little snow. Now let's see what we have in terms of the mean and the top eigenvectors. So top graph here that we see, this one, is it basically shows
+us that the deepest snow is more or less at the end of the winter, which is around January, February, March, March you have the end of the winter. And then it goes down to
+zero during the summer, there is no snow. No snow from April to, from end of April to
+beginning of September. And then in beginning of September there starts to be more snow, okay. So that's what we have and that's the mean. The eigenvectors are more
+interesting than that for the most part. So the blue one is eigenvector one, eigenvector one here. That's the blue line here that is very similar
+in shape to the total, to the average vector. So what happens when we
+add this average vector to this vector? We basically make it bigger or smaller. So what we see is that the biggest, the eigenvector with
+the biggest eigenvalue, the one that explains
+the most variance is the, is basically the amount of snow overall. If you have more snow, then you'll have positive
+coefficient with that. If you have less snow, you'll have negative
+coefficient with that, okay. Then the second and the third they look a little bit
+different and more interesting, and we will talk about them in
+more detail in a little bit. Okay, so the next thing is how much is the explanatory
+power of these eigenvectors? So the percentage of variance explained is basically what is the
+length of the residual relative to the original variance, relative to r1, which is
+the distance from the mean. And what we see is that this graph called the percentage
+of variance explained is increasing very rapidly. So it increases from zero, when we have no eigenvectors to about 55% when we have one eigenvector to after six eigenvectors,
+we have about 80%. So that means that on the average, if you take the six top eigenvectors and use that as your your dimensionality, as your representation of the vector, that explains 80% of the variance. So the residual is 20%
+in terms of its norm. Okay, so let's look at the decomposition in a little bit more detail. So first, let's think about intuitively, what do these vectors
+that we saw look like? So the eigenvector one we talked about is very similar to the mean. It indicates heavy or light snow. And if coefficient one is large, snow accumulation is higher. Eigen two is negative in
+January and positive in March, it then indicates an early
+versus late season, okay. So it basically pushes the
+beginning of the snow earlier or later in that year and station. So if coefficient two is
+high, snow season is late. And finally eigen three
+is positive in February, negative in January and March and that indicates short or long season. So if coefficient three is
+high, the season is short. Now why would you believe
+me about these vectors? This requires some digging
+into the to the files into into the actual reconstructions, and that's what we're going to do. But this is the first kind
+of intuitive explanation. And those explanations are important, because that's what connects your analysis to what people can relate to. They people can relate to a
+lot of snow or a little snow, a snow season that is early or late, or a snow season that is short or long. That means something in the real world. Okay, so let's look at
+first at coefficient one and try to convince
+ourselves that that's really the explanation here. So what I'm doing here is I'm taking the data frame generated by the reconstruction software and I'm saying I want the residual to be, the residual after one
+to be smaller than 0.1. And I want the coefficient, to sort according to coefficient one. So I'm basically sorting everything from coefficient one being very small to coefficient one being very big. And I ask for cases
+where this coefficient, the residual after this
+one coefficient is small. So this is the data frame that I get and here is the plot that I get. Okay, so what I get here is a sample of the values of the reconstructions when you have very negative numbers, - 1003, -999, and so on. What you see is that the
+target is very close to zero. It's not quite zero, because then we would've filtered it out, but it is very close to zero and much, much smaller than the mean in terms of snow depth, okay. So by subtracting a large
+amount of the first coefficient, we basically reduce the
+total amount of snow to something that is very close to zero. Okay, so that is the case when the coefficient is very negative. Here is the case when the
+coefficient is very positive. What you see now is that the
+the signal that we're trying, the purple signal here, is much larger than the average. You see here the average is down here and the signal that we're reconstructing is much, much higher than it. So this is a place where snow depth is much bigger than what is the mean. And indeed, you see that
+the first coefficient captures that very well, okay. So this is the first
+coefficient being very large compared to the other coefficient. So in absolute value,
+this is a very large value and this is also pretty large. And you see that as you
+go larger and larger the signal itself is much
+bigger than the mean. So this confirms what we were saying that basically this coefficient tells us if there's a lot of snow or
+if there's a little snow. What about coefficient number two? We do a similar thing,
+but now we are looking at coefficient number two and the residual for
+coefficient number two. And now the picture is more interesting. Here is the first case, the coefficient number
+two is very negative, the most negative. And what you see is that
+the snow starts early, starts like before the 1st of January. Okay, it starts here, and in all of those, if you compare it to the mean, you see that it tends to be
+earlier than the mean, okay. So all of these are earlier than the mean. And if we go to the opposite and we say, let's say
+the coefficient is large, then we see that the
+coefficient is always larger, that the start time of the
+snow is later than January. Okay, so that basically tells
+us that this coefficient moves the starting time
+from very early to late. Okay, finally, let's look
+at coefficient number three. Again, we just sort. We asked that the residual
+after three is 0.1, smaller than 0.1 and we sort according
+to coefficient three. And now what do we get? We get that if this
+coefficient is very negative, then the season tends to be long, right? So it tends to basically
+have a more flat shape, like this one that basically it is more, it started in January and stays more or less the same and drops, and in these other ones also. And here is the opposite. When the coefficient is very positive, you see that the season
+is relatively short. It starts at the end of January and it ends at the end of April, okay. So season is now a short season. So we have basically three parameters: one is the size, the second
+is the starting point, and the third is the width or the length of the snow season. So this is a way to explore what our reconstructions mean and see if they agree with our intuition. But here we're basically just looking at this kind of sample of places. Sometimes it is useful to look at a particular place and
+see what the coefficient and what the eigenvectors
+mean for that place. So we've looked at the
+reconstruction of snow depth in Massachusetts and we
+looked at it in a bulk way. We looked at individual years and stations that had
+large coefficient one or large negative
+coefficient one and so on. And we saw that the interpretation that we initially gave makes sense. But now we're going to look
+in a little bit different way. Suppose that were just given a station and the measurements that
+were of the snow depth and now we want to see what of the properties of the snow depth are captured by the three
+top eigen coefficients. Okay, so we're going to take just random station and years and see what we can understand from them using this interactive widget that you have access to in your notebooks. So here is our first example. The example here is
+all of the measurements are pretty much zero. So this is a very simple
+example, but let's do it anyway and see what that comes out
+to be in the coefficient. So these three sliders
+represent the coefficients. Initially, the values that
+is associated are all zero. So basically that means
+that we're not using any of the eigenvectors,
+we're just using the mean. And so what you get here is that all of the graphs
+are on top of the mean. As you slide the slider, you
+move it from zero coefficient to the actual best coefficient according to the orthogonal
+decomposition that we use, the closest point using
+the Euclidean distance. And here it is, we're
+adding or subtracting more and more of this first coefficient until we get to something that has much less snow than average, which is correct for this data. Now, if we add the other coefficients they make non-significant
+changes to the, to what we have. So really the main thing
+that we get is that if the value of the first
+coefficient is negative, let's say around -800, that means that we have
+practically no snow. Okay, second one is the
+more interesting one. Here it is. Here is the measurement graph
+that we see for this case. And we see that there's
+much, much more snow than average, than the average, it is the red line here, and that the snow starts, starts pretty late, like the end of January
+and ends early April. Okay, so let's see what the
+coefficients look like here. If I increase this one,
+I get to get, okay, so there's much more than average, but now if I add this one, you
+see the shape here changes. So now that the red shape starts later than average and also
+ends a little bit later than what we had before. Okay, and finally, when
+we add the third one we get a pretty good approximation of how the vector, how the behavior is. And we see that in this case we explained more or less how it started
+late and ended early. And that the height is pretty much a good approximation of the data. So we have a good approximation and we know that this is a lot of snow. This one means snow starts late and then this one means
+the season is short. Let's see, another one. This case looks pretty simple but similar. But here we see that the
+season doesn't start late. And so let's see. Here, we add and we get to the right total volume more or less. And when we add the second
+one, it actually is added with a negative coefficient -404, -673. And that basically moves our start to be a little earlier rather than later. And then when we add the last one that's pretty large and that
+makes the season shorter. So we get a short season,
+but doesn't start early. It ends really early and that's pretty much the approximation. So what you see is that
+these three numbers, these three coefficients that's what's called
+dimensionality reduction. Knowing these three numbers
+gives us the most information about the shape of the snow depth for that station and that year,
+and that's the point of it. So I recommend you play around with that, use different years and see
+that you can get some intuition about what these coefficients mean. Next, we're going to
+study the distribution of these coefficients. That'll be in our next video.

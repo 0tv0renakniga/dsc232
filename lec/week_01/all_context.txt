@@ -1,0 +1,3172 @@
+--- start{1.1_slides.pdf} ---
+What is Data Science?
+Digital Sensors everywhere
+
+
+
+                             Data
+               processing
+                            Analysis
+                    Two data analysis tasks
+1. Establishing facts:
+   1.   The water in City X is safe/unsafe to drink.
+   2.   The average daily time spent on a smartphone is Y
+   3.   The number of almost accidents per-day on highway 5 is Z
+2. Making predictions:
+   1.   Selecting ads to maximize clicks.
+   2.   Automating/assisting medical diagnostics.
+   3.   Choosing candidates for Loans.
+    A real life example
+highway traffic in California.
+Caltrans: PeMS (Performance measurement system)
+Car Loop Detectors
+
+
+                     • For each passing car:
+                         • flow : number of cars per
+                            unit time.
+                         • Occupancy: fraction of time
+                            that there is a car above the
+                            coil.
+                     • ~45,000 individual detectors.
+                     • Each detector generates a data
+                       packet every 30 seconds.
+MAS-DSE Capstone Project, 2016
+Kevin Dyer, John Gill III, Conway Wong
+Mean and STD of total flow (cars per minute)
+Top Eigen-vectors
+
+--- end {1.1_slides.pdf} ---
+--- start{1.1_transcript.txt} ---
+(light music) - I'd like to talk about
+the goal of this course. What is data science? We hear the term used a lot,
+but what does it actually mean? So it's a combination of two words, data which most of us understand, and then science, which is not completely
+clear what it means. Okay, so let me give you my take on that. So we're surrounded by data. Data is collected on pads in gas stations, using laptops in industry, temperature is gauged, and then the wireless world around us is giving us data all the time. All of this data is sent to
+some kind of central computers. And using that data, what we want to do is data analysis. So that is basically data
+collection and analysis. But what is data science? So data science I would say
+is rational decision making. So how do we make decisions
+using data in a rational way that is useful and profitable? So I would divide it into
+two kinds of decisions, big decisions and small decisions. What are big decisions? So one decision might be, is the water in a particular
+city safe or unsafe to drink? So that's a decision that is important because we would have to do something if the water is unsafe. Another question that is now very relevant is will increasing the federal
+interest rate by 75 points, let's say, curb inflation
+in the United States? So that's a prediction
+that is super important to the whole economy and the Federal Reserve people
+have to decide how to do that or how much to increase
+the rate at this point. Even more global decision is about moving away from fossil fuel. So we want to say, will increasing prices
+of gas to $8 a gallon, will that reduce global
+warming by one degree? So that's a benefit of doing that. And then then the cost of doing that. So we would like to know what is the expected gain
+from doing such a thing. So these are all very big decisions involving a lot of people and involving big institutions and making those decisions is based on making, on testing hypotheses and verifying that this is
+to the best we know the true, the true state of the world. And that is what we predict
+will happen based on this. Then there are many small decisions that we are surrounded by
+every day, mostly on the web. So for instance, which ad
+are you likely to click on? That is an important thing
+for a company like Google to basically identify the ad that you are the most likely to click on so that they can have an ad revenue. A similar one is for Netflix. What movie should Netflix recommend to you as the next movie? And a slightly bigger one, more important would be
+which loan applications should a particular bank grant? So what is the, of the many applications that they get, which ones should they grant? So that is a bigger decision but it affects maybe
+one person or a family. So you see there's gradations of the different kinds of decisions where the big decisions
+are really decisions that would be made by
+some kind of set of people that deliberate on the issue. And the second set of decisions is more decisions that can be automated and can be made online without user, without human intervention. So let's look at a particular real example of this kind of situation. So we're going to talk
+about the highway traffic in California, and there is Caltrans which is the organization that basically is charged with deciding, with collecting data and making decisions about how to improve the transportation in the United States or in California. And this is basically the problem that they're trying to solve, right? So we've all been there. Traffic jams, you can be
+stuck there for hours, they take a lot of time out of the day from people and also they, it costs a lot of gas to have these cars basically
+idling on the freeway. So how do we get data so that we can make decisions about this? So the way that Caltrans does it is that there are these, there are these loops on the
+highway here, pairs of loops. And these basically can measure
+when a car goes over them. It can measure how long the car is there, and how many cars pass,
+let's say per minute. So this is a more of a schematic
+of how this is working, collecting the data, then sending it to a computer, and all of these computers
+through the internet collect the data into a central place. So what we have for each passing, for each detector, we have the flow, so the number of cars per unit time, and then we have the occupancy. So what fraction of the time is a car above a particular loop, okay? And there are many such detectors. There are about 45,000
+of them in California. And each one of these detectors
+generates a data packet that says what happened during that half a
+minute every 30 seconds. So a lot of data that
+gets collected together. And then we want to do a
+data science on that data. So here comes the science part, okay? So there is actually a
+science of traffic flow and the science gives us a model of how does traffic go on a highway. And this is the basic graph here. So we have the density of the cars or how many cars per mile there are, and then here is the speed
+that the cars move at, okay? So actually the number of cars per minute that pass the detector, okay? So we want a lot of cars
+to pass the detector, that would be ideal flow. And so what we have is that
+there is this relationship between the density and the flow, okay? So if we have pretty empty highway, then cars can move freely very, very fast. And that's this beginning part. And then as there are more and more cars, the cars have to go slower and at some point you reach a peak. So this is the rate at which
+if cars go at this rate, then you get the maximum
+number of cars per minute. So if you go beyond that,
+beyond that density, if you have the cars closer together, they start to go significantly slower. And so you have less flow, right? You basically, the cars are
+overall moving along less. And so you're getting worse and worse flow until you hit the traffic jam where basically cars are standstill and basically are not moving
+and everybody's frustrated. So this is the theory of it. And of course the practice
+doesn't look exactly like the theory or the model. The practice looks something like this. So here we have one set of measurements and then we here we have
+another set of measurements. So it is somewhat reminiscent of here we have the peak around here and once we have this representation we can start to do some
+kind of rational decisions like how many cars would, what density of cars can
+this highway withstand, beyond that it'll start to
+be non-productive, right? So we want to basically be
+as much as possible here but without getting into here, right? And definitely we don't want to get down all the way down here. So data science at its
+heart is taking the science, what people know about a
+particular process or phenomenon. And we take data that we measured and we basically combine the data to basically tell us whether
+the data fits the model and what are the parameters of the model that would make this fit good. And then once we have those parameters we can go and start to make decisions. So what decisions are
+we going to try to make? Again, the big decisions are things like what
+kind of changes we need to make to a highway. So maybe we kind of
+change a particular place to have a different kind of intersection or we might just make a smaller change which is to change the
+distribution of the lanes, right? So maybe there will be
+more lanes in one direction and fewer lanes in another direction. And so each one of these has a cost. If it's a big change like this, it's probably in the
+many millions of dollars. If it's just a change of lanes, it's probably just using some paint, it might be much, much cheaper. And the question is, what
+would be more effective, right? And so we can use the model
+that we measured to say, oh, actually this little
+change that doesn't cost a lot will actually be quite beneficial and this change is very expensive and will not really gain
+us a lot of improvement in the traffic flow. So these are the big decisions, millions of dollars are involved. Small decisions are something like this. You've probably all experienced this when you get on the highway, there is this light that tells you that you have to wait until it's green and then you go, okay, and why is that important for the flow? Again, because of what I said, that if there are too many cars at the same place in the highway, basically if the density is too high, then everybody suffers. So it's better to block people from getting on the highway when you get on and then
+the traffic can flow. Now of course here the
+traffic is pretty busy, so you really need to do that. But if the traffic is
+actually pretty empty, so there's no, very few cars,
+maybe two in the morning, then you don't need to do that, right? So this is many small decisions that are made moment to moment to decide how much does a car
+have to wait before it goes, or how many cars should we let to go on the highway per minute? So this is the kind of small decisions that we would basically do based
+on the same kind of models. So to start talking about models, one of the basic things
+that you would want to do is you just want to know what
+is the traffic on average and how much it varies from average. So how much is the standard deviation? So this is this plot here, this is the average and this
+is minus one standard deviation and plus one standard deviation. So you see that there's a lot of variation but the overall shape make sense that early in the morning
+there's very little traffic, then it builds up until
+like eight in the morning and then this traffic goes, becomes generally higher until 6:00 PM and then it goes down. So this is the average, however, any individual place is not likely to be quite
+like the average, right? Because there are different
+profiles of the traffic. So how do we get to
+understand those profiles? So that's a method called
+principle component analysis, which we will go over. And basically what this
+tells you is it tells you what are the essentially the profiles that are prevalent in the
+way that the traffic flows. And so what we have here
+is that blue line here is basically the AM traffic jam. And what we have here is we
+have the PM traffic jam, okay? And if you just think
+about it for a minute, it makes a lot of sense because some directions of the highway are busy in the morning, some directions are busy in the afternoon, this might not be the case always. Some places have traffic jams both in the morning and in the afternoon but it's quite typical for
+highways in California. So I showed you an example of what it is, what is data science, and how you make big and
+small decisions based on it. So what are the
+ingredients of data science that I would like to put in your mind? First one is math. So in order to build these models and relate these models to data, you need some solid foundation in math, mostly linear algebra,
+probability and statistics. Then you need to learn about
+machine learning algorithms. So there are algorithms that are based on this
+probability and statistics and let you basically take data and build flexible models of this data. Then all of that becomes at the end software development, right? If you want to actually do it at scale and maybe packages that are
+ready are not good enough for your specific problem, you need to essentially
+know how to write software and how to develop a program software that would be useful for many people. And then there is this whole other area which is domain knowledge. So as I said, in the highway case, there is the science of traffic flow. So this is a well-established science that really understands how the main parameters of traffic behave. So because it is so specific
+to individual things, it is kind of hard to really teach it in any individual course, right? So it's not so much something
+that you would learn here, you will get some examples. It is more something that when you get employed
+as a data scientist, you will learn how this particular, the science of that
+particular type of company or institution. So there's various different domains and it really takes a long
+time to acquire the knowledge of a particular domain in depth, right? So if you really want to be an independent data analysis person or data science person, you need to devote to that area a significant amount of time. And so we will only touch
+on particular small examples like this traffic and like the
+weather and things like that. So that's more or less what
+I would say is data science. This is the introduction
+to what you're going to do. And next time we're going
+to basically start digging into the details. Okay, so I'll see you next time.
+--- end {1.1_transcript.txt} ---
+--- start{1.2_slides.pdf} ---
+Data Engineering
+      and
+ Data Models
+
+
+                   1
+Data Science vs. Data Engineering
+Data Science                           Data Engineering
+• Building models                      • Builds the data and computation
+                                         infrastructure used by the data
+• Answering business questions           scientist.
+• Uses Statistics / Machine learning   • Uses relational databases,
+• Expects data to be available and       streaming, cloud computing …
+  computation to be fast.
+What data engineering we will cover
+• Will Cover
+   • Hadoop File System
+   • Data partitioning and partition balancing
+   • Caching and persistence
+   • Checkpointing
+
+• Will Not Cover
+   • Data Cleaning
+   • Spark Server configuration and optimization.
+   • Creating scalable pipelines
+   • Containerization
+         Three Data Models:
+        Relations, Tensors and
+             Dataframes
+Data Scientists and Data Engineering communicate using these data
+                              models
+       Three Data Models (and languages)
+                             name1   name2       …        namen                   name1   name2           …     namen
+
+type        1            …
+                             type1
+                                 1
+                                     type2       …        typen
+                                                          …
+                                                                                  type1
+                                                                                      1
+                                                                                          type2           …     typen
+                                                                                                                …
+                   n                         n                                                        n
+
+
+
+
+                                                                  name1
+  …
+
+
+
+
+                                                                          …
+                Amn                       Rn                                                   Amn
+
+
+
+
+                                                                  …
+                                                                                          Array of values
+       1
+
+
+
+
+                                 Set of tuples (rows)
+
+
+
+
+                                                                              1
+           Array of values            (typed by column)                                     (typed by column)
+  m
+
+
+
+
+                                                                          m
+                                                                  namem
+                Matrix                 Relation/                                             Dataframe
+                                        Table
+
+
+
+           Linear                    Relational                                                   ?
+           Algebra                    Algebra
+                                 type
+                                            1        …            n
+
+
+Matrices
+
+
+
+
+                                   …
+                                                     Amn
+
+
+
+
+                                        1
+                                                Array of values
+
+
+
+
+                                   m
+                                                   Matrix
+
+• A Rectangle of numbers
+• All numbers are of the same type
+• Can transpose (exchange rows and colummns)
+• Can add and multiply.
+• Typically small enough to reside in memory of one computer.
+                                                        name1      name2           …       namen
+                                                         type1 1   type2           …     … typen
+                                                                             n
+
+ Tables                                                                  Rn
+                                                                Set of tuples (rows)
+                                                                     (typed by column)
+
+
+                                                                           Table
+
+• Row: A tuple – defines an entity
+• Column: a named property of the entity: each column has a type
+• Schema: a collection of related tables.
+• Keys: a special column (1 per table) that uniquely identifies
+• Can select a set of rows based on a condition (SQL)
+• Can be very large (TB) and reside on disk.
+• Disk Data Structures make retrieval much faster than flat files.
+Why Use DataBases
+• We can do the same in python/C/Matlab
+• But only if they fit in memory
+• A Database can span many disks on many computers.
+• Disk Data Structures to make retrieval much faster than flat files.
+Dataframes
+• A blend of ideas from relations and matrices
+   • Originally defined in the S language, which led to R
+   • Ordered, named rows and columns.
+   • But only columns have types.
+• Beware: there is not a standard definition of dataframes
+    • Some define dataframes as relations with an ordering key. No transpose!
+• Two popular flavors: Pandas DataFrames and Spark DataFrames.
+Summary
+• Data Science: Data analytics on large complex data.
+• Data Engineering: making the analytics scale on very large data.
+• Matrices are the basic data structure for linear algebra, Neural
+  Networks.
+• Tables are the basic data structure for relational databases.
+• DataFrames are a compromise between tables and matrices.
+
+--- end {1.2_slides.pdf} ---
+--- start{1.2_transcript.txt} ---
+(bright music) - Okay, I'd like to tell you
+some about the difference between data science and data engineering. So, data science, which is the
+main subject of this course, is about building models. So, you get data and you're
+trying to build a model that would represent this data and capture the important aspect of it. And that would be used to
+answer some scientific question or some business question. So, you as a data scientist,
+are going to present it to people that are not data scientists but are domain experts. What you use is your tools are tools from statistics and machine learning. Those are the basic tools that you use. And what you expect is that
+when you have the data, it's available to you
+in an easy to use format and that the software for analyzing it will run quickly on that data. You will do your part to
+make the software efficient, but the basic infrastructure is usually not part of
+your responsibility. On the other hand, you
+have the data engineers that are becoming more and more important. And their job is to actually
+create the infrastructure on which you can run your software and that stores your data. They uses their basic tools, things like relational
+databases, streaming, cloud computing, things of that type. And we will cover only
+a little bit about it just so that you can
+talk with a data engineer in a meaningful way, but a
+course on data engineering truly would be a separate
+course from this. So, what we will cover is
+the Hadoop File System. That's a general way of having a distributed file
+system that is redundant. Data partitioning and partition balancing, which is part of what you do in Spark in order to make use of this
+distributed data system. Caching and persistence, and checkpointing. So, all of these are things that interface between you and the
+underlying infrastructure. But we will not cover the
+details of the infrastructure. So, things like data cleaning, Spark Server configuration
+and optimization. So, you need detailed understanding about how the Spark System is organized so that you can optimize
+it for a particular need. And creating scalable pipelines, which is when you take
+your code for data analysis and bring it into production, so that it can run on the
+business side in a regular way by people that are not data
+scientists or data engineers. And containerization is a methodology for packaging software and data, so that you can run it, you
+can move it like a container, and you can move it
+from one infrastructure to another infrastructure without worrying about
+the internal details. Okay, so the way that the communication between the data scientist
+and the data engineer works is that we have data models. So, we have standard ways to store and communicate and process data. And those basically, this is the language by which we communicate
+with the data engineers to make data available for
+us in the relevant way. So, we're going to talk
+about three data models. The first one is the matrix. And the matrix is just an array of values, so it's something that
+you're familiar with if you ever used NumPy or MATLAB. The relation or table
+which is data structure used in relational databases, which tends to be very
+efficient if you're storing it very large amounts of data on disk. And then, we have an kind
+of a combination of the two, which is called DataFrames and is not exactly clear and
+well-established data model, but it is becoming more and
+more popular in various setups. And so, it kind of takes
+some of the properties of the matrix and some of the properties of relations and tables. So, to start with matrices. So, what is a matrix? Matrix is basically a
+rectangle of numbers, okay? And all the numbers have the same type, so they are like all floats or all in 16 or something like that. And you can do various
+operations on a matrix. You can transpose it, which is
+one of the basic operations. You exchange the rows for
+columns and columns for rows. And you can perform algebraic operations, you can add matrices,
+you can multiply matrices to generate new matrices. So, it's really a mathematical object that allows you to do a lot
+of different linear algebra. And typically, this kind of dataset is stored in the memory
+of one computer, okay? This is the pre-big data setup where you take all of the
+data that you want to analyze, you put it in the memory of one computer and you process it. In big data, you usually cannot do that. You cannot put all of
+the data in one machine, so that's where the matrices
+reach problem point. Tables are in a way similar, they're also a rectangle of values. However, in a table, a row is basically an entity. It's like one of your customers or one of the cars you
+have for the company. And the columns are
+properties of that, okay? And so, the columns, all of the column has
+to be of the same type, it can be a string, it can be an integer, it can be something else, but they all have to be the same type. But across different columns, they can have different types, okay? So, a schema is basically a definition of a set of tables and how
+they're related to each other. And that schema is basically the way that a person using relational databases would describe the whole
+collection of data. So, it's multiple tables, and they sometimes share columns or sometimes they have keys
+to each other and so on. So, keys is a special column that is basically, you can think about it as an identifier for a
+row, the name of the row, the ID of the row, so that
+this ID can be mentioned in other tables and point
+to that particular row. And there is a language that goes with this relational database. The most common language is SQL. And the SQL allows you to describe what part of the data you want and the machinery underneath
+it will get you that data. So, SQL is a kind of programming language, but it's programming
+language that is declarative, so it basically just
+says, here is what I want, not how to get it. And the main power of relational databases is that the data that is
+stored in a relational database can be very, very large, okay? The amount of time that it takes to get to a particular record
+or a set of records is small. You don't have to read
+all of the big file, all of the table into
+memory, you can do things just with the keys and
+pointers and indices to get to the relevant parts. So, why do we use databases? In principal, we can do the
+same in Python or C or MATLAB, but only if they fit in memory, okay? Only if the data fits in memory does it make sense to do
+it in these languages. And the database can span many computers, many disks on many computers, so it can basically store
+much larger amount of data. And reading the data into the machine is much faster than if
+you read a flat file. Finally, let's talk about DataFrames. So, DataFrames is a blend. There are a blend of ideas from tables and ideas from matrices. And originally, it was
+defined by statisticians in the language S and
+then in the language R. And what you have is a table
+with named rows and columns, but only columns have types, okay? So, the columns have types, and so the types are
+preserved along the column. And a little bit of the problem with this is that if you are
+really a database person, DataFrames are not completely consistent according to the tables that you'd have. So, two popular implementations of DataFrames for data science. One is pandas, you might
+be familiar with already. And the other is inside Spark, there is also DataFrames and those are DataFrames that
+are intended to be on disk, so they're intended to
+make use of the fact that you can store things on disk and then access them efficiently. So, to summarize, data
+science is data analytics using large complex data that
+doesn't fit in one computer. Data engineering is the
+making of the infrastructure that makes it possible to do data science. Matrices are the basic data
+structure for linear algebra, Neural Networks, and tables are the basic data structure for relational databases. And DataFrames are
+essentially a compromise. Okay, so that's a little bit of a view about what is data engineering and how it relates to data science and what are the data models that are used for this communication between data engineering and data science. See you next time.
+--- end {1.2_transcript.txt} ---
+--- start{1.3_notebook.txt} ---
+%pylab inline
+from time import time
+%pylab is deprecated, use %matplotlib inline and import the required libraries.
+Populating the interactive namespace from numpy and matplotlib
+Numpy vs. Native Python
+This notebook demonstrates the large difference in speed between native python code and numpy.
+
+We start with a very simple task of taking the product of two square matrices. In numpy this done using the function .dot()
+
+n=100
+A=ones([n,n])
+B=copy(A)
+C=copy(A)
+%%time
+C=A.dot(B)
+CPU times: user 22.4 ms, sys: 1.45 ms, total: 23.9 ms
+Wall time: 13.2 ms
+matrix product in native python
+To perform the same operation in python we need a three level nested loop. Instead of 1ms, the operation takes 500ms
+
+%%time
+for i in range(A.shape[0]):
+    for j in range(A.shape[1]):
+        s=0
+        for k in range(A.shape[1]):
+            s+=A[i,k]*B[k,j]
+        C[i,j]=s  
+t2=time()
+CPU times: user 746 ms, sys: 65.5 ms, total: 812 ms
+Wall time: 519 ms
+def test_mat_prod_numpy(n=100):
+    A=ones([n,n])
+    B=copy(A)
+    t0=time()
+    C=A.dot(B)
+    t1=time()
+    return t1-t0
+
+def test_mat_prod_python(n=100):
+    A=ones([n,n])
+    B=copy(A)
+    C=copy(A)
+
+    t1=time()
+    for i in range(A.shape[0]):
+        for j in range(A.shape[1]):
+            s=0
+            for k in range(A.shape[1]):
+                s+=A[i,k]*B[k,j]
+            C[i,j]=s  
+    t2=time()
+    return t2-t1
+repeats=10
+tn=[[] for i in range(repeats)]
+tp=[]
+sizes=list(range(1,10))+list(range(10,100,10))+[200,300]
+for n in sizes:
+    print('\r',n,end='')
+    for i in range(repeats):
+        tn[i].append(test_mat_prod_numpy(n))
+    tp.append(test_mat_prod_python(n))
+ 300
+figure(figsize=[15,10])
+for i in range(repeats):
+    loglog(sizes,tn[i],label='numpy %d'%i);
+
+loglog(sizes,tp,label='python');
+xlabel('matrix size (1 dimension)')
+ylabel('seconds')
+title('comparing speed of matrix product in numpy and python')
+legend()
+grid()
+
+Observe
+
+For matrix sizes up to 10x10 there is no significant advantage to numpy over native python
+For matrix size of 300x300 numpy is about 10,000 times faster than native python
+For sizes up to 10x10 the running time of numpy fluctuates between $10^{-4}$ and $10^{-6}$ of a second.
+As the size increases from 10x10 to 300x300 the relative fluctuations decreases.
+
+Inverting a matrix
+a = np.random.normal(size=[1000,1000])
+a.shape
+(1000, 1000)
+%%time
+ainv = np.linalg.inv(a) 
+CPU times: user 199 ms, sys: 12.5 ms, total: 212 ms
+Wall time: 67.9 ms
+Lets check that ainv is really the inverse of a
+The dot product should give us the unit matrix.
+
+C=ainv.dot(a)
+C
+array([[ 1.00000000e+00, -1.30562228e-13, -7.07212067e-14, ...,
+        -1.16129328e-13,  2.65787392e-13,  6.62525590e-14],
+       [-1.72750703e-13,  1.00000000e+00,  2.75446332e-13, ...,
+         9.90318938e-14,  4.99600361e-14,  1.32116540e-13],
+       [ 1.41220369e-13, -3.99680289e-14,  1.00000000e+00, ...,
+        -1.33004718e-13,  1.80522264e-13, -3.07365244e-13],
+       ...,
+       [ 2.33146835e-15, -7.54951657e-15,  2.32452946e-15, ...,
+         1.00000000e+00,  9.36750677e-15, -1.14491749e-15],
+       [-6.75015599e-14,  1.04805054e-13,  3.33066907e-15, ...,
+         1.05249143e-13,  1.00000000e+00,  4.91828800e-14],
+       [ 3.01980663e-14, -4.70734562e-14, -5.99520433e-15, ...,
+        -5.50670620e-14,  1.32116540e-14,  1.00000000e+00]])
+C[C<0.001]=0
+C
+array([[1., 0., 0., ..., 0., 0., 0.],
+       [0., 1., 0., ..., 0., 0., 0.],
+       [0., 0., 1., ..., 0., 0., 0.],
+       ...,
+       [0., 0., 0., ..., 1., 0., 0.],
+       [0., 0., 0., ..., 0., 1., 0.],
+       [0., 0., 0., ..., 0., 0., 1.]])
+Linear regression
+A = np.array([[1, 2, 1],
+              [1,1,2],
+              [2,1,1],
+              [1,1,1]])
+b = np.array([[4,3,5,4],[1,2,3,4]]).T # transpose to align dimensions
+
+x, residuals, rank, s = np.linalg.lstsq(A,b,rcond=None)
+
+print(x) # columns of x are solutions corresponding to columns of b
+#[[ 2.05263158  1.63157895]
+# [ 1.05263158 -0.36842105]
+# [ 0.05263158  0.63157895]]
+print(residuals) # also one for each column in b
+#[ 0.84210526  5.26315789]
+Numpy and memory size
+Numpy is very efficient if the dataset fits in memory. Otherwise it becomes very slow.
+
+Comparing numpy to matlab
+Matlab, like numpy, is very fast for matrix arithmetic. The reason is simple: they are both based on highly optimized libraries for linear algebra.
+
+For example LAPACK, which was release in 1992 and is written in FORTRAN !
+
+--- end {1.3_notebook.txt} ---
+--- start{1.3_slides.pdf} ---
+Speeding up data processing
+    • Fast libraries vs. pure Python
+    • Throughput vs. latency
+Fast libraries
+• Linear Algebra is the computational engine of data analysis, Neural
+  Networks.
+• Can be computed in pure python
+• But: about 1000 times slower than using numpy
+• Numpy Speed similar to matlab speed.
+• Both use similar highly optimized libraries
+• Example: LAPACK, library released in 1992,
+   • written in FORTRAN!
+Matlab and Numpy: fast linear algebra
+Numpy vs pure python
+From: 4_NumpyVsPurePython.ipynb, A,B are 100X100
+ Big data starts when
+your data cannot fit in
+ the memory of one
+      computer.
+Throughput vs latency
+• Throughput: the number of bytes processed per second
+   • Can benefit from parallelism
+   • Can benefit from processing blocks of data.
+   • Important for data science
+• Latency: The time it takes to process a single byte from input to
+  output.
+   • Does not benefit from parallelism
+   • Does not benefit from processing blocks of data.
+   • Important for gaming, robotics, self-driving cars.
+ Queues: an example of Latency vs. throughput
+• Latency: time between joining the
+  line and leaving the store.
+• Throughput: Number of people
+  coming out of the store per minute.
+• Minimal latency: Cashier work
+• The customer cares about latency.
+• The store cares about throughput
+  (dollars per minute) and to some
+  degree latency (customer happier).
+Latency and throughput for big data
+•
+Summary / Increasing throughput for Big
+Data
+
+• The bottleneck is usually moving of data, not computation.
+• Hardware: better to have many cheap/slow/unreliable computers
+  than a few expensive/fast/reliable computing.
+• Map-Reduce / Hadoop / Spark = Methods for organizing computation
+  on large, unreliable computer clusters.
+
+--- end {1.3_slides.pdf} ---
+--- start{1.3_transcript.txt} ---
+(light music) (air whooshing) - Let's talk a little bit about the principles or tricks that you can use to make code run faster, specifically code that
+is data analysis code. So suppose you have some program that you wrote in Python. And when you run it on a thousand data points, it takes two seconds to run and you're happy with that. But now, you want to run the same program on something like 1 billion points. So you don't want to wait for a million times longer than for the thousand points. And so how would you accelerate the code? And so how would you accelerate the code? So I'm going to talk
+about two basic tricks. One is called using an efficient library or vectorizing and the other is the difference based on the difference between
+latency and throughput. So regarding fast libraries, suppose we have a program that is doing regression or is training a deep neural network. The engine behind it, underneath it is linear algebra. And we can code this linear algebra in pure Python and that would work but that would be much, much slower than if we use a call to the NumPy library, okay? If the NumPy library has this operation that we want to do in linear algebra, then it would typically do it about a thousand times
+faster than pure Python. So NumPy gives you the speed that you expect from code maybe in C++ or from Matlab. And the reason that it gives you the same speed as Matlab is that they both use similar libraries is that they both use similar libraries of optimized code and such a library, for instance, is LAPACK. That is a code base that has been released for the first time in 1992, 30 years ago, but it's still one of the most optimized code for specific computer architectures. So this code is available free of charge and basically is written in Fortran and it's constantly being optimized. So here is an example of what you might want to do. So suppose you want to multiply two matrices A and B and that basically means that you want to take each row here and multiply it by the column here. Take the dot product with a column, okay? And that would give you one element of the result matrix, okay? So you need to do that m times p times and each one of these
+operations is m times. So you have the same operations of taking product and adding, but that you have to do it many, many times, okay? And fundamentally, this is the operation that you're doing but the question is, can you do these operations
+really efficiently in the computer memory? So here is a little bit of code that is available to you in this notebook. And there are two matrices, A and B that are about a hundred by a hundred each. And you just want to
+take the multiplication. So if you just do it with NumPy, that's the dot product operation. It takes about... 370 or 400 microsecond. So about half a millisecond, okay? And if you do it in native Python, then you basically need to write these loops that would perform the summation to generate the final matrix. So these embedded loops in Python are done not in the most efficient way. And therefore, the time that it takes to do that here is 65.5 or 519 millisecond, okay? So about half a second which is about a thousand times slower than the NumPy method. Okay, now, for the second part, big data basically starts when your data cannot fit into the memory of one computer. So suppose we still want to do something like the linear algebra but we cannot fit the whole data into the computer. And then basically, what is the bottleneck is bringing the data from disk to the computer. And that brings us to throughput versus a latency. So what are these two things? I'll first define them and then give you some examples. So throughput is the number of bytes that you process per second. So you process maybe
+one gigabyte per second and that can benefit from parallelism because if your machine can do one gigabyte per second, then a hundred machine can maybe do 100 gigabyte per second. And it benefits also from processing big chunks of data rather than doing the data one by one. And this is the kind of thing that we really care about in data science, the throughput. How much data we can process per second? Latency is a different thing. It's basically the time that it takes from an input to an output. So if we give the computer an input, what output it generates? And that doesn't benefit from parallelism because if you have another computer, it doesn't make the computation any faster and the latency any smaller and it doesn't benefit from processing big blocks of data. But it is important in other things. It's important for anything
+that is interactive. If you give some command to the computer, you're playing a computer game, you want the reaction
+to be very, very fast like fraction of a second, right? And similarly, if you're
+doing data analysis and you're hitting a key and you want to get a nice graph, you hope that this graph can be given to you as a matter of fraction of a second. So let's think about latency and throughput in the context of a store where people are going to the cashier. They join the line, a queue to one of the cashiers and then they wait in line until they get to the front and then the cashier sums their purchases and then the cashier sums their purchases and they pay and then they leave, okay? So in this context, latency is the time between the moment you joined the queue and the moment that you
+exit the store, okay? So how long did you need to spend in processing that? And remember, the part that you're doing in the queue is part of it. That's part of how of the time that it takes you to process your purchases. Throughput on the other hand, is a different quantity. It's a quantity that says, if I look at the exit from the store, how many people are leaving per minute? So latency here has a minimum possible which is that there's no queue and you just have the cashier process your purchases. That's the minimum that you can expect. And in general, the customer really cares about the latency. You care about how long will it take you to wait in line. The store mostly cares about the throughput which basically means how many people are processed. But of course, they also want to keep the latency reasonable so people don't just leave in frustration. And because if they don't
+have enough cashiers, the lines will just grow and grow and grow and grow, right? So they don't want that. They want basically the lines to be stable so that people basically can expect to leave the store in a reasonable amount of time. So what is latency and throughput for big data? Suppose we have one terabyte on disk. The data is basically a sequence of floating point numbers. And what we want to do is just sum the numbers and sum the square of the numbers. That's something that we
+will actually want to do. And the question is, how fast can we do it? So it turns out that in a typical computer, the amount of time that it would take you to read the information from the disk and put it in memory is dominating the amount of time to do the actual computation. So basically, the CPU
+is just sitting there waiting for data. So if you have 200 megabytes per second that you can get, then a gigabyte will
+take you five seconds. And if one terabyte is 5,000 seconds, that will take about 1.4 hours, okay? So that's a long time to do this simple operation. But now, suppose that you
+have a hundred machines, they're all exactly like
+the original machines but each one of them has a separate disk with part of the data. And then you basically just have all of these machines compute these sums in parallel. And then at the end, you just combine the sums, okay? So this is a perfect throughput increasing operation. And you can do now the one terabyte in 50 seconds instead of 1.4 hours. Okay, so MapReduce, which we're going to talk about and Spark are ways of organizing
+this kind of computation. So basically in a way that is transparent to you. It will basically compute the sum in parallel way on all of these machines. Okay, so to summarize, how do we increase
+throughput for big data? The bottleneck is usually moving of data, not the computation itself. In terms of hardware, it's better to have many cheap, slow and unreliable computers than to have a few super fast and expensive and reliable computers. So the question is, how do you organize such a cluster of less reliable computers? And MapReduce and Hadoop and Spark are basically methods or methodologies for organizing a computation in these kind of large, unreliable computer clusters, okay? So that's it for this little video.
+--- end {1.3_transcript.txt} ---
+--- start{2.1_slides.pdf} ---
+  Latency, Throughput
+And the memory Hierarchy
+Some numbers
+•
+ Example of Latency vs. throughput
+• Latency: time between joining the
+  line and leaving the cashier.
+• Throughput: Number of people
+  coming out of the store per minute.
+• Minimal latency: Time at Cashier.
+• Customer cares about latency.
+• Store cares mostly about throughput
+  (dollars per minute) and to some
+  degree latency (customer happier).
+Definitions
+•
+            Wholesale vs. retail
+Wholesale
+                                          (water cache)
+Costco                                         Retail
+
+
+
+                Buying water in
+                costco and driving the
+                truck to it’s stand:     Walking to the truck
+                2 hours                  and buying a water
+                10 cents / bottle        bottle: ½ minute
+                                         1$ / bottle
+Different latencies for different units
+•
+                                                                                                  Latency = ½ sec
+Sequential execution                       ½ sec
+                                                                                                  Throughput = 2 byte/sec
+CPU 1      byte            byte            byte             byte            byte
+
+
+
+Parallel execution                          ½ sec
+
+                                                                                                        Latency = ½ sec
+CPU 1       byte            byte                byte         byte                byte
+
+CPU 2             byte            byte             byte            byte             byte                Throughput = 8 byte/sec
+
+CPU 3        byte               byte             byte            byte             byte
+
+CPU 4                    byte            byte             byte            byte             byte
+Reading data blocks from disk
+• The latency for reading a random block from a spinning Disk is 10ms.
+• Why? Because of the mechanics of moving the reading head.
+• Instead of reading one byte, read a whole block!
+• If all of the data in the block is useful:
+   • Latency: 10ms (100Byte/sec for random access)   byte   byte   byte   byte   byte
+                                                     byte   byte   byte   byte   byte
+   • Throughput: 100MB/sec (for sequential access)
+                                                     byte   byte   byte   byte   byte
+
+• Caching: a method for achieving low latency by predicting access.
+When do we need low latency?
+• When interacting with our cell phone or laptop.
+• When playing games online: https://tetris.com/play-tetris
+• When checking in to a flight.
+• Anything interactive – working on a jupyter notebook.
+• Running javascript inside a browser
+• Latency = reaction time < 100ms
+When do we need high throughput
+• When we have a large amount of data to process (50TB),
+   • we care about throughput – number of seconds to process 1TB
+   • we don’t care about latency = processing one record,
+• Example: transfer 50TB of data to the cloud.
+   • Regular home line: upload speed 6Mbps = 6/8 MBps -> 771 days ~ 2 years
+   • Fast University line: upload speed 100Mbps = 100/8 MBps -> 46 days
+   • Dedicated fiber: upload speed 10Gbps = 10/8 GBps -> 11 hours
+   • Dedicated fiber costs 10-100K$ per year.
+The fastest and cheapest option: Fedex
+                        • Latency: 24 hour
+                        • Throughput using 50TB snowball:
+                            50TB / 24 hours.
+                        • Cost ~ 200$
+Summary for part 1
+• When providing an interactive experience, we care more about
+  latency than throughput.
+• When processing TB, we care more about throughput than about
+  latency.
+• Transmitting TB through the internet is slow and expensive.
+• Sending a physical disk through Fedex is cheap and high bandwidth.
+
+--- end {2.1_slides.pdf} ---
+--- start{2.1_transcript.txt} ---
+(gentle upbeat music) (air whooshing) - Hi. Today we're going to talk in some detail about latency throughput and how they relate to
+the memory hierarchy. So, we talked about latency
+and throughput before using this example. So, suppose that you have people that are buying some product in a store waiting to check out, okay? So there is, there's various queues that people are waiting
+in in order to check out. And part of the time necessarily, they will use, they will wait on queue, and part of the time they will wait for the cashier to do her work. So, the latency is the time
+between joining the line and leaving the cashier, okay? So, that's the total
+time for both of these. And throughput is a different measure. It measures, if you look
+at the store as a whole, how many people are leaving
+the store per minute, okay? So, that's the throughput. The minimal latency is the time that you spend in the cashier, right? So, that time cannot be reduced further if you have some number of items that will take some amount of time. And the customer cares about latency. So the customer, from the
+customer's point of view, waiting in line is a waste of time, right? They'd rather just go to the cashier and pay for their stuff and go. From the store, most of the
+interest is in the throughput. So, the store cares about
+how many people can be served or can pay in a minute, let's say. And they care also about
+latency, but to a smaller degree because latency just
+means that the customers are happier or not as happy. But the main thing for the store itself is just how many people
+go through and pay. So let's define, let's
+give some definitions. So in general, not in a store,
+but in a general system, latency is the total
+time to process one unit from start to end, okay? From start to finish. All of that time. Throughput is the number of units that you can process in one minute. Right, so they seem very closely related and one is tempted to ask, "Is throughput just one over latency? If I can process 10 things per minute, does that mean that I wait for each, the latency for each
+element is six seconds?" Right? And that's not really the case. And we will see why. Okay, so let's imagine the
+following system that is, the story is that we have
+some guy that has a food truck and they need to have water to sell to people in the food truck. So, what they do is they
+go in the morning to Costco and they purchase a
+large number of bottles. Let's say, each case has
+some 32 bottles in it, and they buy two cases, okay? So to do that, to buy the bottles and bring them to their truck and drive the truck to
+where it should stand, that takes a significant amount of time. However, it is worthwhile
+because each bottle is pretty cheap in this setup, right? You have 10 cents per bottle
+when you buy the water in bulk. Later on, this food truck
+with the water bottles in it is serving customers. And now, let's look at the
+point of view of the customer. From the point of view of the customer if they want to buy a water
+bottle, it will maybe take them about half a minute to pay
+for a water bottle and get it. And for that, they're willing to pay a dollar per bottle, right? Rather than the 10 cents. So, they're getting very low latency and the truck is supporting
+this low latency. So, you can think about the water, this water that is stored
+is water that is stored close to the customer or a cache where we cache our water bottles so that they're ready
+for customers to buy. So, if we now look at the units, the different units have
+different latencies. So, if the unit is a
+package of 32 water bottles, this big package that we buy in Costco, then the latency is pretty long, right? It takes about two hours
+to get these water bottles from Costco to the place
+where we wanna sell them. So, the throughput in this
+case is the number of packages sold in one Costco per hour, okay? So that can be, we can
+view that as a throughput and maybe buy 20, maybe people overall buy 20 packages of 32 bottles. So in this case, the throughput is much higher than the latency, right? The latency is about one over the latency. The latency is about two hours. But in one hour, Costco sells 20 packets. So, you have high level of parallelism and the throughput is much,
+much higher than the latency. On the other hand, if we
+look at the single bottle, then the latency is the time that it takes from requesting a bottle to
+having the bottle in your hand which is maybe about half a minute. And the throughput is
+really the number of people that come and wanna buy
+a water bottle, okay? So, maybe that's 10 per hour. That's a reasonable number. So in this case, the throughput
+is much, much smaller than one over the latency. The latency is pretty fast,
+you get it in half a minute, but the number of people
+that come and buy them, that's separated by 10 by 6
+minutes, 10 times an hour. And so it's actually the
+throughput is much lower than one over the latency. So, you see that things can be much lower. The throughput can be much
+lower than the latency if the serving time is
+just a fraction of the time between customers and
+it can be much higher if the serving time,
+which is here two hours is much larger than the time
+between selling packets. If Costco sells 20 packets,
+of these big packets per hour, then every about three
+minutes, they sell a packet. But so again, this three
+minutes is much shorter than the time that it actually takes to process this water bottles. Okay, so this is maybe a
+nice story, but in fact, it's highly related to how
+things are done in a computer. What things are done in bulk. What things are done in small units. So suppose that we read
+data from disk, okay? And the data is stored in blocks like this but the data that is the part that we care about is just these two bytes, okay? So, the latency of reading the block can be as high as 10 millisecond, and that's because you need
+to move the disk reading head to a different location and
+that takes mechanical movement, and it takes at least 10 millisecond. But instead of reading one byte, we're going to, once we
+are in the right place, we're going to read the whole block, okay? It's not going to cost us much more to read the whole block
+versus to read just two bytes. So, the question then become, "Is all of the data in the block useful?" Right? If it was just these two elements, then it's not very useful, right? We basically have waited
+this 10 millisecond and now we got only two bytes. So the throughput here is, so the latency is 10 millisecond
+which is very, very slow. If we had one byte for each
+read, then we would have about a hundred bites
+per second throughput which is extremely low. In fact, the throughput is about a hundred megabyte per second. And that is because once
+you're in the right place you read actually the whole block and the blocks are organized in cylinders. And so these cylinders, you're basically, you can read the whole cylinder
+without moving the head. So, that gives you the speed
+of 100 megabyte per second. Okay? So, here we see something similar to what we saw with the water bottles. We see that by buying in bulk, by moving things in bulk, we can gain but we need to make sure that we actually make use of
+this bulk in an efficient way. So, now I'm going to
+tell you about caching which is basically the general method for achieving low latency
+by predicting access. So, when do we need low latency? When we have an interaction like interacting with
+our cell phone or laptop. Or when we play games online. Or when we check for a flight. We don't want to wait
+there for three minutes to see when exactly is the flight. Or anything interactive, anything in which we're basically typing
+or touching the screen. And we want a reaction from the computer. So, latency in this context, the required latency is
+at most 100 millisecond. So, a 10th of a second is what we perceive as pretty much instantaneous reaction. When do we need high throughput? That's in a very different
+kind of situation. When we have a large
+amount of data to process. Let's say 50 terabyte. We care about throughput, the number of seconds
+to process one terabyte. We don't care about latency,
+processing one record. It doesn't matter to us. If taking, processing one
+terabyte takes let's say a minute, we do not care if the
+first byte of this terabyte takes 10 seconds to process, right? That's all kind of inside. It doesn't matter to us. So, here's an example. Let's say that we transfer 50
+terabyte data to the cloud. So, on a regular home
+line the upload speed would be six megabyte per
+second, megabit per second. And so, that's about six to
+eight megabyte per second. 6/8, 6 over 8 megabyte per second. And that if you just calculate
+how long it will take you to move this one terabyte, it
+will take you about 771 days, which is about two years. So, it's not really a practical solution. So, suppose you have a faster line. In the university here, we have lines of typically a hundred megabit per second and that would reduce the
+time significantly to 46 days. 46 days is still kind of a long time. For a dedicated fiber, you
+can get pretty good speed. You can get maybe the whole
+moving of the data is 11 hours. However, having dedicated
+fiber is a big investment. If the type that I'm talking about here, it can cost 10 to $100,000 per year, okay? So, you don't do it for like one terabyte that you want to do. You want to use it if you
+constantly need to move terabytes from one point to another. So, it turns out that there is actually a cheap and fast option, and that is to send
+the data through FedEx. And unless you think that I'm just giving some kind of funny anecdote,
+no, this is actually a service that is provided by AWS
+which is called Snowball, in which you get a disk in the mail and you put into it up
+to 50 terabyte of data and then you put it back
+in the mail and send it. So, here's a situation where the latency, the time that it take to send
+something is like 24 hours, but the throughput is massive, right? It basically is 50 terabyte in 24 hours. Even our fiber line could not do that. So, to summarize this part. When providing interactive experience, we care more about
+latency than throughput. When processing terabytes of data, we care more about throughput
+than about latency. Transmitting a terabyte
+through the internet is a slow and expensive thing. And sending it physically
+on a truck using FedEx is often much more effective.
+--- end {2.1_transcript.txt} ---
+--- start{2.2_slides.pdf} ---
+2: Storage Latency
+CPU
+             Storage
+         A
+
+C=   *
+
+
+
+
+                       B
+Latencies                                           Storage Types
+1.   Read A           Latency 1                   • Main Memory (RAM)
+
+
+
+
+                                  Total Latency
+2.   Read B           Latency 2
+               TIME
+3.   C=A*B            Latency 3
+
+4.   Write C          Latency 4
+                                                  • Spinning disk
+
+With big data, most of the latency
+is memory latency (1,2,4), not
+computation (3)                                   • Remote computer
+Summary for part 2
+• The major source of latency in data analysis is reading and writing to
+  storage
+• Different types of storage offer different latency, capacity and price.
+• Big data analytics revolves around methods for organizing storage and
+  computation in ways that maximize speed while minimizing cost.
+• Next, storage locality.
+3: Caching
+Latency, size and price of computer memory
+       Given a budget, we need to trade off
+   $10: Fast & Small           $10: Slow & Large
+Cache: The basic idea
+                                   Slow & Large
+                          Memory
+           Fast & Small   0   1    2   3   4   5   6   7   8   9
+               Cache      10 11 12 13 14 15 16 17 18 19
+                12 67     20 21 22 23 24 25 26 27 28 29
+
+    cpu         50 51     30 31 32 33 34 35 36 37 38 39
+                52 53     40 41 42 43 44 45 46 47 48 49
+                32 33     50 51 52 53 54 55 56 57 58 59
+                          60 61 62 63 64 65 66 67 68 69
+                          70 71 72 73 74 75 76 77 78 79
+Cache Hit
+                                Memory
+                                0   1    2   3   4   5   6   7   8   9
+                        Cache   10 11 12 13 14 15 16 17 18 19
+            Cache Hit   12 67   20 21 22 23 24 25 26 27 28 29
+
+    cpu                 50 51   30 31 32 33 34 35 36 37 38 39
+                        52 53   40 41 42 43 44 45 46 47 48 49
+                        32 33   50 51 52 53 54 55 56 57 58 59
+                                60 61 62 63 64 65 66 67 68 69
+                                70 71 72 73 74 75 76 77 78 79
+Cache Miss
+                     Memory
+                     0   1    2   3   4   5   6   7   8   9
+             Cache   10 11 12 13 14 15 16 17 18 19
+             12 67   20 21 22 23 24 25 26 27 28 29
+
+    cpu      50 51   30 31 32 33 34 35 36 37 38 39
+             52 53   40 41 42 43 44 45 46 47 48 49
+             32 33   50 51 52 53 54 55 56 57 58 59
+                     60 61 62 63 64 65 66 67 68 69
+                     70 71 72 73 74 75 76 77 78 79
+Cache Miss Service: 1) Choose byte to drop
+                        Memory
+                        0   1    2   3   4   5   6   7   8   9
+               Cache    10 11 12 13 14 15 16 17 18 19
+               12 67    20 21 22 23 24 25 26 27 28 29
+
+    cpu        50 51    30 31 32 33 34 35 36 37 38 39
+               52 53    40 41 42 43 44 45 46 47 48 49
+               32 33    50 51 52 53 54 55 56 57 58 59
+                        60 61 62 63 64 65 66 67 68 69
+                        70 71 72 73 74 75 76 77 78 79
+Cache Miss Service: 2) write back
+                        Memory
+                        0   1    2   3   4   5   6   7   8   9
+               Cache    10 11 12 13 14 15 16 17 18 19
+               12 67    20 21 22 23 24 25 26 27 28 29
+
+    cpu        50 51    30 31 32 33 34 35 36 37 38 39
+               52 53    40 41 42 43 44 45 46 47 48 49
+               32 33    50 51 52 53 54 55 56 57 58 59
+                        60 61 62 63 64 65 66 67 68 69
+                        70 71 72 73 74 75 76 77 78 79
+Cache Miss Service: 3) Read In
+                        Memory
+                        0   1    2   3   4   5   6   7   8   9
+               Cache    10 11 12 13 14 15 16 17 18 19
+               12       20 21 22 23 24 25 26 27 28 29
+
+    cpu        50 51    30 31 32 33 34 35 36 37 38 39
+               52 53    40 41 42 43 44 45 46 47 48 49
+               32 33    50 51 52 53 54 55 56 57 58 59
+                        60 61 62 63 64 65 66 67 68 69
+                        70 71 72 73 74 75 76 77 78 79
+Summary of part 3
+• Cache is much faster than main memory
+• Cache hit = the needed value is already in the cache
+• Cache miss = the needed value is not in the cache – needs to be
+  brought in from memory
+• If there is no space in cache:
+   • need to make space
+   • If dirty, need to write value back to memory first.
+• Cache miss – latency is much bigger than cache miss.
+4: Locality of storage access
+Access Locality
+• The cache is effective If most accesses are hits.
+   • Cache Hit Rate is high.
+• Cache effectiveness depends on patterns (statistics) of memory
+  access.
+• Temporal Locality: Multiple accesses to same address within a short
+  time period
+• Spatial Locality: Multiple accesses to near-by addresses within a
+  short time period
+Temporal Locality
+•
+Spatial locality
+•
+Linked List
+
+
+      Page 1           Page 2        Page3       Page4
+  6            3   2            5            4    1
+
+
+
+
+  Traversal of 6 elements touches 4 pages
+array
+
+
+   Page 1           Page 2                   Page3   Page4
+                      1      2   3   4   5    6
+
+
+
+
+ Traversal of 6 elements touches 2 pages
+Summary of Part 4
+• Caching Is effective when memory access is local
+• Temporal locality: accessing the same location many times in a short
+  period of time.
+• Spatial locality: accessing close-by locations many times in a short
+  period of time.
+• Hardware and compilers have a symbiotic relationship: success if
+  compiler generates machine code that has good locality.
+Word Count
+• Task: given a (large) text
+• Count the number of times each word
+• Output (word,count) sorted in decreasing order by Count.
+Unsorted word count / poor locality
+
+
+Dict={}               Suppose
+For word in list:        len(list)=1,000,000
+   if word in Dict:      len(Dict) = 100,000
+                      Access to list: spatially local
+      Dict[word]+=1
+                      Access to Dict: random
+   else:
+       Dict[word]=1
+sorted word count / good locality
+
+
+                      Suppose
+Dict={}
+                         len(list)=1,000,000
+Sort(list)               len(Dict) = 100,000
+For word in list:     Access to list: spatially local
+   if word in Dict:   Access to Dict: Spatially local
+      Dict[word]+=1
+   else:              But what about the sort step?
+       Dict[word]=1   Sorting can be done in time O(n)
+                      Efficient in distributed setup
+Summary
+• Improved memory locality reduces run-time
+• Why?
+  • Because computer memory is organized in pages.
+  • And caching retrieves a page at a time.
+
+--- end {2.2_slides.pdf} ---
+--- start{2.2_transcript.txt} ---
+(bright music) - Okay, so let's now see
+how these ideas of latency, throughput and caching can be used in the context of an
+actual computer system. So, computer system, as you might know, is made out of a CPU, the
+central processing unit, and storage, okay? And the main thing that we
+need to know about storage at this point is that it's basically a long sequence of addresses going from maybe zero to 999, okay? So, something like that. And what we want to do is
+do a very simple operation which is multiply A and B and put the result in a variable called C. So, A and B are in memory,
+and C will be in the memory. Okay. So, here is A, and here is B. And we read A into the memory. We read B from the memory into the CPU. We take the product to calculate C, and then we take C and we write it back into another location in the memory, okay? So, that's the operation. Now let's think about the
+latencies that are involved, okay? So, we're going to read A, then read B, then multiply A and B and get the results C,
+and then write C, okay? So, these operations happen in order and let's see what are their latencies? So, I just wrote here,
+Latency 1, Latency 2, Latency 3, Latency 4, okay? One cannot start before
+the previous ended. So, what we find out when we
+look at big data especially is that most of the latency is in these reading from the
+memory and writing to memory. And this part is relatively small. Okay. So, why does writing and reading
+from memory take so long? Well, it's not a uniform thing. Some systems can write
+and read very quickly, some of them much more slowly. That's based on essentially
+the technology used for the memory, so storage type. So, you have main memory. You have let's say, a spinning disk, and you have maybe a remote computer. So, when you are using Google Drive or something like that, the memory, the disk that you're using is some other place and
+that that is going to be the longest latency, okay? So, these go from low latency. So, this is low latency, medium latency and long latency. Throughput is another matter. Okay, so to summarize, the major source of
+latency in data analysis is reading and writing to storage. So, you write some big
+statistical analysis, most of the time spent is reading data and then writing the results. Different types of storage offer different latencies, capacity, so how much they can store, and price. And big data analytics
+revolves around methods for organizing the storage
+and the computation in a way that maximizes speed
+while minimizes the cost. And when I say here maximizing the speed, I mean throughput, okay? So, how much data can
+we process per minute? So, now let's see, in
+terms of storage locality, how we can organize the
+computer at different levels in order to give you low
+latency and high throughput. So, we're going to talk about caching. So, here, we're just looking again, into the latency, size and
+price of computer memory. And so, we need to balance these things. So we can buy, let's say for $10, either a fast and small memory or we can buy a slow
+but large memory, okay? So, small and fast would be something that would be, for instance,
+inside the CPU itself. Inside the CPU, it has some memory sometimes called registers
+or register bank, and those are much, much faster than the RAM or the main memory. Okay, and now the question is how do we get to use
+the fast and small one most of the time so that it hides the latency of the slow and large one? So, here is the basic idea. What you do is you put in between the CPU and the large and slow memory, you put something that is called a cache. Very similar to the cache that we had with the water bottles being
+in the food truck, okay? So, what we have is that there are some memory addresses here, this memory is physically
+inside the CPU, for instance, and then what we have is basically copies of elements from the memory, we have them stored close by, okay? So, these are close by and this
+is close by and so on, okay? The other elements, they are just not available
+in the cache, okay? So, the cache is just a
+kind of a little collection, a small collection of
+data from the main memory. So, we have that 12 is 12, 67 to 67. Okay, so how does that help us? The CPU is executing a program. The program as you write it is not aware at all of cache
+or the memory hierarchy. It's not being made available to you because if it was made available to you, it would make programming so much harder. So, you just think about the big memory when you write the program. And what you hope is, what
+you try to design outside is to make sure that most of the time what you need is in the cache, okay? So, that is what is called a cache hit. So, suppose we want to process element 67, then the cache will actually
+intercept this request and say, "Oh, I have 67 right here. You don't need to go all
+the way to Costco." Okay? So, you can just get this 67 from here and that's going to be much, much faster, maybe a hundred times faster. A cache miss, on the other hand, is where you pay for doing this trick. And that is suppose that
+the CPU that your program wants to read location 47 and location 47 is not in the cache, so you have to get it
+actually from memory. But wait, this is not
+even the first problem. The first problem is to make
+some space in the cache, right? So, the cache is usually completely full with things from the past and you need to remove
+something in order to make space for the cache, for the new element. So, what you do is you
+choose which bite to drop. And let's say that you
+choose this bite, okay? You chose 67 to drop, okay? So, if you choose 67, now you're
+faced with another problem, which is that maybe the CPU actually change that 67
+to, let's say, 71, okay? So, now this is 71, but this is still 67. So before you remove this,
+before you empty this place, you have to write back the 71 into the location of
+that cell in main memory. And so, this is what is done here, okay? And now you have this
+empty space that you made and now you can put this
+space into this space 47. And now, 47 can be read by the CPU, okay? So, what you see is that
+you have a situation where if you have most of
+the time you hit the cache, you can have very low latency, but when you miss the cache, then you have much bigger
+latency than you would've had, even if just going to the memory, right? You need to basically potentially
+write something to memory and then read something from memory and then you can continue, okay? So, what intuitively you want to happen is you want to somehow try to make sure that most of the time the
+cache hits are what happens. Okay, so to summarize this part, cache is much faster than main memory. A cache hit happens when the needed value is already in the cache, and the cache miss, it's
+when it's not in the cache. If there is no space in the cache, which is usually the case,
+then you need to make space. And if it's dirty, so
+meaning that if this location in the cache has been actually changed, then you need to actually write
+that part back into memory. So, cache miss, the latency is much bigger than cache miss. Okay, this is a mistake. So, cache miss, the latency
+is much bigger than cache hit. All right, so we talked about caching and how caching can potentially help the computer run faster by reducing the access to slow memory. Now we're going to talk about locality, which is the kind of property
+that you have in a program that allows caching to work well. So, it's not something
+that is a requirement, it's more of a general
+heuristic, if you will, that basically tells you,
+okay, if a program does this and then it will do this
+and it will do this. And so, I can use that pattern to predict which elements will be used very frequently and
+keep them in the cache. Okay, so access locality. The cache is effective if
+most of the accesses are hit. And we call that cache hit rate is high. So cache hit rate is
+something that is used a lot in the lingo for this kind of thing. And the cache effectiveness
+depends on patterns or statistics of memory access, right? So, you wanna capture something
+that happens in programs in terms of memory access, even if people are not completely aware that that's what they're doing. So, we have two types of access. One is called temporal
+locality and that's basically when we say there is one
+variable, one location in memory that we're using very, very frequently. Like for instance, if we have a for loop, then the index of the for loop has high temporal locality. You basically access i to increment it like every cycle of the for loop. So, this i should be in cache. Then, the second one is spatial locality, which is multiple accesses
+to nearby addresses, not to the same address,
+but to address close to it in a short time period. So, let me give you examples. So, here is temporal locality. Suppose the task is you
+want to compute the function f theta x on many xs, x1, x2, up to xn. Theta is a parameter vector, okay? S, it's, let's say, the weights
+in the neural network, okay? So, those are things that do not change or do not change very quickly. But in this case, they don't change at all because we're talking about using, applying the neural network
+rather than learning, okay? So, the parameter theta are needed at each iteration
+of the computation. And so, if theta fits in cache, then you can just put
+theta inside the cache and every time that you need theta, it will be just there waiting for you. If theta does not fit in cache, then you're going to have
+the program all of a sudden, fall off a cliff because what will happen is that every loop, it can't
+get to all of theta at once, so it needs to read some
+into the cache, use it, then read another part
+into the cache and use it. So, it's kind of a critical phenomena, if you want your theta
+to fit in the cache, if it's slightly beyond the cache, then you pay a very big price. Okay, so temporal locality
+is repeated access to the same memory location. What is spatial locality? The spatial locality
+is, here is an example. Suppose that we have,
+again, this long sequence of elements, x1, x2 up to xn and we're looking at the square difference between xi and xi plus one, okay? And we wanna sum all of those. You can think about this, about storing the x1 to xn. Before we talked about the parameters, now the data itself, we're storing it. So, if you use a linked list,
+then you get poor locality. And if you get an indexed array,
+then you get good locality. So, that might be a little
+bit much to understand, so let's go and look at
+picture explaining that. So, here is linked list. So, what does that mean? It means that the element
+one points to element two, element two to element three, element three to element four, four to five and five to six, okay? And what we see is that
+these are the pages, these are the units at which
+the cache operates, okay? So, the cache operates
+by reading or writing a bunch of locations, not
+just one location, okay? And so, what do we see? We see that as we go
+through this sequence, we're basically touching
+On each one of these pages maybe multiple time. So, if we traverse them,
+then we hit all four pages. And suppose that our cache
+itself can hold just two pages, then we will need to write pages out, read pages in and so on. It will cost us a long time, it will make the latency significant. Here is, on the other hand,
+organizing the data in an array. So, in an array, all of the
+data is just sequential, one memory location after the other, okay? So, that's the way that it is. There's no pointers. It's just based on calculating the individual location of each element. And so in this case, if
+we go through the elements to make our computation, we just need to hit page one and page two. And if we have two pages in cache, that means that we have
+one cache miss here, then another cache miss
+here, and we're done, okay? So, that would work much faster. And so, that basically
+tells you that linked lists for very large amounts of
+data is a very bad idea because it basically makes the computer go back and forth and back and forth to find the relevant data. So, to summarize. Caching is effective when
+memory access is local. We can have temporal locality, accessing the same location many times in a short period of time. Or we can have spatial locality, accessing close by locations many times in a short period of time, okay? So, we go close by locations
+instead of the same location. The hardware and compilers
+have a symbiotic relationship in this regard. Basically, the hardware is designed so that the compiler will generate, so that it basically has
+the compiler work well, work fast and have low cache miss. And on the other hand, the
+writers of the compilers are trying to make themselves work well for the most
+popular hardware, okay? So, both of these things are
+kind of evolving over time and they have a symbiotic relationship.
+--- end {2.2_transcript.txt} ---
+--- start{2.3_slides.pdf} ---
+5: The memory Hierarchy
+The Memory Hierarchy
+• Real systems have a several levels storage types:
+   • Top of hierarchy: Small and fast storage close to CPU
+   • Bottom of Hierarchy: Large and slow storage further from CPU
+• Caching is used to transfer data between neighboring levels of the
+  hierarchy.
+• To the programmer / compiler does not need to know
+   • The hardware provides an abstraction : memory looks like like a single large
+     array.
+• Performance depends on locality of program memory access.
+The Memory Hierarchy
+                Computer clusters
+           extend the memory hierarchy
+• A data processing cluster is
+  simply many computers linked
+  through an ethernet connection.
+• Storage is shared
+• Locality: Data to reside on the
+  computer this will use it.
+
+
+
+
+                                    Et
+                                      he
+• “Caching” is replaced by
+
+
+
+
+                                        rn
+                                          et
+  “Shuffling”
+• Abstraction is spark RDD.
+  Sizes and latencies in a typical memory hierarchy.
+
+               CPU           L1    L2       L3      Main   Disk       Local
+               (Registers)   Cache Cache    Cache   Memory Storage    Area
+                                                                      Network
+
+Size (bytes)   1KB           64KB   256KB   4MB     4-16GB   4-16TB   16TB –12
+                                                                      10PB orders of
+                                                                              magnitude
+
+Latency        300ps         1ns    5ns     20ns    100ns    2-10ms   2-10ms6
+                                                                              orders of
+                                                                              magnitude
+Block size     64B           64B    64B     64B     32KB     64KB     1.5-64KB
+Summary of part 5
+• Memory Hierarchy: combining storage banks with different latencies.
+• Clusters: multiple computers, connected by ethernet, that share their
+  storage.
+
+--- end {2.3_slides.pdf} ---
+--- start{2.3_transcript.txt} ---
+(gentle music) - So we now come to combine
+the things that we talked about caching and locality and so on and see how it works in the
+context of the computer. So the memory hierarchy is such that real systems have several
+levels of storage types. At the top of the hierarchy, you have small and fast storage
+that is close to the CPU. At the bottom of the hierarchy you have things like disk that are large, but slow and are further from the CPU. Caching is used to transfer data between neighboring
+levels of the hierarchy. So to the programmer and the compiler they don't need to know
+how this caching works. The whole caching hierarchy
+works as an abstraction and that makes the programmer think as if there is just very
+large and fast storage. But the performance actually depends on locality of the program's memory access as we talked about them. So here is an example of
+computer architecture. Here you have the CPU, and inside the CPU there is some memory, very fast memory for storing
+commands instructions here or data. And that is the fastest
+part of the whole hierarchy. The next level is an L2 cache that is faster than general memory, but slower than these registers. And then you have the main memory and finally you have disk. Okay? So what you see is as you go
+from the fast and very small, 32 to 256 kilobyte, you go through the hierarchy, you get larger and larger storage, but at the price of being
+more and more slow, okay? So here it is, nanoseconds, and here it is, milliseconds. At the next level we have multiple computers and they're all connected
+through an ethernet cable. And so they form one compute cluster. And what we talk about locality
+and caching in this case, when we have the storage, the memory storage, or the disk storage we share it across the computers. And the locality is when the data resides on the computer that needs to process it. So the price is paid when some data that resides
+here needs to be processed by some computer that is here, then you need to pass ring
+through the ethernet cable, which is relatively slow. And caching, what we talked about before about caching is now replaced with
+something called shuffling. And the abstraction that we will get to when we talk about spark is the spark RDD. So the spark RDD will
+serve as an abstraction that makes us think that
+all of this is one computer and we don't need to worry
+about where things are stored. Here's some summary,
+probably a little out of date about the different sizes that you can get and their latency from 300 picosecond to 2 to 10 millisecond, and their total size and the block size. So as you remember, for
+sequential locality, we use blocks in the cache so
+that we can get the advantage of a whole block of data
+that we read at once. So we see that in terms of size, there is twelve orders of magnitude from the very small to the very big and six order of magnitude
+in terms of speed. Okay, so to summarize this part the memory hierarchy is
+combining storage banks with different latencies and clusters are multiple
+computers connected by ethernet that share their storage.
+--- end {2.3_transcript.txt} ---
+--- start{2.4.1_notebook.txt} ---
+Memory locality, Rows vs. Columns
+The effect of row vs column major layout
+The way you traverse a 2D array effects speed.
+
+numpy arrays are, by default, organized in a row-major order.
+a=array([range(1,31)]).reshape([3,10])
+
+ 1  2  3  4  5  6  7  8  9 10
+11 12 13 14 15 16 17 18 19 20
+21 22 23 24 25 26 27 28 29 30
+
+a[i,j] and a[i,j+1] are placed in consecutive places in memory.
+a[i,j] and a[i+1,j] are 10 memory locations apart.
+This implies that scanning the array row by row is more local than scanning column by column.
+locality implies speed.
+%pylab inline
+from time import time
+
+# create an n by n array
+n=1000
+a=ones([n,n])
+Populating the interactive namespace from numpy and matplotlib
+%%time
+# Scan column by column
+s=0;
+for i in range(n): s+=sum(a[:,i])
+CPU times: user 16 ms, sys: 0 ns, total: 16 ms
+Wall time: 14.2 ms
+%%time
+## Scan row by row
+s=0;
+for i in range(n): s+=sum(a[i,:])
+CPU times: user 12 ms, sys: 4 ms, total: 16 ms
+Wall time: 11.2 ms
+Some experiments with row vs column scanning
+We want to see how the run time of these two code snippets varies as n, the size of the array, is changed.
+
+def sample_run_times(T,k=10):
+    """ compare the time to sum an array row by row vs column by column
+        T: the sizes of the matrix, [10**e for e in T]
+        k: the number of repetitions of each experiment
+    """
+    all_times=[]
+    for e in T:
+        n=int(10**e)
+        #print('\r',n)
+        a=np.ones([n,n])
+        times=[]
+
+        for i in range(k):
+            t0=time()
+            s=0;
+            for i in range(n):
+                s+=sum(a[:,i])
+            t1=time()
+            s=0;
+            for i in range(n):
+                s+=sum(a[i,:])
+            t2=time()
+            times.append({'row minor':t1-t0,'row major':t2-t1})
+        all_times.append({'n':n,'times':times})
+    return all_times
+#example run
+sample_run_times([1,2],k=1)
+[{'n': 10,
+  'times': [{'row minor': 5.4836273193359375e-05,
+    'row major': 3.600120544433594e-05}]},
+ {'n': 100,
+  'times': [{'row minor': 0.0004298686981201172,
+    'row major': 0.0003581047058105469}]}]
+Plot the ratio between run times as function of n
+Here we have small steps between consecutive values of n and only one measurement for each (k=1)
+
+all_times=sample_run_times(np.arange(1.5,3.01,0.001),k=1)
+
+n_list=[a['n'] for a in all_times]
+ratios=[a['times'][0]['row minor']/a['times'][0]['row major'] for a in all_times]
+
+figure(figsize=(15,10))
+plot(n_list,ratios)
+grid()
+xlabel('size of matrix')
+ylabel('ratio or running times')
+title('time ratio as a function of size of array');
+
+Conclusions
+Traversing a numpy array column by column takes more than row by row.
+The effect increasese proportionally to the number of elements in the array (square of the number of rows or columns).
+Run time has large fluctuations.
+See you next time.
+Next, we want to quantify the random fluctuations
+and see what is their source
+
+k=100
+all_times=sample_run_times(np.arange(1,3.001,0.01),k=k)
+_n=[]
+_row_major_mean=[]
+_row_major_std=[]
+_row_major_std=[]
+_row_minor_mean=[]
+_row_minor_std=[]
+_row_minor_min=[]
+_row_minor_max=[]
+_row_major_min=[]
+_row_major_max=[]
+
+for times in all_times:
+    _n.append(times['n'])
+    row_major=[a['row major'] for a in times['times']]
+    row_minor=[a['row minor'] for a in times['times']]
+    _row_major_mean.append(np.mean(row_major))
+    _row_major_std.append(np.std(row_major))
+    _row_major_min.append(np.min(row_major))
+    _row_major_max.append(np.max(row_major))
+
+    _row_minor_mean.append(np.mean(row_minor))
+    _row_minor_std.append(np.std(row_minor))
+    _row_minor_min.append(np.min(row_minor))
+    _row_minor_max.append(np.max(row_minor))
+
+_row_major_mean=np.array(_row_major_mean)
+_row_major_std=np.array(_row_major_std)
+_row_minor_mean=np.array(_row_minor_mean)
+_row_minor_std=np.array(_row_minor_std)
+figure(figsize=(20,13))
+plot(_n,_row_major_mean,'o',label='row major mean')
+plot(_n,_row_major_mean-_row_major_std,'x',label='row major mean-std')
+plot(_n,_row_major_mean+_row_major_std,'x',label='row major mean+std')
+plot(_n,_row_major_min,label='row major min among %d'%k)
+plot(_n,_row_major_max,label='row major max among %d'%k)
+plot(_n,_row_minor_mean,'o',label='row minor mean')
+plot(_n,_row_minor_mean-_row_minor_std,'x',label='row minor mean-std')
+plot(_n,_row_minor_mean+_row_minor_std,'x',label='row minor mean+std')
+plot(_n,_row_minor_min,label='row minor min among %d'%k)
+plot(_n,_row_minor_max,label='row minor max among %d'%k)
+xlabel('size of matrix')
+ylabel('running time')
+legend()
+grid()
+
+Summary
+Scan by column is slower than scan by row and the difference increases with the size.
+scan by row increases linearly and has very little random fluctuations.
+Scan by column increases linearly with one constant until about n=430 and then increases with a higher constant.
+Scan by column has large fluctatuations around the mean.
+
+--- end {2.4.1_notebook.txt} ---
+--- start{2.4.2_notebook.txt} ---
+measuring memory latency
+In this notebook we will investigate the distribution of latency times for different size arrays.
+
+Note: It is impossible to run 10GB files on workbench, so all 10GB experiments are omitted here
+Goal 1: Measure the effects of caching in the wild
+Goal 2: Undestand how to study long-tail distributions.
+Import modules
+%pylab inline
+from numpy import *
+Populating the interactive namespace from numpy and matplotlib
+import time
+from matplotlib.backends.backend_pdf import PdfPages
+
+from os.path import isfile,isdir
+from os import mkdir
+import os
+Set log directory
+This script generates large files. We put these files in a separate directory so it is easier to delete them later.
+
+run this cell only once
+## Remember the path for home and  log directories
+home_base,=!pwd
+log_root=home_base+'/logs'
+if not isdir(log_root):
+    mkdir(log_root)
+from lib.measureRandomAccess import measureRandomAccess
+from lib.PlotTime import PlotTime
+from lib.create_file import create_file,tee
+defining memory latency
+Latency is the time difference between the time at which the CPU is issuing a read or write command and, the time the command is complete.
+
+This time is very short if the element is already in the L1 Cache,
+and is very long if the element is in external memory (disk or SSD).
+setting parameters
+We test access to elements arrays whose sizes are:
+m_legend=['Zero','1KB','1MB','1GB','10GB']
+Arrays are stored in memory or on disk
+We perform 100,000 read/write ops to random locations in the array.
+We analyze the distribution of the latencies as a function of the size of the array.
+# include 10GB here
+# m_list=[0]+[int(10**i) for i in [3,6,9,10]]
+# m_legend=['Zero','1KB','1MB','1GB','10GB']
+
+m_list=[0]+[int(10**i) for i in [3,6,9]]
+m_legend=['Zero','1KB','1MB','1GB']
+L=len(m_list)
+k=100000 # number of pokes
+print('m_list=',m_list)
+m_list= [0, 1000, 1000000, 1000000000]
+Set working directory
+This script generates large files. We put these files in a separate directory so it is easier to delete them later.
+
+TimeStamp=str(int(time.time()))
+log_dir=log_root+'/'+TimeStamp
+mkdir(log_dir)
+%cd $log_dir
+stat=open('stats.txt','w')
+
+def tee(line):
+    print(line)
+    stat.write(line+'\n')
+/home/ccc_v1_t_TS0f_161889/work/asn88885_10/asn88886_1/work/Section1-Spark-Basics/0.MemoryLatency/logs/1569977822
+_mean=zeros([2,L])   #0: using disk, 1: using memory
+_std=zeros([2,L])
+_block_no=zeros([L])
+_block_size=zeros([L])
+T=zeros([2,L,k])
+# %load /Users/yoavfreund/academic.papers/Courses/BigDataAnalytics/BigData_spring2016/CSE255-DSE230-2018/Sections/Section1-Spark-Basics/0.MemoryLatency/lib/create_file.py
+import time
+
+stat=open('stats.txt','w')
+
+def tee(line):
+    print(line)
+    stat.write(line+'\n')
+    
+def create_file(n,m,filename='DataBlock'):
+    """Create a scratch file of a given size
+
+    :param n: size of block
+    :param m: number of blocks
+    :param filename: desired filename
+    :returns: time to allocate block of size n, time to write a file of size m*n
+    :rtype: tuple
+
+    """
+    t1=time.time()
+    A=bytearray(n)
+    t2=time.time()
+    file=open(filename,'wb')
+    for i in range(m):
+        file.write(A)
+        if i % 100 == 0:
+            print('\r',i,",", end=' ')
+    file.close()
+    t3=time.time()
+    tee('\r              \ncreating %d byte block: %f sec, writing %d blocks %f sec' % (n,t2-t1,m,t3-t2))
+    return (t2-t1,t3-t2)
+Random_pokes=[]
+Min_Block_size=1000000
+for m_i in range(len(m_list)):
+    
+    m=m_list[m_i]
+    blocks=int(m/Min_Block_size)
+    if blocks==0:
+        _block_size[m_i]=1
+        _block_no[m_i]=m
+    else:
+        _block_size[m_i]=Min_Block_size
+        _block_no[m_i]=blocks
+    (t_mem,t_disk) = create_file(int(_block_size[m_i]),int(_block_no[m_i]),filename='BlockData'+str(m))
+
+    (_mean[0,m_i],_std[0,m_i],T[0,m_i]) = measureRandomAccess(m,filename='BlockData'+str(m),k=k)
+    T[0,m_i]=sorted(T[0,m_i])
+    tee('\rFile pokes _mean='+str(_mean[0,m_i])+', file _std='+str(_std[0,m_i]))
+
+    (_mean[1,m_i],_std[1,m_i],T[1,m_i]) = measureRandomAccess(m,filename='',k=k)
+    T[1,m_i]=sorted(T[1,m_i])
+    tee('\rMemory pokes _mean='+str(_mean[1,m_i])+', Memory _std='+str(_std[1,m_i]))
+    
+    Random_pokes.append({'m_i':m_i,
+                        'm':m,
+                        'memory__mean': _mean[1,m_i],
+                        'memory__std': _std[1,m_i],
+                        'memory_largest': T[1,m_i][-1000:],
+                        'file__mean': _mean[0,m_i],
+                        'file__std': _std[0,m_i],
+                        'file_largest': T[0,m_i][-1000:]                
+                })
+print('='*50)
+              
+creating 1 byte block: 0.000001 sec, writing 0 blocks 0.001522 sec
+File pokes _mean=1.4178752899169922e-07, file _std=1.735372681852446e-07
+Memory pokes _mean=1.3778924942016603e-07, Memory _std=2.0693948659186357e-07
+              
+creating 1 byte block: 0.000002 sec, writing 1000 blocks 0.007607 sec
+File pokes _mean=1.167142391204834e-05, file _std=4.742214808370476e-06
+Memory pokes _mean=1.736617088317871e-07, Memory _std=1.577743855945899e-07
+              
+creating 1000000 byte block: 0.000071 sec, writing 1 blocks 0.022258 sec
+File pokes _mean=1.3782503604888917e-05, file _std=7.029326266297049e-06
+Memory pokes _mean=2.594304084777832e-07, Memory _std=1.7600767824608167e-07
+              
+creating 1000000 byte block: 0.000046 sec, writing 1000 blocks 13.825604 sec
+File pokes _mean=1.5203940868377686e-05, file _std=7.625527918272001e-06
+Memory pokes _mean=3.649687767028809e-07, Memory _std=2.1319633784894616e-07
+==================================================
+fields=['m', 'memory__mean', 'memory__std','file__mean','file__std']
+print('| block size | mem mean  | mem std | disk mean | disk std |')
+print('| :--------- | :----------- | :--- | :-------- | :------- |')
+for R in Random_pokes:
+    tup=tuple([R[f] for f in fields])
+    print('| %d | %6.3g | %6.3g |  %6.3g | %6.3g |'%tup)
+| block size | mem mean  | mem std | disk mean | disk std |
+| :--------- | :----------- | :--- | :-------- | :------- |
+| 0 | 1.38e-07 | 2.07e-07 |  1.42e-07 | 1.74e-07 |
+| 1000 | 1.74e-07 | 1.58e-07 |  1.17e-05 | 4.74e-06 |
+| 1000000 | 2.59e-07 | 1.76e-07 |  1.38e-05 | 7.03e-06 |
+| 1000000000 | 3.65e-07 | 2.13e-07 |  1.52e-05 | 7.63e-06 |
+Mean and std of latency for random access
+
+Note that zero is not really zero.
+system time is accurate to micro-second, not nano-second.
+SSD random access latency is 
+Digging deeper
+The mean and std are the first statistics to look at.
+but the distribution might have more to tell us.
+First, lets try histograms
+m_i=3
+Disk_Mem=1
+print('Disk Block of size %2.1g GB'%(m_list[m_i]/1e9))
+print('\r latency mean='+str(_mean[1,m_i])+',  std='+str(_std[1,m_i]))
+
+_mean_t=_mean[Disk_Mem,m_i]
+_std_t=_std[Disk_Mem,m_i]
+_normal=random.normal(loc=_mean_t,scale=_std_t,size=T.shape[2])
+tmp=T[Disk_Mem,m_i]
+print(' Fraction of zeros=',sum(tmp==0)/len(tmp))
+figure(figsize=(10,4))
+subplot(121)
+thr=1e-6
+hist([tmp[tmp<thr],_normal[_normal<thr]],bins=20);
+#ylim([0,20000])
+xlim([-thr/10,thr])
+title('time < %3.2g ms'%(thr*1e3))
+xticks(rotation=45)
+grid()
+subplot(122)
+hist([tmp[tmp>=thr],_normal[_normal>=thr]],bins=40);
+xlim([thr,thr*10])
+#ylim([0,20])
+title('time >= %3.2g ms'%(thr*1e3))
+xticks(rotation=45);
+grid();
+Disk Block of size  1 GB
+
+ latency mean=3.649687767028809e-07,  std=2.1319633784894616e-07
+ Fraction of zeros= 0.00252
+
+CDF instead of histogram
+Choosing ranges and bin-numbers for histograms can be hard.
+
+$$CDF(a) = Pr(T \leq a) \hdots (T=\text{latency})$$
+
+Plotting a CDF does not require choosing bins.
+We are interested in larger latencies, so we use instead
+
+$$1-CDF(a) = 1 - Pr(T \leq a ) = Pr(T > a)$$
+
+figure(figsize=(14,7))
+subplot(121)
+grid()
+PlotTime(sort(_normal),_mean_t,_std_t,Color=['y','b','k','r'],LS=['-','-','-','--'],LogLog=False)
+title('normal distribution')
+xlabel('delay (sec)',fontsize=18)
+xlim([-thr/10,thr])
+ylabel('1-CDF',fontsize=18)
+tick_params(axis='both', which='major', labelsize=16,rotation=45)
+tick_params(axis='both', which='minor', labelsize=12,rotation=45)
+
+#print('%d Memory Blocks of size %d bytes'%(m_list[m_i],n))
+#print('\rMemory pokes _mean='+str(_mean[1,m_i])+', Memory _std='+str(_std[1,m_i]))
+subplot(122)
+grid()
+PlotTime(sort(tmp),_mean_t,_std_t,Color=['y','b','k','r'],LS=['-','-','-','--'],LogLog=False)
+title('distribution of 1GB memory access latencies')
+xlabel('delay (sec)',fontsize=18)
+xlim([-thr/10,thr])
+#ylim([0,0.001])
+#ylabel('1-CDF',fontsize=18)
+tick_params(axis='both', which='major', labelsize=16,rotation=45)
+tick_params(axis='both', which='minor', labelsize=12,rotation=45)
+
+CDF + loglog plots
+figure(figsize=(12,6))
+subplot(121)
+grid()
+PlotTime(sort(_normal),_mean_t,_std_t,Color=['y','b','k','r'],LS=['-','-','-','--'])
+title('normal distribution / loglog scaling')
+xlabel('delay (sec)',fontsize=18)
+xlim([1e-7,1000*thr])
+ylabel('1-CDF',fontsize=18)
+tick_params(axis='both', which='major', labelsize=16)
+tick_params(axis='both', which='minor', labelsize=12)
+
+#print('%d Memory Blocks of size %d bytes'%(m_list[m_i],n))
+#print('\rMemory pokes _mean='+str(_mean[1,m_i])+', Memory _std='+str(_std[1,m_i]))
+subplot(122)
+grid()
+PlotTime(sort(tmp),_mean_t,_std_t,Color=['y','b','k','r'],LS=['-','-','-','--'])
+title('distribution of mem access delays / loglog scaling')
+xlabel('delay (sec)',fontsize=18)
+xlim([1e-7,1000*thr])
+#ylabel('1-CDF',fontsize=18)
+tick_params(axis='both', which='major', labelsize=16)
+tick_params(axis='both', which='minor', labelsize=12)
+
+Characterize random access to storage
+pp = PdfPages('MemoryFigure.pdf')
+figure(figsize=(6,4))
+
+Colors='bgrcmyk'  # The colors for the plot
+LineStyles=['-',':']
+Legends=['F','M']
+
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5,10.5)
+
+for m_i in range(len(m_list)):
+    Color=Colors[m_i % len(Colors)]
+    for Type in [0,1]:
+        
+        PlotTime(sort(T[Type,m_i]),_mean[Type,m_i],_std[Type,m_i],\
+             Color=Color,LS=LineStyles[Type],Legend=m_legend[m_i]+' '+Legends[Type],\
+             m_i=m_i)
+
+grid()
+legend(fontsize=18)
+xlabel('delay (sec)',fontsize=18)
+ylabel('1-CDF',fontsize=18)
+tick_params(axis='both', which='major', labelsize=16)
+tick_params(axis='both', which='minor', labelsize=12)
+pp.savefig()
+pp.close()
+
+Characterize sequential access
+Random access degrades rapidly with the size of the block.
+Sequential access is much faster.
+We already saw that writing 10GB to disk sequentially takes 8.9sec, or less than 1 second for a gigbyte.
+Writing a 1TB disk at this rate would take ~1000 seconds or about 16 minutes.
+import time
+Consec=[]
+Line='### Consecutive Memory writes:'
+print(Line); stat.write(Line+'\n')
+n=1000
+r=np.array(list(range(n)))
+Header="""
+|   size (MB) | Average time per byte |
+| ---------: | --------------: | """
+tee(Header)
+# for m in [1,1000,1000000,10000000]: # include 10GB experiment
+for m in [1,1000,1000000]:
+    t1=time.time()
+    A=np.repeat(r,m)
+    t2=time.time()
+    Consec.append((n,m,float(n*m)/1000000,(t2-t1)/float(n*m)))
+    tee("| %6.3f | %4.2g |" % (float(n*m)/1000000,(t2-t1)/float(n*m)))
+A=[];r=[]
+stat.close()
+### Consecutive Memory writes:
+
+|   size (MB) | Average time per byte |
+| ---------: | --------------: | 
+|  0.001 | 0.00036 |
+|  1.000 | 6.3e-09 |
+| 1000.000 | 6.9e-09 |
+
+We are measuring bandwidth rather than latency:
+We say that it take 8.9sec to write 10GB to SSD, we are NOT saying that to write one byte to SSD it take $8.9 \text{x} 10^{-10}$ second to write a single byte.
+This is because many write operations are occuring in parallel.
+Byte-rate for writing large blocks is about (100MB/sec)
+Byte-rate for writing large SSD blocks is about (1GB/sec)
+Comparison:
+Memory: Sequential access: 100M/sec, random access: $10^{-9}$ sec for 10KB,$10^{-6}$ to $10^{-3}$ for 10GB
+SSD: Sequential access: $10^{-5}$ to $10^{-3}$ sec for 10KB, $10^{-4}$ to $10^{-1}$ for 10GB
+
+Collecting System Description
+In this section you will find commands that list properties of the hardware on which this notebook is running.
+
+Specify which OS you are using
+Uncomment the line corresponding to your OS. Comment all of the rest.
+
+# brand_name = "brand: Macbook"
+brand_name = "brand: Linux"
+#brand_name = "brand: Windows"
+For Mac users
+The next cell needs to be run only by Mac OS users. If run on other OS platforms, it will throw error.
+
+if brand_name== "brand: Macbook":
+    # To get all available information use !sysctl -a
+    os_info = !sysctl kernel.osrelease kernel.osrevision kernel.ostype kernel.osversion
+    cpu_info = !sysctl machdep.cpu.brand_string machdep.cpu.cache.L2_associativity machdep.cpu.cache.linesize machdep.cpu.cache.size machdep.cpu.core_count
+    cache_info = !sysctl kern.procname hw.memsize hw.cpufamily hw.activecpu hw.cachelinesize hw.cpufrequency hw.l1dcachesize hw.l1icachesize hw.l2cachesize hw.l3cachesize hw.cputype 
+For Linux OS users
+if brand_name == "brand: Linux":
+    os_info = !sysctl kernel.ostype kernel.osrelease 
+    os_version = !lsb_release -r
+    memory_size = !cat /proc/meminfo | grep 'MemTotal'
+    os_info += os_version + memory_size
+
+    cache_L1i = !lscpu | grep 'L1i'
+    cache_L1d = !lscpu | grep 'L1d'
+    cache_L2 = !lscpu | grep 'L2'
+    cache_L3 = !lscpu | grep 'L3'
+    cache_info = cache_L1i + cache_L1d + cache_L2 + cache_L3
+
+    cpu_type = !lscpu | grep 'CPU family'
+    cpu_brand = !cat /proc/cpuinfo | grep -m 1 'model name'
+    cpu_frequency = !lscpu | grep 'CPU MHz'
+    cpu_core_count = !lscpu | grep 'CPU(s)'
+    cpu_info = cpu_type + cpu_brand + cpu_frequency + cpu_core_count
+For Windows users
+if brand_name =="brand: Windows":
+    os_release  = !ver
+    os_type     = !WMIC CPU get  SystemCreationClassName
+    memory      = !WMIC ComputerSystem get TotalPhysicalMemory
+    os_info     = os_release + os_type
+
+    cpu_core_count  = !WMIC CPU get NumberOfCores
+    cpu_speed       = !WMIC CPU get CurrentClockSpeed
+    cpu_model_name  = !WMIC CPU get name
+    cpu_info        = cpu_core_count + cpu_speed + cpu_model_name
+
+    l2cachesize = !WMIC CPU get L2CacheSize
+    l3cachesize = !WMIC CPU get L3CacheSize
+    cache_info  = l2cachesize + l3cachesize
+# Print collected information
+description=[brand_name] + os_info + cache_info + cpu_info
+print("Main Harware Parameters:\n")
+print('\n'.join(description))
+Main Harware Parameters:
+
+brand: Linux
+kernel.ostype = Linux
+kernel.osrelease = 4.4.0-139-generic
+/bin/bash: lsb_release: command not found
+MemTotal:       32127736 kB
+L1i cache:             32K
+L1d cache:             32K
+L2 cache:              1024K
+L3 cache:              33792K
+CPU family:            6
+model name	: Intel(R) Xeon(R) Platinum 8175M CPU @ 2.50GHz
+CPU MHz:               2500.000
+CPU(s):                8
+On-line CPU(s) list:   0-7
+NUMA node0 CPU(s):     0-7
+Summary of Macbook Pro hardware parameters
+Intel four cores
+Clock Rate: 2.50GHz (0.4ns per clock cycle)
+
+# Writing all necesarry information int oa pickle file.
+import pickle
+with open(home_base+'/memory_report.pkl','wb') as pickle_file:
+    pickle.dump({'description':description,
+                'Consec':Consec,
+                'Random_pokes':Random_pokes},
+               pickle_file)
+Observations
+making measurements in the wild allows you to measure the performance of your hardware with your software.
+Measuring in the wild you discover unexpected glitches:
+timer resolution is $1\mu$s
+once every ~10,000 of a zero-time poke there is a $10^{-5}$ delay. Maybe a context switch?
+Latencies typically have long tails - Use loglog graphs.
+Memory latency varies from $10^{-9}$ sec to $10^{-6}$ sec depending on access pattern.
+SSD latency for random access varies from $10^{-5}$ sec to $10^{-1}$ sec.
+
+When reading or writing large blocks, we care about throughput or byte-rate not latency
+Typical throughputs: Memory: 100MB/sec SSD: 1GB/sec Disk: (fill in)
+
+Impact on Big Data Analytics
+Clock rate is stuck at around 3GHz, and is likely to be stuck there for the forseeable future.
+Faster computers / disks / networks are expensive
+focus on data access: ** The main bottleneck on big data computation is moving data around, **NOT calculation.
+The cost-effective solution is often a cluster of many cheap computers, each with many cores and break up the data so that each computer has a small fraction of the data.
+Data-Centers and the "Cloud"
+I invite you to use this notebook on your computer to get a better understanding of its memory access latency.
+If you are interest in way to make more accurate measurements of latency, try notebook 3.
+See you next time.
+
+--- end {2.4.2_notebook.txt} ---
+--- start{2.4.3_notebook.txt} ---
+measuring memory latency
+The purpose of this notebook is to overcome a problem int the notebook 2_measuring_performance_of_memory_hierarchy.ipynb.
+
+The problem is that the time() function is only accurate up to $10^{-7}$ of a second. So any operations that take a shorter time do not register as taking any time.
+
+To overcome the problem we perform many random pokes in sequence and measure the time it takes to complete all of the pokes.
+
+As we ware interested in times shorter than $10^{-7}$ we restrict our attention to the main memory, rather than to files.
+
+Import modules
+%pylab inline
+from numpy import *
+Populating the interactive namespace from numpy and matplotlib
+import time
+from matplotlib.backends.backend_pdf import PdfPages
+
+from os.path import isfile,isdir
+from os import mkdir
+import os
+from lib.measureRandomAccess import measureRandomAccess
+from lib.PlotTime import PlotTime
+setting parameters
+We test access to elements arrays whose sizes are:
+1MB, 10MB, 100MB, 1000MB (=1GB)
+Arrays are stored in memory or on disk on disk
+We perform 1 million read/write ops to random locations in the array.
+We analyze the distribution of the latencies.
+n=100 # size of single block (1MB)
+m_list=[1,10,100,1000,10000] # size of file in blocks
+k=100000;  # number of repeats
+L=len(m_list)
+print('n=%d, k=%d, m_list='%(n,k),m_list)
+n=100, k=100000, m_list= [1, 10, 100, 1000, 10000]
+Set working directory
+This script generates large files. We put these files in a separate directory so it is easier to delete them later.
+
+log_root='./logs'
+if not isdir(log_root): mkdir(log_root)
+TimeStamp=str(int(time.time()))
+log_dir=log_root+'/'+TimeStamp
+mkdir(log_dir)
+%cd $log_dir
+stat=open('stats.txt','w')
+
+def tee(line):
+    print(line)
+    stat.write(line+'\n')
+/home/ccc_v1_t_TS0f_161889/work/asn88885_10/asn88886_1/work/Section1-Spark-Basics/0.MemoryLatency/logs/1569977826
+_mean=zeros([2,L])   #0: using disk, 1: using memory
+_std=zeros([2,L])
+Tmem=[]
+TFile=[]
+import numpy as np
+from numpy.random import rand
+import time
+
+def measureRandomAccessMemBlocks(sz,k=1000,batch=100):
+    """Measure the distribution of random accesses in computer memory.
+
+    :param sz: size of memory block.
+    :param k: number of times that the experiment is repeated.
+    :param batch: The number of locations poked in a single experiment (multiple pokes performed using numpy, rather than python loop)
+    :returns: (_mean,std,T):
+              _mean = the mean of T
+              _std = the std of T
+              T = a list the contains the times of all k experiments
+    :rtype: tuple
+
+    """
+    # Prepare buffer.
+    A=np.zeros(sz,dtype=np.int8)
+
+    # Read and write k*batch times from/to buffer.
+    sum=0; sum2=0
+    T=np.zeros(k)
+    for i in range(k):
+        if (i%100==0): print('\r',i, end=' ')
+        loc=np.int32(rand(batch)*sz)
+        t=time.time()
+        x=A[loc]
+        A[loc]=loc
+        d=(time.time()-t)/batch
+        T[i]=d
+        sum += d
+        sum2 += d*d
+    _mean=sum/k; var=(sum2/k)-_mean**2; _std=np.sqrt(var)
+    return (_mean,_std,T)
+m_list=[10,1000,10000,100000,1000000,10000000,100000000,1000000000]
+m_legend=['10B','1KB','10KB','100KB','1MB','10MB','100MB','1GB']
+Random_pokes=[]
+
+L=len(m_list)
+_mean=zeros([L])   #0: using disk, 1: using memory
+_std=zeros([L])
+TMem=[0]*L
+
+for m_i in range(L):
+    m=m_list[m_i]
+    print('Memory array %d Bytes'%m)
+    out = measureRandomAccessMemBlocks(m,k=1000,batch=1000)
+    (_mean[m_i],_std[m_i],TMem[m_i]) = out
+    TMem[m_i].sort()
+    tee('\rMemory pokes _mean='+str(_mean[m_i])+', Memory _std='+str(_std[m_i]))
+
+    Random_pokes.append({'m_i':m_i,
+                        'm':m,
+                        'memory__mean': _mean[m_i],
+                        'memory__std': _std[m_i],
+                        'memory_largest': TMem[m_i][-100:],
+                })
+Memory array 10 Bytes
+Memory pokes _mean=2.2172689437866045e-08, Memory _std=1.2749012371199187e-07
+Memory array 1000 Bytes
+Memory pokes _mean=1.76773071289062e-08, Memory _std=1.4492373426138178e-08
+Memory array 10000 Bytes
+Memory pokes _mean=2.1302700042724702e-08, Memory _std=2.3344059100144298e-08
+Memory array 100000 Bytes
+Memory pokes _mean=1.4214038848876832e-08, Memory _std=2.143190224073267e-08
+Memory array 1000000 Bytes
+Memory pokes _mean=1.654481887817381e-08, Memory _std=3.1749179760893e-08
+Memory array 10000000 Bytes
+Memory pokes _mean=3.1414508819579996e-08, Memory _std=1.0611376225861106e-07
+Memory array 100000000 Bytes
+Memory pokes _mean=1.2456393241882282e-07, Memory _std=3.8794427160679063e-07
+Memory array 1000000000 Bytes
+ 0
+Characterize random access to storage
+pp = PdfPages('MemoryBlockFigure.pdf')
+figure(figsize=(6,4))
+
+Colors='bgrcmyk'  # The colors for the plot
+LineStyles=['-']
+
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(18.5,10.5)
+
+for m_i in range(len(m_list)):
+    Color=Colors[m_i % len(Colors)]
+    PlotTime(TMem[m_i],_mean[m_i],_std[m_i],\
+             Color=Color,LS='-',Legend=m_legend[m_i],\
+             m_i=m_i)
+
+grid()
+legend(fontsize=18)
+xlabel('delay (sec)',fontsize=18)
+ylabel('1-CDF',fontsize=18)
+tick_params(axis='both', which='major', labelsize=16)
+tick_params(axis='both', which='minor', labelsize=12)
+pp.savefig()
+pp.close()
+Conclusions
+We see that for this laptop (an apple powerbook) the latency of random pokes is close to $10^{-8}$ for blocks of size up to 1 MB. Beyond that, for sizes of 10MB, 100MB and 1GB, the delay is significantly larger.
+
+This makes sense because the size of the L3 cache in this machine is about 6MB.
+
+--- end {2.4.3_notebook.txt} ---
+--- start{2.4_slides.pdf} ---
+6: Heavy Tail Distributions
+       Caching effect on sequential computation
+
+    Cache hit                   •   Cache hit: 1ns
+                                •   Cache miss 100ns
+                                •   Cache miss occurs 1% of the time
+  Cache miss                    •   Sequential execution
+
+
+Sequential execution
+
+
+                         Time
+    Caching effect on parallel computation
+Parallel execution
+
+      Time
+Distribution of access latencies
+•
+Heavy tails are hard to visualize
+• Both the normal density and the probability look very close to zero for latency=100
+• Problem 1:
+    • The distribution of the latencies is a point-mass-function (PMF)
+    • The distribution defined by the normal is a density (PDF)
+    • The two are incomparable.
+Using log scale to compare small probabilities
+•
+
+
+
+
+                                                 Heavy tail
+
+                                      Light/exponential tail
+Summary: heavy tail distribution
+•
+A heavy tails example
+• Example: A program’s run time is
+   • 1 second with probability 99.9%
+   • 300 sec (5 minutes) with probability 0.1%
+   • Mean=1.3sec, std=9.5sec
+• You run the program in parallel on 1000 dataset, 1000 computers
+• You wait until all of the runs finish.
+• The laggard problem: the slowest run determines the overall running
+  time. More than half the time we need to wait 300 seconds.
+The latency of the task is not normal
+•
+The reason:
+• With probability 99.9%, the run finishes in 0.5 second
+• With probability 0.1%, the run finish in 1000 seconds
+• When you have 1000 computers, there is a large probability that one
+  of the machines will take 1000 seconds. Causing the fast machines to
+  waste 999.5 seconds.
+What about just one machine?
+• Using just one machine.
+• Run the jobs sequentially
+• We are interested in the sum, not the max
+
+
+
+
+• Very rarely more than 6500 sec
+• Mean is 1500 Sec (it was about 1000 for 1000 machines!)
+• The distribution has exponential (= light tails)
+Problem in HW
+• Estimate the fraction of 1’s in a large RDD
+• Distribution of a single sample: 1 with prob p, 0 with probability 1-p
+• Distribution of number of 1’s: binomial distribution
+• Binomial approaches normal for number of samples ~>100
+• We can bound the probability of a the tail using the normal
+  distribution.
+
+--- end {2.4_slides.pdf} ---
+--- start{2.4_transcript.txt} ---
+(upbeat music) (air whooshing) - We're now going to talk
+about heavy tail distributions. Heavy tail distributions
+are not usually something that you learn when you learn basic probability and statistics, but in the context of computers,
+they're very important. So let's think about the caching effect on sequential computation. So let's say that these markers
+here are when we have a hit. So it's a very short
+response, like one nanosecond. And here we have a cache miss. This is time. And here we have a cache miss, and that takes 100 nanoseconds, so much, much longer
+than the cache misses. And luckily cache misses
+occur only 1% of the time. Okay, so 1% of the time we
+have to pay 100 nanosecond, but most of the time
+we need one nanosecond, 100 nanosecond versus one nanosecond. So here is the time, again,
+that we have running this way. And what we have is we
+have many, many hits, many hits, hits, hits, hits,
+hits, and then we have a miss, and then we have another bunch of hits and then a miss, and continuing with hits. So we have just two
+misses in this sequence and it definitely affects
+the amount of time that it takes us to execute, but it is balanced well with
+the rest of the computation. So the expected time per access
+is two nanosecond, right? So one nanosecond in one case, 100 nanosecond in the other case. If you average them out,
+you get two nanosecond. And the time to complete the whole process is about 2 times n, n is the number of accesses that we have, plus minus 6 times square
+root nanosecond times sigma. Okay, so this is just
+a regular calculation of the mean and standard
+deviation of the sequence. And so we have that the standard
+deviation is 10 nanosecond. So relative to the whole
+length of what we have, it is not very big. So if n is 1 million, then what we get is a total
+time is about 2 million for the average 2 nanosecond, and then plus 60,000, plus minus 60,000, which
+is one standard deviation. So 60,000 relative to 2
+million is very small, and we are pretty happy
+with what we have working. On the other hand, suppose that we have parallel computation. So we have our many
+computers and we're trying to essentially do the
+same kind of computation, but now distributed across the computers. Okay? What you immediately see
+is that, in this case, when you have a miss,
+it creates a big effect on the parallel processing, right? Because most of the time, we
+can finish what we are doing in let's say 10 nanosecond but sometimes it takes us
+more than 100 nanosecond. And the problem is that we have to wait for everybody to finish before we can say that
+the processing is done. So expected time per
+access is 2 nanosecond. The time to complete n accesses is 2n plus 6 square root of n time sigma. Suppose that we have a 100 CPUs, we then have about n equal 1000 per core. And so what we get is 1000 plus minus 380. Okay, so 380 is now much
+bigger relative to the 1000. But is this really right? Is this the right computation? It still seems reasonably short. You know, we can tolerate that. But it isn't right actually, because the computation that we did here, this computation depends on the sum having a normal distribution, or approximately a normal
+distribution, but it doesn't. It has one element that
+has probability 99% that has length 1, and then
+1% that have length 100. So it's not really a
+very good approximation by the normal distribution. All right, so in this case, the normal distribution is
+just not a good approximation. And this is a situation where we call it, distribution where the extreme
+values are much more likely than the normal, are called
+heavy tail distribution. So the tail of the distribution, if we think about it as here is one part and here is another part, so maybe the normal approximation would be something like this. But it's a very bad approximation because we have an element
+that is, let's say, at 100 that has some significant probability. So how can we see this long
+tail distribution in practice? So suppose that we have
+this setting as we were, that we have 1 nanosecond
+occurs 99% of the time and 100 nanosecond 1% of the time, the expected latency is indeed
+1.99 or about 2 nanosecond and the standard deviation is 10. However, if you now draw this
+1 nanosecond here for the mean plus minus 10, for the standard deviation of the normal distribution, you see that the probability of the 100 is much, much smaller than 1%. So this is kind of hard
+to see in this plot because this distribution
+that we're trying to model, here, this distribution that
+is like 99% here and 1% here, is a point-mass distribution. It's not a density distribution, so it's hard to compare. So instead, what we want to do is we want to compare the
+cumulative distribution function. Okay, so here we have 1 minus the cumulative
+distribution function, and we have the 1 minus for
+the normal distribution, and then we have the one for the two-point mass distribution. Okay, so at least now we are
+working in the same space. We're talking about probabilities. Okay. But it's still hard to
+see the difference, right? So are these two really
+different from each other, right? It's not clear from this plot. So in order to see that, we need to use log of the probabilities. So we need to basically
+be much more sensitive when we're close to zero, and this is how we do that. Okay, so now we have 1 minus
+CDF using the semi-log plot. Okay, so the probability is logarithmic, and the latency is, again, just linear. And what we have is,
+we have the point here and the point here for the
+point-mass distribution, and then we have this for
+the normal distribution. And now it is very, very clear
+that the probability of this, which is about 1 out of 100, is much, much bigger than
+the probability of the tail of the normal distribution, which is about 10 to the minus
+20 or something like that. Right? It goes way, way below. So now we can see that there is really
+a very big difference. And this point here, there's just 1%, we get 100 nanosecond is an outlier relative to the normal distribution. So this is the light exponential tail. So this is what we call the light tailed. And this is the heavy tailed. So to summarize, a distribution has heavy tails if the probability of outliers is much, much higher than
+the probability that you get if you assume the normal distribution. So you can calculate the mean
+and the standard deviation. It's just that the standard
+deviation doesn't give you a lot of information about
+what is the distribution. Even if the distribution is heavy tailed, you can't use the estimate
+that says the value is about the expected value plus minus k times the standard deviation, which is a very common estimate to use. And heavy tail distributions
+are very common in the memory hierarchy because most of the time you get hits and then some of the times you get misses and some smaller fraction
+of the time you get a miss followed by a miss, followed by a miss, so several levels of the hierarchy. And because a miss is a rare
+but expensive operation, you get this problem. Okay, so I'll see you
+in the next video. Bye.
+--- end {2.4_transcript.txt} ---
+--- start{week_01_guide.pdf} ---
+      DSC 232R: Big Data Analytics Using Spark
+                    Winter 2026
+                     Week 1
+
+
+                               January 8, 2026
+
+
+1       Topic: Introduction to Big Data Using Spark
+1.1     What is Data Science
+1.1.1    Lecture Content
+    • Definition: Data Science is defined as rational decision making using
+      data to make decisions that are useful and profitable. It combines ”Data”
+      (collection from sensors, logs, etc.) and ”Science” (hypothesis testing and
+      verification).
+    • Types of Decisions:
+         – Big Decisions: Strategic, high-stakes decisions involving delibera-
+           tion by people.
+             ∗ Examples: Is city water safe?, Federal interest rate hikes, Infras-
+               tructure changes (adding lanes).
+         – Small Decisions: Tactical, automated, high-volume decisions made
+           without human intervention.
+             ∗ Examples: Ad selection (Google), Movie recommendations (Net-
+               flix), Loan approvals, Ramp metering (traffic lights on highway
+               on-ramps).
+    • Ingredients of Data Science:
+
+         1. Math: Linear Algebra, Probability, Statistics.
+         2. Machine Learning: Algorithms to build flexible models.
+         3. Software Development: Implementing at scale.
+         4. Domain Knowledge: Understanding the specific science of the
+            problem (e.g., Traffic Flow theory).
+
+
+
+                                        1
+   • Case Study: Caltrans PeMS (Performance Measurement Sys-
+     tem):
+        – Data Collection: 45,000 magnetic loop detectors in CA highways.
+        – Measurements:
+              ∗ Flow: Number of cars per unit time.
+              ∗ Occupancy: Fraction of time a car is over the loop.
+        – Traffic Theory (The Fundamental Diagram): Relationship be-
+          tween Density (cars/mile) and Flow.
+              ∗ Low Density → High Speed, increasing Flow.
+              ∗ Peak Flow → Optimal capacity.
+              ∗ High Density (Traffic Jam) → Low Speed, decreasing Flow.
+        – Analysis Techniques: Uses PCA (Principal Component Analysis)
+          to identify traffic profiles (e.g., AM vs PM peaks).
+
+1.2     Data Engineering and Data Science
+1.2.1   Lecture Content
+   • Roles:
+        – Data Scientist: Builds models, answers business questions, uses
+          Stats/ML. Expects data availability and fast computation.
+        – Data Engineer: Builds the infrastructure (databases, streaming,
+          cloud, pipelines) that supports the data scientist.
+   • Course Scope (Data Engineering Topics):
+        – Covered: Hadoop File System (HDFS), Data Partitioning, Caching/Per-
+          sistence, Checkpointing.
+        – Not Covered: Data Cleaning, Spark Server Optimization, Con-
+          tainerization.
+   • Data Models (The Interface):
+        1. Matrix (Linear Algebra):
+            – Rectangle of numbers (all same type).
+            – Supports transposition, addition, multiplication.
+            – Limitation: Typically must fit in the memory of one computer.
+        2. Relation/Table (Relational Databases):
+            – Rows = Tuples (Entities), Columns = Properties (Attributes).
+            – Columns have types, but types can differ across columns.
+            – Scale: Can span many disks/computers; uses indices for fast
+              retrieval without loading everything into memory.
+
+
+                                       2
+        3. DataFrame (The Hybrid):
+            – Blend of Matrix and Table concepts (popularized by R/S/Pan-
+              das).
+            – Ordered, named rows and columns.
+            – Spark DataFrames: Designed to reside on disk and support
+              distributed processing (unlike standard in-memory matrices).
+
+1.3     Speeding Up Data Processing
+1.3.1   Lecture Content
+   • Two Primary Optimization Methods:
+        1. Fast Libraries (Vectorization): Replacing explicit Python loops
+           with calls to optimized libraries (e.g., NumPy).
+        2. Throughput vs.      Latency: Optimizing for volume rather than
+           individual speed.
+   • Throughput vs. Latency Definitions:
+        – Latency: Time to process a single item from start to finish.
+            ∗ Analogy: Time spent waiting in a grocery line.
+            ∗ Parallelism: Does NOT improve latency (adding 100 cashiers
+              doesn’t make your checkout faster).
+            ∗ Critical for: Gaming, High-Frequency Trading.
+        – Throughput: Amount of data processed per unit time (e.g., bytes/sec).
+            ∗ Analogy: Total customers exiting the store per hour.
+            ∗ Parallelism: DOES improve throughput (100 cashiers process
+              100x more people).
+            ∗ Critical for: Data Science and Big Data processing.
+   • The Big Data Bottleneck:
+        – Bottleneck is usually Disk I/O (Moving data Disk → Memory), not
+          CPU speed.
+        – Example: Processing 1TB of data.
+            ∗ Single Machine (200MB/s): ∼1.4 hours.
+            ∗ 100 Machines (Parallel): ∼50 seconds.
+        – Solution: MapReduce/Spark organize this parallel processing on
+          unreliable clusters.
+
+
+
+
+                                      3
+1.3.2   Juypter Notebook Content: Numpy vs Pure Python
+   • The Experiment: Matrix Multiplication (A × B) of size 100 × 100.
+   • Results:
+
+        – NumPy: ∼0.4 ms (uses optimized C/Fortran libraries).
+        – Pure Python: ∼500 ms (uses nested loops).
+        – Speedup: NumPy is ∼1000x faster for this size.
+   • Under the Hood:
+
+        – NumPy relies on LAPACK (Linear Algebra PACKage).
+        – Written in Fortran (released 1992).
+        – Highly optimized for vector/matrix operations.
+   • Scaling Behavior:
+
+        – Small Matrices (< 10 × 10): No significant advantage (overhead
+          dominates).
+        – Large Matrices (300 × 300): NumPy is ∼10,000x faster.
+
+
+
+
+                                     4
+2       Topic: Memory Hierarchy
+2.1     Latency Throughput and Memory Hierarchy
+2.1.1    Lecture Content
+    • Definitions:
+         – Latency: The total time to process one single unit from start to
+           finish. (Analogy: Time waiting in line + checkout).
+         – Throughput: The number of units processed per unit of time.
+           (Analogy: Customers exiting the store per hour).
+         – Key Insight: Throughput is not necessarily 1 Latency.
+             ∗ Example: A store with no lines has low latency (fast checkout),
+               but if nobody visits, throughput is near zero.
+
+    • Analogy: Costco (Wholesale) vs. Retail:
+         – Wholesale (Batch Processing): High Latency (2 hours to drive
+           truck), but massive Throughput (transferring 1000s of bottles). This
+           is the Big Data approach.
+         – Retail (Random Access): Low Latency (30 seconds to grab a
+           bottle), but low Throughput (one bottle at a time). This is the
+           Interactive approach.
+    • Hard Disk Mechanics:
+         – Seek Time (Latency): ∼10ms to physically move the read head.
+         – Sequential Read (Throughput): ∼100 MB/s once the head is in
+           position.
+         – The Trap of Random Access: Reading 1 byte randomly requires
+           the full 10ms seek time.
+             ∗ Result: Throughput drops to ∼100 Bytes/sec.
+             ∗ Solution: Always read in blocks (Sequential Access) to amortize
+               the seek cost.
+    • Data Transfer at Scale (AWS Snowball):
+
+         – Transferring 50TB over a 100Mbps university line takes ∼46 days.
+         – Transferring 50TB via AWS Snowball (physical shipping via FedEx)
+           takes ∼24 hours.
+         – Lesson: For massive data, physical transport (high latency) offers
+           superior throughput compared to network transfer.
+
+
+
+
+                                       5
+2.2     Storage Latency
+2.2.1   Lecture Content
+   • The Basic Operation (C = A × B):
+
+        – Requires 4 distinct steps, each adding to total latency:
+           1. Read A from Storage (High Latency).
+           2. Read B from Storage (High Latency).
+           3. Compute A × B in CPU (Low Latency).
+           4. Write C to Storage (High Latency).
+   • The Bottleneck:
+
+        – In Big Data analysis, the majority of execution time is spent on
+          Steps 1, 2, and 4 (Storage I/O).
+        – The actual computation (Step 3) is negligible compared to data move-
+          ment.
+   • Storage Hierarchy:
+
+        – Different storage types offer different trade-offs between Latency, Ca-
+          pacity, and Price.
+        – Low Latency: Main Memory (RAM).
+        – Medium Latency: Spinning Disk.
+        – High Latency: Remote Computer / Cloud Storage.
+
+   • Goal of Big Data Systems: Organize storage and computation to max-
+     imize Throughput (processing speed) while minimizing Cost.
+
+2.3     Memory Hierarchy
+2.3.1   Lecture Content
+2.3.2   Lecture Content
+   • The Hierarchy Levels:
+
+        1. CPU Registers: Fastest (∼ 300 ps), Smallest (∼ 1 KB).
+        2. L1/L2/L3 Cache: Fast (∼ 1 − 20 ns), Small (∼ 64 KB - 4 MB).
+        3. Main Memory (RAM): Moderate (∼ 100 ns), Moderate Size (∼
+           16 GB).
+        4. Disk Storage: Slow (∼ 10 ms), Huge Size (∼ 16 TB). Note: 6
+           orders of magnitude slower than CPU!
+        5. Network (Cluster): Slowest, Massive Scale (10+ PB).
+   • The Abstraction:
+
+
+                                       6
+        – Hardware presents memory as a single, large, flat array.
+        – Performance relies on Locality: The hardware automatically moves
+          frequently accessed data to the faster levels.
+   • Cluster Computing (Spark Context):
+
+        – Extends the hierarchy via Ethernet.
+        – Locality Rule: Compute data on the node where it resides to avoid
+          network latency.
+        – Shuffling: The cluster equivalent of moving data between levels (ex-
+          pensive).
+        – Spark RDD: The abstraction that makes a cluster look like a single
+          computer’s memory.
+
+2.4     Heavy Tail Distributions
+2.4.1   Lecture Content
+   • The Problem: Memory is 1-Dimensional (linear addresses), but Matrices
+     are 2-Dimensional. We must flatten 2D data into 1D storage.
+   • Two Standards:
+
+        1. Row-Major Order: Consecutive elements of a row are stored to-
+           gether.
+            – Used by: C, C++, Python, NumPy.
+            – Traversal: Fast to iterate row-by-row (inner loop on columns).
+        2. Column-Major Order: Consecutive elements of a column are
+           stored together.
+            – Used by: Fortran, MATLAB, R, Spark (often, due to Scala/JVM).
+            – Traversal: Fast to iterate column-by-column (inner loop on rows).
+   • Performance Impact: Traversing a Row-Major array in Column order
+     (or vice versa) breaks Spatial Locality.
+        – The CPU fetches a cache line, uses 1 value, and discards the rest.
+        – Result: Massive increase in Cache Misses and execution time.
+
+2.4.2   Juypter Notebook Content: Row vs Col Major
+   • The Experiment: Summing elements of a 10k × 10k NumPy matrix.
+
+   • Results:
+        – Row Traversal (Good Locality): ∼8 seconds.
+        – Column Traversal (Bad Locality): ∼100-200 seconds.
+
+
+                                      7
+        – Factor: 10x - 20x slowdown purely due to memory access patterns.
+   • Key Takeaway: Always match your iteration order to the language’s
+     storage layout. For NumPy, iterate over rows first.
+
+2.4.3   Juypter Notebook Content: Measuring Performance of Mem-
+        ory Hierarchy
+   • The Experiment: Accessing random indices in arrays of increasing size
+     (1KB to 1GB).
+   • The Staircase Graph:
+        – Step 1 (L1 Cache): Sizes < 32KB. Latency ∼ 0.5 ns.
+        – Step 2 (L2 Cache): Sizes 32KB - 256KB. Latency ∼ 2 − 5 ns.
+        – Step 3 (L3 Cache): Sizes 256KB - 6MB. Latency ∼ 10 ns.
+        – Step 4 (Main Memory): Sizes > 10MB. Latency ∼ 100 ns.
+   • Conclusion: You can physically ”see” the cache sizes of a computer by
+     measuring access latency spikes.
+
+2.4.4   Juypter Notebook Content: A More Accurate Measure of
+        Memory Poke Latency
+   • The Measurement Problem: A naive loop ‘for i in range(n): x = A[i]‘
+     measures both the memory access AND the loop overhead (Python logic,
+     index increment).
+   • The Solution (Loop Unrolling):
+
+        – Perform many accesses inside a single loop iteration.
+        – Code: ‘sum += A[i] + A[i+1] + ... + A[i+9]‘
+   • Effect: Amortizes the loop overhead across many operations, bringing
+     the measured time closer to the true hardware latency (approx 1 ns for
+     L1 vs 3-4 ns naive).
+
+
+
+
+                                      8
+3     Exam Traps: Danger Zone
+    • The Definition Trap: Data Science is not just ”analyzing data”; the
+      professor explicitly defines it as rational decision making (Big vs. Small
+      decisions).
+    • The Traffic Graph Trap: Higher density does not always mean higher
+      flow. After the ”critical density” peak, increasing density decreases flow
+      (Traffic Jam).
+    • The ”Matrix” Trap: Matrices are homogeneous (numbers only) and
+      must fit in one computer’s memory. If the data is 50TB or has mixed
+      types (strings/ints), it’s a Table or DataFrame, not a Matrix.
+    • The Parallelism Limit: Parallelism improves Throughput (total vol-
+      ume), but it rarely improves Latency (time for one unit). Adding 100
+      computers won’t make a single network request 100x faster.
+    • The ”Dirty” Penalty: A cache miss is bad. A cache miss on a dirty
+      block is worse because you pay double the latency: 1) Write the old dirty
+      data to RAM, 2) Read the new data from RAM.
+
+    • Language Defaults: NumPy is Row-Major. Iterating column-by-
+      column kills performance (10-20x slower) because it breaks spatial locality.
+    • The Bottleneck Reality: In Big Data, the bottleneck is almost always
+      Disk I/O (moving data), not CPU speed. ”Faster Math” doesn’t help if
+      the CPU is waiting for data.
+
+
+
+
+                                        9
+4     Practice Quiz
+Question 1
+The Spatial Locality Check
+Which operation benefits most from Spatial Locality?
+a Updating a single global sum variable 1,000 times.
+b Reading every element of a 10,000-element integer array.
+
+c Traversing a binary tree with 10,000 nodes allocated randomly in memory.
+d Calculating a factorial using recursion.
+
+Answer: B
+Brief Explanation
+    • Spatial Locality refers to accessing memory addresses that are contigu-
+      ous (next to each other).
+    • An array is stored contiguously in memory. Loading the first element likely
+      loads the next 64 bytes (Cache Line) automatically, making subsequent
+      reads nearly instant.
+
+    • Option A is Temporal Locality (same address). Option C has poor locality
+      (random pointers).
+
+Question 2
+Traffic Flow Theory
+According to the Fundamental Diagram of Traffic, what happens when density
+exceeds the critical peak?
+a Flow remains constant at maximum capacity.
+
+b Flow increases linearly with density.
+c Flow decreases as velocity drops significantly.
+d Throughput increases, but Latency decreases.
+
+Answer: C
+Brief Explanation
+    • Beyond the peak density, cars are too close to move fast. The drop in
+      speed outweighs the increase in density, causing a traffic jam where flow
+      (throughput) drops.
+
+
+                                       10
+Question 3
+Data Models
+Which Data Model is characterized by having named columns, heterogeneous
+types (different types for different columns), and is designed to scale across
+many disks?
+a Matrix
+b Relation (Table)
+
+c Vector
+d Tensor
+
+Answer: B
+Brief Explanation
+   • Matrices are homogeneous and memory-bound. Tables (Relations) allow
+     different types per column and use indices to scale to massive sizes on
+     disk.
+
+Question 4
+Latency vs. Throughput
+You need to transfer 50TB of data. Option A (Fiber Optic) takes 11 hours.
+Option B (AWS Snowball/FedEx) takes 24 hours. Which statement is true?
+a Option A has higher Latency and higher Throughput.
+
+b Option B has higher Latency, but could have higher Throughput if data size
+  increases to 100TB.
+c Option A is always preferred because Latency is lower.
+d Throughput is identical because the data size is the same.
+
+Answer: B
+Brief Explanation
+   • Physical transport (Snowball) has a fixed high latency (24h travel time)
+     but massive bandwidth. If you scaled to 100TB, Fiber would take 22
+     hours, while the truck still takes 24 hours, making the throughput com-
+     parison dependent on volume.
+
+
+
+
+                                      11
+Question 5
+4.0.1   NumPy Speed
+Why is NumPy matrix multiplication (∼1ms) vastly faster than a pure Python
+implementation (∼500ms) for a 100 × 100 matrix?
+a NumPy uses GPU acceleration automatically.
+b NumPy uses a specialized C++ compiler at runtime.
+c NumPy calls optimized Fortran libraries (LAPACK).
+
+d NumPy avoids memory storage by streaming data.
+
+Answer: C
+Brief Explanation
+   • NumPy relies on BLAS/LAPACK libraries, originally written in Fortran
+     (1992), which are highly optimized for vector operations.
+
+Question 6
+Cache Miss Penalty
+In the context of the Memory Hierarchy, what is a ”Dirty Eviction”?
+a Removing data that has been corrupted.
+b Removing data that was read but never used.
+c Evicting a cache block that has been modified, requiring a write-back to RAM.
+
+d Clearing the cache to prevent security leaks.
+
+Answer: C
+Brief Explanation
+   • If the CPU modified a value in the cache (”dirty”), that value must be
+     saved to main memory before the cache slot can be reused. This doubles
+     the latency penalty.
+
+
+
+
+                                      12
+Question 7
+Row vs. Column Major
+You are iterating through a standard NumPy array using a nested loop. To
+maximize performance, which index should be in the inner loop?
+a The Row index (iterate top-down).
+b The Column index (iterate left-right).
+c It does not matter for NumPy.
+
+d It depends on the size of the array.
+
+Answer: B
+Brief Explanation
+   • NumPy is Row-Major. Elements in the same row are stored next to
+     each other. Iterating along the column index (moving left-to-right across
+     a row) accesses contiguous memory, maximizing spatial locality.
+
+Question 8
+Hierarchy Scale
+Approximately how much slower is a Random Disk Access compared to a Main
+Memory (RAM) Access?
+a 10x
+b 100x
+
+c 1,000x
+d 100,000x (5 orders of magnitude)
+
+Answer: D
+Brief Explanation
+   • RAM access is ∼100 nanoseconds. Disk seek is ∼10 milliseconds. 10ms =
+     10, 000, 000ns. The difference is roughly 5-6 orders of magnitude (105 ).
+
+
+
+
+                                         13
+Question 9
+Big Data Latency Chain
+When calculating C = A × B on a dataset larger than memory, which step
+dominates the execution time?
+a Computing the product in the ALU.
+b Reading A and B from Disk.
+c Allocating memory variables.
+
+d The operating system scheduler.
+
+Answer: B
+Brief Explanation
+   • In Big Data, the bottleneck is moving data from slow storage (Disk) to
+     fast memory. The CPU spends most of its time waiting for data (I/O
+     Bound).
+
+Question 10
+Data Structures
+Why does a Linked List generally exhibit poor performance compared to an
+Array for large sequential scans?
+a Linked Lists have O(N 2 ) access time.
+b Linked Lists use more memory for integers.
+
+c Linked List nodes are scattered in memory, causing frequent Cache Misses.
+d Arrays are always cached in L1 by default.
+
+Answer: C
+Brief Explanation
+   • Linked list nodes are allocated dynamically and linked via pointers, scat-
+     tering them across memory pages. Traversing them requires loading many
+     different pages, whereas an Array loads many elements in a single page
+     (Spatial Locality).
+
+
+
+
+                                      14
+
+--- end {week_01_guide.pdf} ---
+--- start{week_01_guide.tex} ---
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code Snippet
+% LaTeX Template
+% Version 1.0 (14/2/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Velimir Gayevskiy (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+%----------------------------------------------------------------------------------------
+\usepackage{enumerate}
+\usepackage{listings} % Required for inserting code snippets
+\usepackage[usenames,dvipsnames]{color} % Required for specifying custom colors and referring to colors by name
+
+\definecolor{DarkGreen}{rgb}{0.0,0.4,0.0} % Comment color
+\definecolor{highlight}{RGB}{255,251,204} % Code highlight color
+
+\lstdefinestyle{Style1}{ % Define a style for your code snippet, multiple definitions can be made if, for example, you wish to insert multiple code snippets using different programming languages into one document
+language=Python, % Detects keywords, comments, strings, functions, etc for the language specified
+backgroundcolor=\color{highlight}, % Set the background color for the snippet - useful for highlighting
+basicstyle=\footnotesize\ttfamily, % The default font size and style of the code
+breakatwhitespace=false, % If true, only allows line breaks at white space
+breaklines=true, % Automatic line breaking (prevents code from protruding outside the box)
+captionpos=b, % Sets the caption position: b for bottom; t for top
+commentstyle=\usefont{T1}{pcr}{m}{sl}\color{DarkGreen}, % Style of comments within the code - dark green courier font
+deletekeywords={}, % If you want to delete any keywords from the current language separate them by commas
+%escapeinside={\%}, % This allows you to escape to LaTeX using the character in the bracket
+firstnumber=1, % Line numbers begin at line 1
+frame=single, % Frame around the code box, value can be: none, leftline, topline, bottomline, lines, single, shadowbox
+frameround=tttt, % Rounds the corners of the frame for the top left, top right, bottom left and bottom right positions
+keywordstyle=\color{Blue}\bf, % Functions are bold and blue
+morekeywords={}, % Add any functions no included by default here separated by commas
+numbers=left, % Location of line numbers, can take the values of: none, left, right
+numbersep=10pt, % Distance of line numbers from the code box
+numberstyle=\tiny\color{Gray}, % Style used for line numbers
+rulecolor=\color{black}, % Frame border color
+showstringspaces=false, % Don't put marks in string spaces
+showtabs=false, % Display tabs in the code as lines
+stepnumber=5, % The step distance between line numbers, i.e. how often will lines be numbered
+stringstyle=\color{Purple}, % Strings are purple
+tabsize=4, % Number of spaces per tab in the code
+}
+
+% set title
+\title{DSC 232R: Big Data Analytics Using Spark \\ Winter 2026 \\ Week 1} 
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+% section 1 
+%----------------------------------------------------------------------------------------
+
+\section{Topic: Introduction to Big Data Using Spark}
+
+%----------------------------------------------------------------------------------------
+% section 1.1
+%----------------------------------------------------------------------------------------
+\subsection{What is Data Science}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{Definition:} Data Science is defined as \textit{rational decision making} using data to make decisions that are useful and profitable. It combines "Data" (collection from sensors, logs, etc.) and "Science" (hypothesis testing and verification).
+    \item \textbf{Types of Decisions:}
+    \begin{itemize}
+        \item \textbf{Big Decisions:} Strategic, high-stakes decisions involving deliberation by people.
+        \begin{itemize}
+            \item \textit{Examples:} Is city water safe?, Federal interest rate hikes, Infrastructure changes (adding lanes).
+        \end{itemize}
+        \item \textbf{Small Decisions:} Tactical, automated, high-volume decisions made without human intervention.
+        \begin{itemize}
+            \item \textit{Examples:} Ad selection (Google), Movie recommendations (Netflix), Loan approvals, Ramp metering (traffic lights on highway on-ramps).
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Ingredients of Data Science:}
+    \begin{enumerate}
+        \item \textbf{Math:} Linear Algebra, Probability, Statistics.
+        \item \textbf{Machine Learning:} Algorithms to build flexible models.
+        \item \textbf{Software Development:} Implementing at scale.
+        \item \textbf{Domain Knowledge:} Understanding the specific science of the problem (e.g., Traffic Flow theory).
+    \end{enumerate}
+    \item \textbf{Case Study: Caltrans PeMS (Performance Measurement System):}
+    \begin{itemize}
+        \item \textbf{Data Collection:} ~45,000 magnetic loop detectors in CA highways.
+        \item \textbf{Measurements:}
+        \begin{itemize}
+            \item \textit{Flow:} Number of cars per unit time.
+            \item \textit{Occupancy:} Fraction of time a car is over the loop.
+        \end{itemize}
+        \item \textbf{Traffic Theory (The Fundamental Diagram):} Relationship between \textit{Density} (cars/mile) and \textit{Flow}.
+        \begin{itemize}
+            \item Low Density $\rightarrow$ High Speed, increasing Flow.
+            \item Peak Flow $\rightarrow$ Optimal capacity.
+            \item High Density (Traffic Jam) $\rightarrow$ Low Speed, decreasing Flow.
+        \end{itemize}
+        \item \textbf{Analysis Techniques:} Uses PCA (Principal Component Analysis) to identify traffic profiles (e.g., AM vs PM peaks).
+    \end{itemize}
+\end{itemize}
+%----------------------------------------------------------------------------------------
+% section 1.2 
+%----------------------------------------------------------------------------------------
+\subsection{Data Engineering and Data Science}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{Roles:}
+    \begin{itemize}
+        \item \textbf{Data Scientist:} Builds models, answers business questions, uses Stats/ML. Expects data availability and fast computation.
+        \item \textbf{Data Engineer:} Builds the infrastructure (databases, streaming, cloud, pipelines) that supports the data scientist.
+    \end{itemize}
+    \item \textbf{Course Scope (Data Engineering Topics):}
+    \begin{itemize}
+        \item \textbf{Covered:} Hadoop File System (HDFS), Data Partitioning, Caching/Persistence, Checkpointing.
+        \item \textbf{Not Covered:} Data Cleaning, Spark Server Optimization, Containerization.
+    \end{itemize}
+    \item \textbf{Data Models (The Interface):}
+    \begin{enumerate}
+        \item \textbf{Matrix (Linear Algebra):}
+        \begin{itemize}
+            \item Rectangle of numbers (all same type).
+            \item Supports transposition, addition, multiplication.
+            \item \textit{Limitation:} Typically must fit in the memory of \textbf{one} computer.
+        \end{itemize}
+        \item \textbf{Relation/Table (Relational Databases):}
+        \begin{itemize}
+            \item Rows = Tuples (Entities), Columns = Properties (Attributes).
+            \item Columns have types, but types can differ across columns.
+            \item \textit{Scale:} Can span many disks/computers; uses indices for fast retrieval without loading everything into memory.
+        \end{itemize}
+        \item \textbf{DataFrame (The Hybrid):}
+        \begin{itemize}
+            \item Blend of Matrix and Table concepts (popularized by R/S/Pandas).
+            \item Ordered, named rows and columns.
+            \item \textbf{Spark DataFrames:} Designed to reside on disk and support distributed processing (unlike standard in-memory matrices).
+        \end{itemize}
+    \end{enumerate}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% section 1.3
+%----------------------------------------------------------------------------------------
+\subsection{Speeding Up Data Processing}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{Two Primary Optimization Methods:}
+    \begin{enumerate}
+        \item \textbf{Fast Libraries (Vectorization):} Replacing explicit Python loops with calls to optimized libraries (e.g., NumPy).
+        \item \textbf{Throughput vs. Latency:} Optimizing for volume rather than individual speed.
+    \end{enumerate}
+    \item \textbf{Throughput vs. Latency Definitions:}
+    \begin{itemize}
+        \item \textbf{Latency:} Time to process a single item from start to finish.
+        \begin{itemize}
+            \item \textit{Analogy:} Time spent waiting in a grocery line.
+            \item \textit{Parallelism:} Does NOT improve latency (adding 100 cashiers doesn't make \textit{your} checkout faster).
+            \item \textit{Critical for:} Gaming, High-Frequency Trading.
+        \end{itemize}
+        \item \textbf{Throughput:} Amount of data processed per unit time (e.g., bytes/sec).
+        \begin{itemize}
+            \item \textit{Analogy:} Total customers exiting the store per hour.
+            \item \textit{Parallelism:} DOES improve throughput (100 cashiers process 100x more people).
+            \item \textit{Critical for:} Data Science and Big Data processing.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{The Big Data Bottleneck:}
+    \begin{itemize}
+        \item Bottleneck is usually \textbf{Disk I/O} (Moving data Disk $\to$ Memory), not CPU speed.
+        \item \textit{Example:} Processing 1TB of data.
+        \begin{itemize}
+            \item Single Machine (200MB/s): $\sim$1.4 hours.
+            \item 100 Machines (Parallel): $\sim$50 seconds.
+        \end{itemize}
+        \item \textbf{Solution:} MapReduce/Spark organize this parallel processing on unreliable clusters.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Juypter Notebook Content: Numpy vs Pure Python}
+\begin{itemize}
+    \item \textbf{The Experiment:} Matrix Multiplication ($A \times B$) of size $100 \times 100$.
+    \item \textbf{Results:}
+    \begin{itemize}
+        \item \textbf{NumPy:} $\sim$0.4 ms (uses optimized C/Fortran libraries).
+        \item \textbf{Pure Python:} $\sim$500 ms (uses nested loops).
+        \item \textbf{Speedup:} NumPy is $\sim$1000x faster for this size.
+    \end{itemize}
+    \item \textbf{Under the Hood:}
+    \begin{itemize}
+        \item NumPy relies on \textbf{LAPACK} (Linear Algebra PACKage).
+        \item Written in \textbf{Fortran} (released 1992).
+        \item Highly optimized for vector/matrix operations.
+    \end{itemize}
+    \item \textbf{Scaling Behavior:}
+    \begin{itemize}
+        \item \textbf{Small Matrices ($< 10 \times 10$):} No significant advantage (overhead dominates).
+        \item \textbf{Large Matrices ($300 \times 300$):} NumPy is $\sim$10,000x faster.
+    \end{itemize}
+\end{itemize}
+
+\newpage
+%----------------------------------------------------------------------------------------
+% section 2
+%----------------------------------------------------------------------------------------
+\section{Topic: Memory Hierarchy}
+
+%----------------------------------------------------------------------------------------
+% section 2.1 
+%----------------------------------------------------------------------------------------
+\subsection{Latency Throughput and Memory Hierarchy}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{Definitions:}
+    \begin{itemize}
+        \item \textbf{Latency:} The total time to process one single unit from start to finish. (Analogy: Time waiting in line + checkout).
+        \item \textbf{Throughput:} The number of units processed per unit of time. (Analogy: Customers exiting the store per hour).
+        \item \textbf{Key Insight:} Throughput is \textbf{not} necessarily 1 Latency.
+        \begin{itemize}
+            \item \textit{Example:} A store with no lines has low latency (fast checkout), but if nobody visits, throughput is near zero.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Analogy: Costco (Wholesale) vs. Retail:}
+    \begin{itemize}
+        \item \textbf{Wholesale (Batch Processing):} High Latency (2 hours to drive truck), but massive Throughput (transferring 1000s of bottles). This is the Big Data approach.
+        \item \textbf{Retail (Random Access):} Low Latency (30 seconds to grab a bottle), but low Throughput (one bottle at a time). This is the Interactive approach.
+    \end{itemize}
+    \item \textbf{Hard Disk Mechanics:}
+    \begin{itemize}
+        \item \textbf{Seek Time (Latency):} $\sim$10ms to physically move the read head.
+        \item \textbf{Sequential Read (Throughput):} $\sim$100 MB/s once the head is in position.
+        \item \textbf{The Trap of Random Access:} Reading 1 byte randomly requires the full 10ms seek time.
+        \begin{itemize}
+            \item Result: Throughput drops to $\sim$100 Bytes/sec.
+            \item Solution: Always read in \textbf{blocks} (Sequential Access) to amortize the seek cost.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Data Transfer at Scale (AWS Snowball):}
+    \begin{itemize}
+        \item Transferring 50TB over a 100Mbps university line takes $\sim$46 days.
+        \item Transferring 50TB via \textbf{AWS Snowball} (physical shipping via FedEx) takes $\sim$24 hours.
+        \item \textbf{Lesson:} For massive data, physical transport (high latency) offers superior throughput compared to network transfer.
+    \end{itemize}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% section 2.2 
+%----------------------------------------------------------------------------------------
+\subsection{Storage Latency}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{The Basic Operation ($C = A \times B$):}
+    \begin{itemize}
+        \item Requires 4 distinct steps, each adding to total latency:
+        \begin{enumerate}
+            \item Read $A$ from Storage (High Latency).
+            \item Read $B$ from Storage (High Latency).
+            \item Compute $A \times B$ in CPU (Low Latency).
+            \item Write $C$ to Storage (High Latency).
+        \end{enumerate}
+    \end{itemize}
+    \item \textbf{The Bottleneck:}
+    \begin{itemize}
+        \item In Big Data analysis, the majority of execution time is spent on \textbf{Steps 1, 2, and 4} (Storage I/O).
+        \item The actual computation (Step 3) is negligible compared to data movement.
+    \end{itemize}
+    \item \textbf{Storage Hierarchy:}
+    \begin{itemize}
+        \item Different storage types offer different trade-offs between Latency, Capacity, and Price.
+        \item \textbf{Low Latency:} Main Memory (RAM).
+        \item \textbf{Medium Latency:} Spinning Disk.
+        \item \textbf{High Latency:} Remote Computer / Cloud Storage.
+    \end{itemize}
+    \item \textbf{Goal of Big Data Systems:} Organize storage and computation to maximize Throughput (processing speed) while minimizing Cost.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+% section 2.3 
+%----------------------------------------------------------------------------------------
+\subsection{Memory Hierarchy}
+\subsubsection{Lecture Content}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{The Hierarchy Levels:}
+    \begin{enumerate}
+        \item \textbf{CPU Registers:} Fastest ($\sim300$ ps), Smallest ($\sim1$ KB).
+        \item \textbf{L1/L2/L3 Cache:} Fast ($\sim1-20$ ns), Small ($\sim64$ KB - $4$ MB).
+        \item \textbf{Main Memory (RAM):} Moderate ($\sim100$ ns), Moderate Size ($\sim16$ GB).
+        \item \textbf{Disk Storage:} Slow ($\sim10$ ms), Huge Size ($\sim16$ TB). \textit{Note: 6 orders of magnitude slower than CPU!}
+        \item \textbf{Network (Cluster):} Slowest, Massive Scale ($10+$ PB).
+    \end{enumerate}
+    \item \textbf{The Abstraction:}
+    \begin{itemize}
+        \item Hardware presents memory as a single, large, flat array.
+        \item Performance relies on \textbf{Locality}: The hardware automatically moves frequently accessed data to the faster levels.
+    \end{itemize}
+    \item \textbf{Cluster Computing (Spark Context):}
+    \begin{itemize}
+        \item Extends the hierarchy via \textbf{Ethernet}.
+        \item \textbf{Locality Rule:} Compute data on the node where it resides to avoid network latency.
+        \item \textbf{Shuffling:} The cluster equivalent of moving data between levels (expensive).
+        \item \textbf{Spark RDD:} The abstraction that makes a cluster look like a single computer's memory.
+    \end{itemize}
+\end{itemize}
+%----------------------------------------------------------------------------------------
+% section 2.4 
+%----------------------------------------------------------------------------------------
+\subsection{Heavy Tail Distributions}
+\subsubsection{Lecture Content}
+\begin{itemize}
+    \item \textbf{The Problem:} Memory is 1-Dimensional (linear addresses), but Matrices are 2-Dimensional. We must flatten 2D data into 1D storage.
+    \item \textbf{Two Standards:}
+    \begin{enumerate}
+        \item \textbf{Row-Major Order:} Consecutive elements of a \textbf{row} are stored together.
+        \begin{itemize}
+            \item \textit{Used by:} C, C++, Python, \textbf{NumPy}.
+            \item \textit{Traversal:} Fast to iterate row-by-row (inner loop on columns).
+        \end{itemize}
+        \item \textbf{Column-Major Order:} Consecutive elements of a \textbf{column} are stored together.
+        \begin{itemize}
+            \item \textit{Used by:} Fortran, MATLAB, R, Spark (often, due to Scala/JVM).
+            \item \textit{Traversal:} Fast to iterate column-by-column (inner loop on rows).
+        \end{itemize}
+    \end{enumerate}
+    \item \textbf{Performance Impact:} Traversing a Row-Major array in Column order (or vice versa) breaks \textbf{Spatial Locality}.
+    \begin{itemize}
+        \item The CPU fetches a cache line, uses 1 value, and discards the rest.
+        \item Result: Massive increase in Cache Misses and execution time.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Juypter Notebook Content: Row vs Col Major}
+\begin{itemize}
+    \item \textbf{The Experiment:} Summing elements of a $10k \times 10k$ NumPy matrix.
+    \item \textbf{Results:}
+    \begin{itemize}
+        \item \textbf{Row Traversal (Good Locality):} $\sim$8 seconds.
+        \item \textbf{Column Traversal (Bad Locality):} $\sim$100-200 seconds.
+        \item \textbf{Factor:} 10x - 20x slowdown purely due to memory access patterns.
+    \end{itemize}
+    \item \textbf{Key Takeaway:} Always match your iteration order to the language's storage layout. For NumPy, iterate over rows first.
+\end{itemize}
+
+\subsubsection{Juypter Notebook Content: Measuring Performance of Memory Hierarchy}
+\begin{itemize}
+    \item \textbf{The Experiment:} Accessing random indices in arrays of increasing size ($1$KB to $1$GB).
+    \item \textbf{The Staircase Graph:}
+    \begin{itemize}
+        \item \textbf{Step 1 (L1 Cache):} Sizes $< 32$KB. Latency $\sim 0.5$ ns.
+        \item \textbf{Step 2 (L2 Cache):} Sizes $32$KB - $256$KB. Latency $\sim 2-5$ ns.
+        \item \textbf{Step 3 (L3 Cache):} Sizes $256$KB - $6$MB. Latency $\sim 10$ ns.
+        \item \textbf{Step 4 (Main Memory):} Sizes $> 10$MB. Latency $\sim 100$ ns.
+    \end{itemize}
+    \item \textbf{Conclusion:} You can physically "see" the cache sizes of a computer by measuring access latency spikes.
+\end{itemize}
+
+\subsubsection{Juypter Notebook Content: A More Accurate Measure of Memory Poke Latency}
+\begin{itemize}
+    \item \textbf{The Measurement Problem:} A naive loop `for i in range(n): x = A[i]` measures both the memory access AND the loop overhead (Python logic, index increment).
+    \item \textbf{The Solution (Loop Unrolling):}
+    \begin{itemize}
+        \item Perform many accesses inside a single loop iteration.
+        \item Code: `sum += A[i] + A[i+1] + ... + A[i+9]`
+    \end{itemize}
+    \item \textbf{Effect:} Amortizes the loop overhead across many operations, bringing the measured time closer to the true hardware latency (approx 1 ns for L1 vs 3-4 ns naive).
+\end{itemize}
+
+\newpage
+
+%----------------------------------------------------------------------------------------
+% Exam Traps Section
+%----------------------------------------------------------------------------------------
+\section{Exam Traps: Danger Zone}
+\begin{itemize}
+    \item \textbf{The Definition Trap:} Data Science is not just "analyzing data"; the professor explicitly defines it as \textit{rational decision making} (Big vs. Small decisions).
+    \item \textbf{The Traffic Graph Trap:} Higher density does \textbf{not} always mean higher flow. After the "critical density" peak, increasing density \textit{decreases} flow (Traffic Jam).
+    \item \textbf{The "Matrix" Trap:} Matrices are homogeneous (numbers only) and must fit in \textbf{one} computer's memory. If the data is 50TB or has mixed types (strings/ints), it's a Table or DataFrame, not a Matrix.
+    \item \textbf{The Parallelism Limit:} Parallelism improves \textbf{Throughput} (total volume), but it rarely improves \textbf{Latency} (time for one unit). Adding 100 computers won't make a single network request 100x faster.
+    \item \textbf{The "Dirty" Penalty:} A cache miss is bad. A cache miss on a \textbf{dirty} block is worse because you pay double the latency: 1) Write the old dirty data to RAM, 2) Read the new data from RAM.
+    \item \textbf{Language Defaults:} NumPy is \textbf{Row-Major}. Iterating column-by-column kills performance (10-20x slower) because it breaks spatial locality.
+    \item \textbf{The Bottleneck Reality:} In Big Data, the bottleneck is almost always \textbf{Disk I/O} (moving data), not CPU speed. "Faster Math" doesn't help if the CPU is waiting for data.
+\end{itemize}
+
+\newpage
+%----------------------------------------------------------------------------------------
+% Practice Quiz Section
+%----------------------------------------------------------------------------------------
+\section{Practice Quiz}
+
+% Question 1
+\subsection*{Question 1}
+\subsubsection*{The Spatial Locality Check}
+Which operation benefits most from \textbf{Spatial Locality}?
+\begin{enumerate}[a]
+    \item Updating a single global sum variable 1,000 times.
+    \item Reading every element of a 10,000-element integer array.
+    \item Traversing a binary tree with 10,000 nodes allocated randomly in memory.
+    \item Calculating a factorial using recursion.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item \textbf{Spatial Locality} refers to accessing memory addresses that are \textit{contiguous} (next to each other).
+    \item An array is stored contiguously in memory. Loading the first element likely loads the next 64 bytes (Cache Line) automatically, making subsequent reads nearly instant.
+    \item Option A is \textit{Temporal} Locality (same address). Option C has poor locality (random pointers).
+\end{itemize}
+
+% Question 2
+\subsection*{Question 2}
+\subsubsection*{Traffic Flow Theory}
+According to the Fundamental Diagram of Traffic, what happens when density exceeds the critical peak?
+\begin{enumerate}[a]
+    \item Flow remains constant at maximum capacity.
+    \item Flow increases linearly with density.
+    \item Flow decreases as velocity drops significantly.
+    \item Throughput increases, but Latency decreases.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Beyond the peak density, cars are too close to move fast. The drop in speed outweighs the increase in density, causing a traffic jam where flow (throughput) drops.
+\end{itemize}
+
+% Question 3
+\subsection*{Question 3}
+\subsubsection*{Data Models}
+Which Data Model is characterized by having named columns, heterogeneous types (different types for different columns), and is designed to scale across many disks?
+\begin{enumerate}[a]
+    \item Matrix
+    \item Relation (Table)
+    \item Vector
+    \item Tensor
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Matrices are homogeneous and memory-bound. Tables (Relations) allow different types per column and use indices to scale to massive sizes on disk.
+\end{itemize}
+
+% Question 4
+\subsection*{Question 4}
+\subsubsection*{Latency vs. Throughput}
+You need to transfer 50TB of data. Option A (Fiber Optic) takes 11 hours. Option B (AWS Snowball/FedEx) takes 24 hours. Which statement is true?
+\begin{enumerate}[a]
+    \item Option A has higher Latency and higher Throughput.
+    \item Option B has higher Latency, but could have higher Throughput if data size increases to 100TB.
+    \item Option A is always preferred because Latency is lower.
+    \item Throughput is identical because the data size is the same.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Physical transport (Snowball) has a fixed high latency (24h travel time) but massive bandwidth. If you scaled to 100TB, Fiber would take 22 hours, while the truck still takes 24 hours, making the throughput comparison dependent on volume.
+\end{itemize}
+
+% Question 5
+\subsection*{Question 5}
+\subsubsection{NumPy Speed}
+Why is NumPy matrix multiplication ($\sim$1ms) vastly faster than a pure Python implementation ($\sim$500ms) for a $100 \times 100$ matrix?
+\begin{enumerate}[a]
+    \item NumPy uses GPU acceleration automatically.
+    \item NumPy uses a specialized C++ compiler at runtime.
+    \item NumPy calls optimized Fortran libraries (LAPACK).
+    \item NumPy avoids memory storage by streaming data.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item NumPy relies on BLAS/LAPACK libraries, originally written in Fortran (1992), which are highly optimized for vector operations.
+\end{itemize}
+
+% Question 6
+\subsection*{Question 6}
+\subsubsection*{Cache Miss Penalty}
+In the context of the Memory Hierarchy, what is a "Dirty Eviction"?
+\begin{enumerate}[a]
+    \item Removing data that has been corrupted.
+    \item Removing data that was read but never used.
+    \item Evicting a cache block that has been modified, requiring a write-back to RAM.
+    \item Clearing the cache to prevent security leaks.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item If the CPU modified a value in the cache ("dirty"), that value must be saved to main memory before the cache slot can be reused. This doubles the latency penalty.
+\end{itemize}
+
+\newpage
+% Question 7
+\subsection*{Question 7}
+\subsubsection*{Row vs. Column Major}
+You are iterating through a standard NumPy array using a nested loop. To maximize performance, which index should be in the \textbf{inner} loop?
+\begin{enumerate}[a]
+    \item The Row index (iterate top-down).
+    \item The Column index (iterate left-right).
+    \item It does not matter for NumPy.
+    \item It depends on the size of the array.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item NumPy is \textbf{Row-Major}. Elements in the same row are stored next to each other. Iterating along the column index (moving left-to-right across a row) accesses contiguous memory, maximizing spatial locality.
+\end{itemize}
+
+% Question 8
+\subsection*{Question 8}
+\subsubsection*{Hierarchy Scale}
+Approximately how much slower is a Random Disk Access compared to a Main Memory (RAM) Access?
+\begin{enumerate}[a]
+    \item 10x
+    \item 100x
+    \item 1,000x
+    \item 100,000x (5 orders of magnitude)
+\end{enumerate}
+
+\subsubsection*{Answer: D}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item RAM access is $\sim$100 nanoseconds. Disk seek is $\sim$10 milliseconds. $10ms = 10,000,000ns$. The difference is roughly 5-6 orders of magnitude ($10^5$).
+\end{itemize}
+
+\newpage
+
+% Question 9
+\subsection*{Question 9}
+\subsubsection*{Big Data Latency Chain}
+When calculating $C = A \times B$ on a dataset larger than memory, which step dominates the execution time?
+\begin{enumerate}[a]
+    \item Computing the product in the ALU.
+    \item Reading A and B from Disk.
+    \item Allocating memory variables.
+    \item The operating system scheduler.
+\end{enumerate}
+
+\subsubsection*{Answer: B}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item In Big Data, the bottleneck is moving data from slow storage (Disk) to fast memory. The CPU spends most of its time waiting for data (I/O Bound).
+\end{itemize}
+
+% Question 10
+\subsection*{Question 10}
+\subsubsection*{Data Structures}
+Why does a Linked List generally exhibit poor performance compared to an Array for large sequential scans?
+\begin{enumerate}[a]
+    \item Linked Lists have $O(N^2)$ access time.
+    \item Linked Lists use more memory for integers.
+    \item Linked List nodes are scattered in memory, causing frequent Cache Misses.
+    \item Arrays are always cached in L1 by default.
+\end{enumerate}
+
+\subsubsection*{Answer: C}
+\subsubsection*{Brief Explanation}
+\begin{itemize}
+    \item Linked list nodes are allocated dynamically and linked via pointers, scattering them across memory pages. Traversing them requires loading many different pages, whereas an Array loads many elements in a single page (Spatial Locality).
+\end{itemize}
+
+\end{document}
+
+--- end {week_01_guide.tex} ---

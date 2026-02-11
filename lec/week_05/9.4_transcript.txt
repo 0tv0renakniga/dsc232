@@ -1,0 +1,37 @@
+(bright music) (air whooshing) - [Instructor] Hi, so we saw the analysis, we did some detailed analysis
+of the three top eigenvectors of snow depth, and we could
+see what each of them means. The first one is how much snow. The second one is whether
+the season is early or late. And the third one is whether
+the season is short or long. And now we want to see how these things, how these descriptors,
+the three descriptors that we have change over time, okay? So this is part of the goal
+of dimensionality reduction. Instead of having 365 values
+that we are trying to compare, we're just comparing three, so it makes the task a little bit easier. So we're going to select
+all of these values and we're going to look at some plots. So this is a type of
+plot called a box plot and what it says for each year and this is about the first coefficient, what is the mean value
+of that coefficient. What's the 25 and 75 percentile? And then what's the range from
+the minimum to the maximum? Okay, so we can see that some years have very little snow, very consistently throughout Massachusetts and here very little snow,
+here a little bit more. And all of a sudden, 2011 and 2015, we see that there is a lot of snow, okay? And that the variation
+is also much bigger. So that's something we can see from looking at this
+graph for coefficient one. Now let's look at coefficient two. Now, coefficient two is about whether the season started early or late. So, when it's negative
+the season started early and when it's positive, it's late. So, we see again, 2015 was a special year. There was a lot of snow
+and it started late, okay? And then we can see other times, whether it was early or
+late, it kind of changes. Finally, we can look at the third coefficient and that tells us whether
+the season was short or long. So we see that 2015 was
+actually another short season. So it was a short season,
+but with a lot of snow, okay. Now another thing we
+can do is we can look at how much do the residuals to the different eigenvectors explain. So we know that if we have
+all of the eigenvectors, they explain everything, but we wanna see how much the first and second and so on. So here is the first, the blue line. And you see that there
+are some that it explains, there are some instances where, the residual is very small and some kind of here is in the middle and then some where the
+residual is very large. So this is the best part. This is the part where we model the best and here the part where
+we model not so well. And then as we go to
+the later eigenvectors, so to the orange line and the green line, the red line and the purple line, we see how we explain more
+and more of the signal and the residual, the fraction that a lot of the residual is explained
+is becoming bigger and bigger. So this is the residual. The residual here, you get smaller residual for
+let's say 20% of the data. Another way to look at the same thing is to look at the distribution
+of the coefficient. So how do the coefficients vary? So, interestingly, the first coefficient, the one about the volume,
+it varies from zero and up because you can't have
+less than zero snow. So there's a limit to how low it can go and then it can go up quite a lot. And if you look at the second
+and third, they can vary. They have a nominal value that
+is in the middle, let's say. No, that's the mean start date of the snow and the mean length of the
+year, of the snow season. But it can be lower and it can be higher. So that's what we can look at. We can use our coefficients as descriptors of the years and we can study the
+distribution that way. Okay, we'll see you next time.

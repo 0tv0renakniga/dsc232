@@ -1,0 +1,34 @@
+(upbeat music) (graphics whooshing) - [Instructor] So we
+talked about decision trees and the simple ways in which they can be learned and interpreted. But there is one property
+of decision trees that is a significant problem, and that is the trees are unstable. What do I mean by that? They're very flexible. The trees that we build are very flexible and a fully grown tree, where
+all the leaves are pure, so basically each leaf has only one label, so you can always create such a tree because you can
+always get down to the level that each leaf has only one example in it. Okay, so that means that
+the fully grown tree, which has zero error, does not error on the training set. Okay, so you can always build a tree that will be perfect in a sense. However, if the tree is large
+and the data is limited, the test error of the
+tree, the test error, so running now, using now test
+data, is likely to be high, so because the tree over-fits the data. Statisticians say that the trees are high variance or unstable. So basically if you change
+a little bit your data you'll get a different tree
+and therefore the decisions that the tree makes on new
+test examples are unstable. So the first common solution for improving on this over-fitting problem is to do pruning. So pruning is you start by a tree that has error zero
+like this complete tree, and then you start chopping off nodes that don't add much to the error, so don't reduce the error by very much. Like if a particular
+node reduces the error by 10%, then you don't remove it. But if it reduces the error by just making two training examples correct,
+then you might remove it. Okay, so you you remove it like that. And until you get to a
+tree that has a error of, let's say, 1%, okay, so you're saying, "I'm not really trusting this 0% error. I'm going to reduce the tree. It's going to on the training
+data perform slightly worse. But my hope is that, because of that, it would be more stable and perform better on the test data." Okay, so that's the pruning approach. Another approach that was also developed by Leo Breiman is to do bagging. So what is bagging? In bagging, you generate several trees and you vote with the
+majority over these trees. Okay, so you vote with a
+majority over these trees. And the trees are slightly different because for each one of them you use a bootstrap sample. Okay, and a bootstrap sample is basically just you take the
+training data that you have and you pick new examples
+with replacement. So some of the, and you pick the exact
+same number of examples. So some of the examples
+you'll pick more than once and some of the examples
+you won't pick at all. And that creates the
+difference between the bags and then you train using that data. So each one of these trees
+is a little bit different. And when you want to make a prediction, you just take the sum or the vote over all of these trees and that's your prediction. Okay, so we predict
+using the majority vote over these trees and this is related to various methods
+including RANDOM FORESTS and Boosting Trees/XGBoost and we are going to describe those next. So to summarize, decision trees are simple and intuitive but fully grown trees
+can over-fit the data. There are two main ways
+to reduce over-fitting. One is pruning, removing leaves
+to make the trees smaller, and the other is bagging or boosting, which is to take a majority
+vote over many trees. And that's called an
+ensemble method, okay. So boosting or bagging that
+take a majority over many trees. Those are called ensemble methods and we'll talk about them soon some more. See you then.

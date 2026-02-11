@@ -1,0 +1,77 @@
+(bright music) (screen whooshes) - [Instructor] Hi. So we have
+talked about decision trees. Another popular structure for learning that we mentioned are ensembles. So we're going to talk a little
+bit more about ensembles. So what are they? Ensembles are predictors defined by an average or a vote over base or weak predictors. The weak learner is faced with a variant of the original problem. So they don't solve
+exactly the same problem. They solve a variant. And there are two main flavors. There are other types of ensembles that we won't talk about here, but two main flavors that exist are one is boosting based ensembles that we'll talk about next lecture and bootstrap based ensembles. Okay. So we're going to talk now about bootstrap based ensembles and what they are. So first let's look at an example of an ensemble. So here is an ensemble of trees. So here is the first tree in the ensemble. And here is the second tree. And here is the third tree. Okay? So they're all solutions for the same classification problem. And here's the fourth one. And then what we do to
+generate our own prediction is take a weighted combination of the ensemble members
+or of the weak trees. Okay? So each weak tree
+gives us some evidence towards the label, and
+we combine them together to get something more accurate. And then after we take the
+sum, we take a threshold so that we get the actual
+prediction, plus one or minus one. Okay. So the idea of
+bootstrapped prediction is an idea that relates to
+stability of statistics. So we might want to
+estimate various quantities in statistics such as the
+mean, the standard deviation, median, minimum, or maximum. Okay? And also we might want to estimate what is the label of a particular example. So that's also an estimation problem, can be seen as an estimation problem. So a stable estimator is
+one that varies little from sample to sample, right? So we have some true distribution but what we see is a sample from it. So we want the dependence on the particular sample to be small, to be as small as possible so
+that we capture the essence of what's in the distribution
+rather than the fluctuation according to the particular examples. Okay? So median is one of
+the most stable estimates. And mean is less stable. And standard deviation
+is even less stable. The stability of maximum is interesting because it depends on
+the actual distribution. Some distribution, it is very stable. Some distribution, it's not. So let's look at these two examples. In this case, the maximum is unstable. Why I'm saying that? Because when we take a sample, we'll have a few samples here
+and a lot of samples here. Okay? And so the sample here, the fact that there's
+only a few of them means that from sample to sample, from each time we take a sample of size N, we get a different estimate. On the other hand, if we
+take this distribution, we'll get a lot of estimates right at the maximum,
+then fewer and fewer here. So in this case, when after
+we take a small number of examples, we will know
+the maximum very accurate. Okay? So the stability of an
+estimate is not just a property of what kind of estimate it is, but it's also a property of the distribution that is underlying. So of course, one way that
+we can estimate that is we can just take a lot of samples. Instead of just one sample of size N, maybe take 100 samples each of size N and then estimate according
+to each one of them and then see how much is the variation. But that requires a lot of data, right? That requires 100 times N examples. So bootstrap is a method that tries to imitate
+doing this estimation, but without increasing
+the number of examples. So what is the bootstrap? It's a method for estimating
+out-of-sample variation. And instead of collecting
+truly independent samples, we create semi-independent samples from the one sample that we actually have. And how do we do that? Let's say S is the sample. Then bootstrap sample is
+to select N examples from S independently at random with replacement. Okay? So we take the examples
+that we have in the data and then in our sample, and then we generate an
+artificial sample of the same size by picking examples at random. And it's important to
+say with replacement. Had it been without replacement, we'd just get the same sample
+again, but with replacement some examples we'd get more than once and some examples we won't get at all. And some examples we would get once. So that means that the samples would vary and we can estimate how
+stable is our estimate. Okay, so now you treat them as if they're independent samples. Okay, so this is how you would do it here. You would get let's say the
+examples that you got here and then you pick out of them again, let's say with a circle,
+I'll denote it like that, this one you pick twice. This one you pick once, this
+one will pick once, okay? So because you are going
+to pick the top ones with some noise, with some probability
+of not picking them up, then you can estimate that the maximum estimator is unstable. So this is a very well-studied
+method in statistics. And I mention here the book because I want you to
+make note of that book, because it turns out
+that in many situations where you're doing
+large-scale data analysis, you want to use the bootstrap to help you estimate how stable. Do you have enough data? How stable is the estimation, and so on? So what is bagging? Bagging is short for bootstrap aggregation. Okay? And what it is is
+designing decision trees and then combining them, designing them and training
+them using bootstrap and then combining them. So decision trees have
+high data variation. They're unstable. That means that the
+generated tree is sensitive to small changes in the training set. So to reduce the variation, we take a majority vote over several runs, each using independent random
+sample of the training data. And then the independent
+sample is using bootstrap. Okay? One nice thing about bagging is that the trees are run, trained
+on different training sets. So all of the training
+can be done in parallel. The result is a reduction in variation with no increase in the bias. Okay? So that's the magical
+thing about bagging is that you can decrease the variability and you in general
+don't increase the bias. What are random forests? So random forest is an
+elaboration on bagging trees. It was developed by Leo Breiman after he developed bagging trees, and is now a very popular
+commercial software. And it has more
+randomization that it uses. Before choosing which
+leaf to split and how, you choose a random
+subset of the features. So you don't try to find
+the best feature overall but the just the best
+feature over a sample. So that increases the variability of the individual trees. And when you average many of these trees, you get better results. So that decreases the correlation
+between different trees and speeds up the learning process. All trees get equal weight. That is the same with bagging
+and with random forest. All of the trees are equal. Okay, so finally we'll do a short review of gradient tree boosting. We'll go into much more
+detail in following slides. And what are gradient tree boosting? The trees in this case
+are trained sequentially, not in parallel, but one after the other. Each tree is trained using
+a weighted training set. The weight represent the
+gradient of the loss function. And each tree receives a different weight. So stochastic gradient boosting use random resampling of the training set as in bagging. Okay? So you can combine
+the idea of bootstrap with the idea of boosting and get what is called
+stochastic gradient boosting. To summarize, we talked about
+ensemble learning in Spark ML. We talked about bagging,
+bootstrap aggregation. We talked about random forests, and we started to talk about
+boosted gradient trees. We'll talk much more about
+that in following videos. I'll see you then.

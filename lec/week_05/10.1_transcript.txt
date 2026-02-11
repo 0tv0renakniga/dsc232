@@ -1,0 +1,161 @@
+(upbeat music) - [Instructor] So we have worked with principal component analysis, and saw what it can do for us and how it can explain
+the variance in the data. And this points to a more
+general set of methods, where principle component
+analysis is just one of them, all based on minimizing
+root mean square error. So we're going to do a
+little review of them and just about the way of thinking about a problem that lends itself to doing root mean square
+error based modeling. So we have a situation where
+we're getting some data. The data comes from the real world. It's not data that we generated. So therefore we don't know
+exactly how to model it. But what we do is we find some kind of simple mathematical model. This is this blue box. And using this model, we generate predictions of
+the different measurements. And so if our model is good, then our predictions will
+be close to the values that they correspond to. The way that we typically would measure how close they are in this RMSE approach is that we take the difference between x, the vector that we observe, and o, the vector that we predict, and take the square of
+the norm of that, okay? And then we average that
+over all our examples so that the root mean squared error. So this is because of the root of the mean of the squared error, okay? So that's the basic idea
+of what we're going to do. So let's look at the simplest case in which we're just trying
+to predict a set of numbers. Okay, so we have numbers,
+data points x1, x2, xn in R to the D, in Euclidean
+space to the D, dimension D. And then we want to find a single point such that the mean squared error to the points that were given is minimum. And it turns out that the thing that minimizes this
+RMSE is the mean, okay? So the mean of all of the points gives us the best point
+in terms of representing all of these points with
+a single point, okay? That's a nice property of squared error. Next, let's think about what we do when we do principle component analysis. So now we have data that is in R2. These data points that we see here, and we want to find
+the top K eigenvectors. Now here, the top K, the
+total dimension is 2, so the top K has to be 1. So we have some dimension one, and we basically take as the
+reconstruction or the output, we take the mean plus the
+projection on the first vector. And how does that look? That looks like something
+like a line that is like that. That is the direction of v1. And when we want to
+measure how good this is, we measure the distance from each point to the closest point on the line, to the projection on the line. That is the thing that we're minimizing. And that's the thing that gives us, if these distances on average are small, then we say that this is a good
+representation of the data. So that's the kind of thing that we have been doing
+in the weather data. There's another approach. There's another approach
+to explaining data. And that is if you have
+one of the coordinates, let's say y here, which is
+the preferred coordinate. That's the coordinate we want to predict. All the others are just input. In that case, what we're
+talking about is regression. We have a set of points,
+x1, y1, x2, y2 and so on where x is a vector
+and y is just a scalar. And then, the thing that we're
+trying to predict is y. So we generate y hat, which is a linear
+combination of a constant plus a coefficient multiplied
+by the ith coordinate, okay? When we do that, we get a line that is slightly different than the line we got before. And that is because the
+distances that we're minimizing are these vertical distances
+between x and the line, the point on the line, rather than the closest point on the line. So this is based on assuming that y is the most important thing
+that we're trying to predict. And we basically generate
+the approximations as the points that are on the line and that are at the same x
+value as the point itself. And the RMS Error here is
+when we take the difference between yi and yi hat, okay? So now it's a difference that
+is going on the vertical axis. Now let's talk about something different. K-means clustering. You're probably all familiar
+with finding the k points that are closest to all the points. The one mean we already
+said it's the mean. It's the mean of all the data. But the two mean or three mean is a more complicated problem, where we're trying to
+find here two points, such that for each point,
+the closest point to it is the closest representative
+for each of the data points, the closest representative
+to this data point. That's the distance that we care about, and that's what we're trying to minimize. So the RMS Error here in this case is xi, the data itself minus oi where oi is the representative
+closest to the point xi. Okay, so all of these generate quantities that are like variance, that are like sum of squares of things. And so what we can say is
+how much of the variance are we explaining using our model? So RMSE changes with the
+units of the measure, right? So if we measure in kilometers or in millimeters or in centimeters, we get different values. We want to normalize it somehow. And so the standard way is to normalize by seeing what is the trivial model. What is the model that
+is the most basic model at the level below us? So for PCA we said it's the mean, okay? For K-means, it would
+probably also be the mean because that's the explanation
+using one center, okay? So for PCA we use the RMSE k. So how much of the variance is explained by the top k eigenvectors, or what's the sum of the top K eigenvalues divided by the sum of
+all of the eigenvalues? And similarly for K-means, the explanation power, the RMSE of k, divided by the RMSE of
+using just one center, okay? So in both of these cases, we're looking at how much
+of the explanatory power, how much are we improving over the explanatory power
+of the most basic model. Okay, so we can think about this as when we're talking about
+PCA and the other methods, we can think about it
+as an iterative thing where we're generating a model. The model lets us do low dimensional
+representation of the data, and then we do a reconstruction from this low dimensional representation and measure the error. So here it is for PCA. We get k eigenvectors, and then we take a particular point, so a single year station
+measurement vector. And from that, we take
+the k top coefficients. So these are the K top coefficients that we get from our model. And then we can plug
+it back into our model and get an approximate
+reconstruction, right? So that was what we had when we looked at the depth of the snow. We would have the representation
+using just three numbers. And then from these three numbers, we reconstruct a signal that is supposed to be close to the original signal, okay? And then we measure the error by the squared error
+between this and this, okay? All right, now a similar thing
+we've done when we studied whether the spatial effect
+or the temporal effect are more important in terms of snow depth or in terms of the second
+coefficient for snow depth, okay? So what did we do in this case? We had the average per year
+and average per station. So we had two averages that
+could be used as a model. And then given station year, we could calculate the average, we could calculate a
+prediction for how much, just this vector of averages
+and this vector of averages if we use them together, how do they approximate the value of the actual second coefficient? And then that's the
+estimation of coefficient 1. And we compute the
+squared error again, okay? So in this case, the model itself is not a PCA model, it's a model of combining averages, but the general technology,
+the method is the same. So to say things in more generality. So we fix some things. So that's what we fix in the model. And then we learn the
+model parameters, right? So from the data, we learned
+parameters for the model. Then when we have a single data point, we get a compressed representation
+of that single point, and then we get an
+approximate reconstruction. And from this reconstruction, we calculate the squared error, and the minimization of the
+squared error is the goal of choosing the model. So sometimes it can be
+done in closed form, like in principle component
+analysis or regression, but sometimes it actually
+has to be done using some kind of iterative
+algorithm just like in K-means. Okay, so this brings us to distinction that I think is useful to know in general. So suppose that we have
+some data x1 to xn. And we can distinguish
+two types of things. One is extensive. So these are quantities
+that scale linearly with N. So like for instance, the
+coefficients that we have for each one of the
+stations, it scales linearly with the number of station
+years that we have, okay? So it reduces the number from
+365 times N to 3 times N, but it still scales like N, so it's an extensive quantity. An intensive quantity is a quantity that doesn't scale as fast
+with the amount of data. So it scales maybe not at all, or it scales logarithmically
+typically in terms of how many more bits we need
+to express this thing. In the situation that we're in, the model is an intensive property, so it's relatively, especially
+when you have a lot of data, the model takes very little space. And then this single data point is one of the N data
+points, so it's extensive. This is extensive, and
+then this is extensive. But the model that combined
+these things together or the parameters that define the model, those are intensive. So you can think about them as these are the essence of our distribution that doesn't change very much if we get more and more and more samples. It changes a little
+bit, but not very much. So what is a good model? From x, from the original
+data point, to r, we have dimensionality
+reducing mapping, okay? X and r and o, the output,
+these are all extensive, okay? A good model is one which
+reduces the dimension with only a small increase
+in the RMSE, okay? So we can always say that a model is simply remembering all of the data, but a model that is more useful
+is a model which is small and compresses the data, and doesn't create a lot of noise, a lot of error in the RMSE sense, okay? So when N is large, then a
+larger model is justified. So basically, when we have more and more data, we can actually get our
+accuracy of our parameters to be better and better. And that will require a few more bits. Typically, something like log N bits. Why log N? You can think about taking
+an average of N numbers. The average basically
+involves taking the sum. So you are summing N numbers. So you get a number that
+is about N times larger. And the number of bits that you need in order to store that number
+exactly is log N, okay? So that is why the parameters, the storage for the parameters
+typically scales like log N. Or it doesn't scale at all
+if you basically decide, no, beyond this accuracy, I don't really want to
+know the accuracy anymore. I don't want any more
+accuracy in my estimates. Suppose we're given some
+d-dimensional data here, 2-dimensional data, okay? These our data points. And we don't really know
+much about this data, but it looks like it actually is organized along this curve, okay? Okay, so what are we going to do is we're going to fit to this model with a small number of parameters. Let's say this curve that we put here. This curve is going to be our model, okay? So it's a simplified
+represent approximation of this point cloud, how this
+point cloud organized, okay? And so each data is approximated by taking the closest
+point on the model, okay? So if we take this point here, then it's going to be
+mapped to this point here, which is on the curve and is the closest point
+to the blue circle. One useful thing about
+putting things on the curve is that now we don't need to represent it using two parameters, but there is enough to use one parameter. So we can think about this
+parameter scaling from 0 to 1, which basically goes
+smoothly along the curve. And so this point can
+be represented as 0.52, a single number, okay? And that is what we call
+dimensionality reduction. The distance that we
+have between the point and the approximation is
+the error, the RMSE error. We want the average
+root mean squared error or percentage of the variance
+explained to be high. So to summarize. Models in general are small
+approximate representations of the data distribution. Each data point x is mapped into a smaller representation rt. So that's the representation. And the model maps the rt back
+to a reconstruction, okay? So we go from x to a
+compressed representation. Let's say the top eigenvectors. And then from that three top coefficients, we represent it back as a vector. And then we measure the
+distance between them. And the average distance, that's the quantity
+we're trying to minimize. While at the same time having the data be as compressed as possible. So the more compressed the data is, the worse the error. But that's the trade off
+that we're looking for. Okay, so the model and model
+parameters are intensive. Those kind of capture important quantities that don't scale with
+the number of examples. And the x, r, t and o are extensive. Xt to rt is a dimensionality
+reducing mapping. So to compare these relationship to other approaches and statistics, we have the RMSE approach,
+which we talked about. We can have goals that are
+different than the RMSE. We want the parameters to capture something about the true distribution. So we endow these parameters
+that we're measuring by a meaningfulness beyond
+being able to reconstruct. A generative approach
+is a different approach, which basically says what we're trying to do is create a mechanism that generates data that
+looks like our data. So examples of that are
+mixtures of Gaussians and HMMs. Generated distribution
+approximates the true distribution. And the performance is
+measured using likelihood. The main goal is to capture the parameters of the distribution. So what we had here is another goal. This is here the main goal. So we want to know what is really the rate at which the temperature
+of the water is increasing. So we are really interested in the estimation of that
+underlying parameter. Discriminative approach is where the model predicts
+output given the input. So examples of that are perceptron, decision trees, neural networks. Generated predictor approximate the input output relationship. And performance is measured
+using average loss. It can be RMSE, it can
+be number of mistakes, it can be log loss. There are various things. But what we're trying to do here is specific to mapping
+an input to an output. Like regression is of that type. And there is no other goal. So the point here when we're
+doing these kind of modeling is just to get a good predictor, not to try to understand what
+are the underlying parameters.

@@ -1,0 +1,68 @@
+(bright notes) (title whooshes) - Hi. We talked about how to program in Spark and how to, basically,
+take advantage of RDDs, but the real question
+is what does this buy us in terms of speed, okay? So, in order to understand that, we need to delve a little bit deeper into the architecture of
+Spark and how it works. So, roughly speaking, Spark is one of those architectures that is based on a head node, a master node, and which communicates with slave nodes. And the slave nodes do all the work while the master node
+just coordinates the work. And the question is how
+to coordinate the work so that the slaves would
+always have work to do, useful work to do, and would make as much as advantage of the parallelism as possible. So, we're going to talk about
+partitioning the process of computation in time, or temporal, and in space, or spatial. Okay? So, we're going to start by the spatial. And in the spatial, we have basically, the logical image of what we just saw. We have the driver, that's this head node, and that through a set of software, that is the Cluster Master, the Mesos, YARN, or Standalone, it communicates with the worker nodes. Okay? So, these worker nodes have the parts that actually do the execution of the code to do the computation. Okay. So, to elaborate on this a little bit, the driver runs on the master, okay? Also, it executes the
+"main" code of your program. So, that's like the part of the code that is really just the organizing part. The Cluster Master manages
+computer resources. So, that's what you communicate with when you do Spark Cluster, when you create a Spark Cluster. And each worker is another manager which manages just a single core, okay? So, you have management at multiple levels just to make sure that
+resources are used efficiently. And the Executor is just
+running on its own little piece. So, the RDD is partitioned across the workers. So, you have parts of the RDD being stored and processed in different workers, and the worker manages partitions. So those are the, these data parts, and Executors. So, those are the pieces of code that run to manipulate the partitions. And the Executors execute
+tasks on their partition. And so, they're myopic. They don't know anything
+about the overall structure of how this computation is organized. They just get a piece of code to be executed on a piece of data. So, the piece of code is the task and the piece of data is the partition. Here is the same in a
+little bit more detail. You have the driver node, which, through the SparkContext, talks with a Cluster Manager. The Cluster Manager is aware of all of the different resources, the amount of memory and the amount of CPUs that
+you have in each machine. And it spawns Executors,
+one for each core. And in the Executor, you have a part that is the cache, which is the same cache
+as we talked about before, which is storing intermediate
+solutions and tasks, sequence of tasks to
+execute on this cache. So, the SparkContext is an abstraction that encapsulates the
+cluster for the driver node and the programmer. And the worker nodes manage resources in a single slave machine. So, each machine is actually
+Java virtual machine. And in it, you have various resources, amount of memory and so on. And so, that's managed by the worker node. Worker nodes communicate
+with the cluster manager and the Executors are the
+processes that can perform tasks. Okay? So, as I said before, the Executors are these slave processes that execute a particular sequence of commands called the task
+on a particular partition. And the cache refers to the local memory on the slave machine. So, that's where you
+really pay for having cache and storing intermediate results. So, materialization is
+the name of the game. When we're running long and
+complicated processes or tasks, we want the use of the cache to be minimal because our data is so big. So, for instance, to consider an RDD that you map x to x squared to RDD2 and then reduce from x, from RDD2 to the sum of all of the elements. So, RDD1 to RDD2 is a lineage and RDD2 can be consumed
+as it is being generated. So, it doesn't need to
+be materialized, okay? Does not have to be materialized
+or stored in memory. So, how does this look
+like as a general process? We have an RDD or we have a whole sequence of RDDs, one calculated from the other. The first one is maybe
+created from a file on disk and then we calculate the
+next one from that one, the next one from that one, and so on. And going backwards, that's what we call the lineage. This RDD comes from a
+lineage of RDDs before it. And the transformations are
+these processes that move us from one RDD to the next. Then, eventually, we take an action and that results in something
+that is smaller than an RDD and which we take in the head node. So, all of this maintained
+in the worker nodes, partitioned and maintained
+in the worker nodes. And some of these might be materialized and others might not. So, by default, these
+RDDs are not materialized. They're just conceptual. They're just a pointer to
+a place in the computation. They do materialize if they're cached or otherwise persistent. And we'll talk about the difference between caching and general
+persistence in a few slides. Now we go to the next, to the other dimension, which is temporal organization, or how the computation
+is performed across time. Okay? And so, suppose that we
+have this computation that we're starting with
+reading a text file, then doing a map, then a filter, and then reduced by key. If we think about what needs
+to be materialized here, the only thing that
+needs to be materialized is after the filtered. After the filtered, when we want to do reduced by key, we need a materialized version. But all of these previous ones do not need to be materialized. So, what does that mean? It means that these RDDs
+that are not materialized are simply an internal part of our task. They're not something
+that writes into memory. Okay? So, this is what we call, sorry. This is what we call a stage. Stage is the part of the
+computation that can be done without materialization
+other than at the end. So, this stage ends when the
+RDD needs to be materialized. And now, imagine this temporal
+partitioning being crossed with this spatial partitioning. And that's where we get the
+actual working environment of Spark. So, RDDs are partitioned across workers and the RDD graph defines
+the lineage of the RDD. So, what RDD comes from
+previous RDD and so on. SparkContext divides the
+RDD graph into stages. So, these stages are those
+pieces that can be executed without writing back to memory. And that is what is
+called the physical plan. Okay? So that's, these stages
+are the temporal pieces and a task corresponds to one stage, restricted to one partition. Okay? So we have the stage, which is a little piece
+of software that is, gets actually sent to the worker and the worker also has a
+partition it's working on. And it tells the Executor, "Do this task on, do this
+stage, on this partition." And that stage and partition
+is what is called a task. Okay? So, the Executor is a
+process that performs tasks. So, to summarize, Spark
+computation is broken into tasks. Spatial organization, different data is partitioned
+on to different machines and temporal organization, computation is broken into stages, a sequence of stages. And next we're going to
+talk about persistence and checkpointing. So, I'll see you then.

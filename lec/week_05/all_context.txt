@@ -1,0 +1,1602 @@
+--- start{10.1_lec.pdf} ---
+ The RMSE Methodology
+(Root Mean Square Error )
+ Real World
+
+
+
+
+Mathematical
+   Model
+The best constant prediction is the
+              mean
+
+
+
+
+â€¢
+PCA based prediction
+
+
+                           ox
+
+                   xoo
+                  o    x
+               x x
+                o
+                  x
+          xo
+      o
+      x
+Regression based Prediction
+
+
+
+
+                        o
+                        x
+                  x o
+                  oox
+               x ox
+               o x
+           x
+           o
+       o
+       x
+K-means clustering
+    Percentage of variance explained
+
+
+
+
+â€¢
+             PCA block diagram
+
+      K Eigenvectors
+
+
+
+
+                                                 Approximate
+ K vector
+                                Model           Reconstruction
+coeï¬ƒcients
+                                                 Of the vector
+
+
+                                                        or
+                                                       r
+                                                     er
+                                                ed
+                                              ar
+                   Single year,station,     u
+                                          Sq
+                      measurement
+                          vector
+     Spatial/temporal block
+            diagram
+ Average per Year                      Fix measurement
+Average per station                   Fix coeï¬ƒcient index
+
+
+
+
+Station
+                           Model           Estim. Coeï¬ƒcient i
+ year
+
+
+                                                     ro r
+                                              d   er
+                                           re
+                      â€¢ Station         ua
+                                      Sq
+                      â€¢ Year
+                      â€¢ Value of
+                        Coeï¬ƒcient i
+  Model-based approximation
+        block diagram
+        Learned Model
+         Parameters                         Some things are ï¬xed
+
+
+
+
+ Compressed
+Representation                                     Approximate
+                             Model
+      Of                                          Reconstruction
+ Single Point
+
+                                                          or
+                                                         r
+                                                       er
+                                                  ed
+                                                ar
+                                              u
+                                            Sq
+                        Single Data Point
+          Extensive and Intensive properties
+     â€¢ Extensive: size scales with size of data
+     â€¢ Intensive: size does not scale with size of data
+        Learned Model
+         Parameters
+
+
+
+ Compressed
+Representation                                           Approximate
+                                Model
+      Of                                                Reconstruction
+ Single Point
+
+                                                                 o r
+                                                                r
+                                                             er
+                                                        ed
+                                                      ar
+                                                    u
+                                                  Sq
+                           Single Data Point
+    What is a good model?
+
+
+
+
+â€¢
+ Model-based
+â€¢ Given d-dimensional data
+                           approximation
+ points. (here d=2)
+
+â€¢ Fit a simple model with few        parameters:
+ parameters. (Here Curve)
+                                                    0
+â€¢ Each data point is
+ approximated by the closest
+ point on the curve.
+
+â€¢ The point on the curve is       error      0.52
+
+ represented by a few numbers
+                                                        1
+ (dimensionality reduction)
+
+â€¢ The distance between the
+ point and the approximation is
+ the error.
+
+â€¢ We want the average
+ root-mean-square-error
+ (RMSE) or Percentage of
+    Summary
+
+
+
+
+â€¢
+   Variations on a theme
+
+
+â€¢ diï¬€erent model geometric: lines, curves, points
+
+â€¢ diï¬€erent measures of error: distance from projection,
+  distance from closest point ï¬xing x, non-euclidean
+  distancesâ€¦
+            Diï¬€erent approaches to
+â€¢
+             statistical modelling
+    Diï¬€erent Models for Diï¬€erent Goals
+
+    â€¢   RMSE approach: Model maps each example to a simpliï¬ed approximation.
+
+        â€¢   Examples PCA, Regression, K-means
+
+        â€¢   Performance measured using average reconstruction error (RMSE)
+
+        â€¢   Other Goal: capture parameters of true distribution.
+
+    â€¢   Generative approach: model is a generator of examples.
+
+        â€¢   Examples: Mixture of Gaussians, HMMs
+
+        â€¢   Generated distribution approximates true distribution.
+
+        â€¢   Performance measured using likelihood.
+
+        â€¢   Main Goal: capture parameters of true distribution.
+
+    â€¢   Discriminative approach: model predicts output given input.
+
+        â€¢   Examples: Perceptron, Decision trees, Neural Networks
+
+        â€¢   Generated predictor approximated input -> output relationship.
+
+        â€¢   Performance measured using average loss (RMSE, # of mistakes, â€¦)
+  Example of generative vs
+    predictive modeling
+â€¢ Computer receives telephone call
+â€¢ Measures Pitch of voice
+â€¢ Decides gender of caller
+
+                                     Mal
+                                     e
+            Human
+            Voice
+
+
+                                           17
+              Generative modeling
+
+                    mean1   mean
+                            2
+Probabilit
+
+
+
+
+             var1                  var2
+y
+
+
+
+
+                                          Voice
+                                          Pitch
+Discriminative approach
+       [Vapnik
+       85]
+
+
+
+
+                     Voice
+                     Pitch
+          Well Behaved Data
+
+
+
+â€¢ Data for male/female generated according to normal distributions.
+â€¢ Estimated Mean and variance converge quickly to true values.
+â€¢ Generative method converges (much) faster than discriminative method.
+â€¢ Only viable method when number of training examples is small
+   (<10,000).
+              Ill-behaved data
+
+
+                mean
+                       mean
+                1
+ Probabilit
+
+
+
+
+                       2
+mistakes
+No. of
+ y
+
+
+
+
+                                 Voice
+                                 Pitch
+      Traditional Statistics vs.
+         Machine Learning
+
+                    Machine
+                    Learning
+                  Estimated    Prediction
+Dat                 world          s
+ a    Statistic                 Actions
+                    state
+      s
+                 Deep Learning
+â€¢ In the discriminative family.
+â€¢ Claim: because we have many labeled training examples,
+  we can use as many parameters as we want and never
+  overfit.
+â€¢ Approach: Use models with many parameters, and train
+  until training error 0.
+â€¢ Famous success cases: Alpha-Go, machine
+  translation.
+â€¢ Problems:
+  â€“ Restricted labels: can we make use of unlabeled data
+    (auto-encoders vs PCA)
+  â€“ Collecting a representative training set can be        23
+Back To Kmeans
+
+
+
+
+                 24
+
+--- end {10.1_lec.pdf} ---
+--- start{10.1_transcript.txt} ---
+(upbeat music) - [Instructor] So we have worked with principal component analysis, and saw what it can do for us and how it can explain
+the variance in the data. And this points to a more
+general set of methods, where principle component
+analysis is just one of them, all based on minimizing
+root mean square error. So we're going to do a
+little review of them and just about the way of thinking about a problem that lends itself to doing root mean square
+error based modeling. So we have a situation where
+we're getting some data. The data comes from the real world. It's not data that we generated. So therefore we don't know
+exactly how to model it. But what we do is we find some kind of simple mathematical model. This is this blue box. And using this model, we generate predictions of
+the different measurements. And so if our model is good, then our predictions will
+be close to the values that they correspond to. The way that we typically would measure how close they are in this RMSE approach is that we take the difference between x, the vector that we observe, and o, the vector that we predict, and take the square of
+the norm of that, okay? And then we average that
+over all our examples so that the root mean squared error. So this is because of the root of the mean of the squared error, okay? So that's the basic idea
+of what we're going to do. So let's look at the simplest case in which we're just trying
+to predict a set of numbers. Okay, so we have numbers,
+data points x1, x2, xn in R to the D, in Euclidean
+space to the D, dimension D. And then we want to find a single point such that the mean squared error to the points that were given is minimum. And it turns out that the thing that minimizes this
+RMSE is the mean, okay? So the mean of all of the points gives us the best point
+in terms of representing all of these points with
+a single point, okay? That's a nice property of squared error. Next, let's think about what we do when we do principle component analysis. So now we have data that is in R2. These data points that we see here, and we want to find
+the top K eigenvectors. Now here, the top K, the
+total dimension is 2, so the top K has to be 1. So we have some dimension one, and we basically take as the
+reconstruction or the output, we take the mean plus the
+projection on the first vector. And how does that look? That looks like something
+like a line that is like that. That is the direction of v1. And when we want to
+measure how good this is, we measure the distance from each point to the closest point on the line, to the projection on the line. That is the thing that we're minimizing. And that's the thing that gives us, if these distances on average are small, then we say that this is a good
+representation of the data. So that's the kind of thing that we have been doing
+in the weather data. There's another approach. There's another approach
+to explaining data. And that is if you have
+one of the coordinates, let's say y here, which is
+the preferred coordinate. That's the coordinate we want to predict. All the others are just input. In that case, what we're
+talking about is regression. We have a set of points,
+x1, y1, x2, y2 and so on where x is a vector
+and y is just a scalar. And then, the thing that we're
+trying to predict is y. So we generate y hat, which is a linear
+combination of a constant plus a coefficient multiplied
+by the ith coordinate, okay? When we do that, we get a line that is slightly different than the line we got before. And that is because the
+distances that we're minimizing are these vertical distances
+between x and the line, the point on the line, rather than the closest point on the line. So this is based on assuming that y is the most important thing
+that we're trying to predict. And we basically generate
+the approximations as the points that are on the line and that are at the same x
+value as the point itself. And the RMS Error here is
+when we take the difference between yi and yi hat, okay? So now it's a difference that
+is going on the vertical axis. Now let's talk about something different. K-means clustering. You're probably all familiar
+with finding the k points that are closest to all the points. The one mean we already
+said it's the mean. It's the mean of all the data. But the two mean or three mean is a more complicated problem, where we're trying to
+find here two points, such that for each point,
+the closest point to it is the closest representative
+for each of the data points, the closest representative
+to this data point. That's the distance that we care about, and that's what we're trying to minimize. So the RMS Error here in this case is xi, the data itself minus oi where oi is the representative
+closest to the point xi. Okay, so all of these generate quantities that are like variance, that are like sum of squares of things. And so what we can say is
+how much of the variance are we explaining using our model? So RMSE changes with the
+units of the measure, right? So if we measure in kilometers or in millimeters or in centimeters, we get different values. We want to normalize it somehow. And so the standard way is to normalize by seeing what is the trivial model. What is the model that
+is the most basic model at the level below us? So for PCA we said it's the mean, okay? For K-means, it would
+probably also be the mean because that's the explanation
+using one center, okay? So for PCA we use the RMSE k. So how much of the variance is explained by the top k eigenvectors, or what's the sum of the top K eigenvalues divided by the sum of
+all of the eigenvalues? And similarly for K-means, the explanation power, the RMSE of k, divided by the RMSE of
+using just one center, okay? So in both of these cases, we're looking at how much
+of the explanatory power, how much are we improving over the explanatory power
+of the most basic model. Okay, so we can think about this as when we're talking about
+PCA and the other methods, we can think about it
+as an iterative thing where we're generating a model. The model lets us do low dimensional
+representation of the data, and then we do a reconstruction from this low dimensional representation and measure the error. So here it is for PCA. We get k eigenvectors, and then we take a particular point, so a single year station
+measurement vector. And from that, we take
+the k top coefficients. So these are the K top coefficients that we get from our model. And then we can plug
+it back into our model and get an approximate
+reconstruction, right? So that was what we had when we looked at the depth of the snow. We would have the representation
+using just three numbers. And then from these three numbers, we reconstruct a signal that is supposed to be close to the original signal, okay? And then we measure the error by the squared error
+between this and this, okay? All right, now a similar thing
+we've done when we studied whether the spatial effect
+or the temporal effect are more important in terms of snow depth or in terms of the second
+coefficient for snow depth, okay? So what did we do in this case? We had the average per year
+and average per station. So we had two averages that
+could be used as a model. And then given station year, we could calculate the average, we could calculate a
+prediction for how much, just this vector of averages
+and this vector of averages if we use them together, how do they approximate the value of the actual second coefficient? And then that's the
+estimation of coefficient 1. And we compute the
+squared error again, okay? So in this case, the model itself is not a PCA model, it's a model of combining averages, but the general technology,
+the method is the same. So to say things in more generality. So we fix some things. So that's what we fix in the model. And then we learn the
+model parameters, right? So from the data, we learned
+parameters for the model. Then when we have a single data point, we get a compressed representation
+of that single point, and then we get an
+approximate reconstruction. And from this reconstruction, we calculate the squared error, and the minimization of the
+squared error is the goal of choosing the model. So sometimes it can be
+done in closed form, like in principle component
+analysis or regression, but sometimes it actually
+has to be done using some kind of iterative
+algorithm just like in K-means. Okay, so this brings us to distinction that I think is useful to know in general. So suppose that we have
+some data x1 to xn. And we can distinguish
+two types of things. One is extensive. So these are quantities
+that scale linearly with N. So like for instance, the
+coefficients that we have for each one of the
+stations, it scales linearly with the number of station
+years that we have, okay? So it reduces the number from
+365 times N to 3 times N, but it still scales like N, so it's an extensive quantity. An intensive quantity is a quantity that doesn't scale as fast
+with the amount of data. So it scales maybe not at all, or it scales logarithmically
+typically in terms of how many more bits we need
+to express this thing. In the situation that we're in, the model is an intensive property, so it's relatively, especially
+when you have a lot of data, the model takes very little space. And then this single data point is one of the N data
+points, so it's extensive. This is extensive, and
+then this is extensive. But the model that combined
+these things together or the parameters that define the model, those are intensive. So you can think about them as these are the essence of our distribution that doesn't change very much if we get more and more and more samples. It changes a little
+bit, but not very much. So what is a good model? From x, from the original
+data point, to r, we have dimensionality
+reducing mapping, okay? X and r and o, the output,
+these are all extensive, okay? A good model is one which
+reduces the dimension with only a small increase
+in the RMSE, okay? So we can always say that a model is simply remembering all of the data, but a model that is more useful
+is a model which is small and compresses the data, and doesn't create a lot of noise, a lot of error in the RMSE sense, okay? So when N is large, then a
+larger model is justified. So basically, when we have more and more data, we can actually get our
+accuracy of our parameters to be better and better. And that will require a few more bits. Typically, something like log N bits. Why log N? You can think about taking
+an average of N numbers. The average basically
+involves taking the sum. So you are summing N numbers. So you get a number that
+is about N times larger. And the number of bits that you need in order to store that number
+exactly is log N, okay? So that is why the parameters, the storage for the parameters
+typically scales like log N. Or it doesn't scale at all
+if you basically decide, no, beyond this accuracy, I don't really want to
+know the accuracy anymore. I don't want any more
+accuracy in my estimates. Suppose we're given some
+d-dimensional data here, 2-dimensional data, okay? These our data points. And we don't really know
+much about this data, but it looks like it actually is organized along this curve, okay? Okay, so what are we going to do is we're going to fit to this model with a small number of parameters. Let's say this curve that we put here. This curve is going to be our model, okay? So it's a simplified
+represent approximation of this point cloud, how this
+point cloud organized, okay? And so each data is approximated by taking the closest
+point on the model, okay? So if we take this point here, then it's going to be
+mapped to this point here, which is on the curve and is the closest point
+to the blue circle. One useful thing about
+putting things on the curve is that now we don't need to represent it using two parameters, but there is enough to use one parameter. So we can think about this
+parameter scaling from 0 to 1, which basically goes
+smoothly along the curve. And so this point can
+be represented as 0.52, a single number, okay? And that is what we call
+dimensionality reduction. The distance that we
+have between the point and the approximation is
+the error, the RMSE error. We want the average
+root mean squared error or percentage of the variance
+explained to be high. So to summarize. Models in general are small
+approximate representations of the data distribution. Each data point x is mapped into a smaller representation rt. So that's the representation. And the model maps the rt back
+to a reconstruction, okay? So we go from x to a
+compressed representation. Let's say the top eigenvectors. And then from that three top coefficients, we represent it back as a vector. And then we measure the
+distance between them. And the average distance, that's the quantity
+we're trying to minimize. While at the same time having the data be as compressed as possible. So the more compressed the data is, the worse the error. But that's the trade off
+that we're looking for. Okay, so the model and model
+parameters are intensive. Those kind of capture important quantities that don't scale with
+the number of examples. And the x, r, t and o are extensive. Xt to rt is a dimensionality
+reducing mapping. So to compare these relationship to other approaches and statistics, we have the RMSE approach,
+which we talked about. We can have goals that are
+different than the RMSE. We want the parameters to capture something about the true distribution. So we endow these parameters
+that we're measuring by a meaningfulness beyond
+being able to reconstruct. A generative approach
+is a different approach, which basically says what we're trying to do is create a mechanism that generates data that
+looks like our data. So examples of that are
+mixtures of Gaussians and HMMs. Generated distribution
+approximates the true distribution. And the performance is
+measured using likelihood. The main goal is to capture the parameters of the distribution. So what we had here is another goal. This is here the main goal. So we want to know what is really the rate at which the temperature
+of the water is increasing. So we are really interested in the estimation of that
+underlying parameter. Discriminative approach is where the model predicts
+output given the input. So examples of that are perceptron, decision trees, neural networks. Generated predictor approximate the input output relationship. And performance is measured
+using average loss. It can be RMSE, it can
+be number of mistakes, it can be log loss. There are various things. But what we're trying to do here is specific to mapping
+an input to an output. Like regression is of that type. And there is no other goal. So the point here when we're
+doing these kind of modeling is just to get a good predictor, not to try to understand what
+are the underlying parameters.
+--- end {10.1_transcript.txt} ---
+--- start{10.2_lec.pdf} ---
+10.2 Data in
+High
+Dimensions
+DSC 232R, Class 10: RMS
+1 Data in High Dimensions/ The Curse of
+Dimensionality
+ïƒ    Random vectors in high dimension behave very differently from low dimensional
+    vectors
+ïƒ    Our intuition fails us
+ïƒ    For a better understanding, rely on the law of large numbers and central limit
+    theorem
+2.1 The Length of a Random Vector
+
+ïƒ 
+               ïƒ 
+
+2.2 What is
+the
+Explanation?
+2.3 What about the Distance Between
+Two Random Vectors
+Drawn from the same gaussian
+3 Two Gaussians
+
+ïƒ 
+3.1 The Length of a Random Vector
+
+ïƒ    If the data is two dimensional, it behaves like we would expect â€“ most vectors have
+    length close to 5
+ïƒ    As the dimension increases, the length of the vectors becomes dominated by the
+    coordinates with mean 0
+3.2 Compare with a Single Gaussian
+
+ïƒ 
+3.3 Distance Between Two Points
+
+ïƒ 
+3.4 K-nearest-neighbors Fails in High
+Dimensions
+ïƒ 
+4 Dot Products
+
+ïƒ 
+4.1 Summary
+
+ïƒ    The 2d and 3D intuitions break down at high dimensions. The lengths of vectors,
+    the distance between vectors and the dot products between vectors all become
+    highly concentrated and therefor not informative
+ïƒ    The curse of dimensionality: Most statistical methods break down at high
+    dimensions
+ïƒ    A way out: some high dimensional data has low intrinsic dimension
+ïƒ    For example: small number of PCA eigenvectors explain alarge fraction of the
+    variance
+
+--- end {10.2_lec.pdf} ---
+--- start{10.2_transcript.txt} ---
+(upbeat music) - [Narrator] Hi, we've talked about the power of using
+principle component analysis to do dimensionality reduction. Take a data that is 365 dimensional down to three dimensional. And the question is, why are
+we so excited about that? Why can't we just leave data in its original high dimension and just do our machine learning that way? Well, there are some issues
+come up when you do that, data doesn't behave in high dimensions the way that your intuition is when you talk about low dimensions. So let's think about a few of those cases. So suppose we have a single gaussian, so something like this, and we are doing it now in end dimensions, I can draw end dimensions,
+so I'll just draw two, so this is the second dimension and it's also gaussian in this way, okay? So it's gaussian in both
+of these directions. So it's a spherical gaussian. And now we want to ask, what's the distribution of
+the distance from the origin? Okay, so here, when we
+talk about one dimension it's pretty clear that the distribution of the length would be like
+a gaussian, so let's see. So what we see is, that the
+length when the dimension is two is indeed very close
+to the gaussian, okay? Or to the distribution that is derived from the gaussian when you
+take absolute value, okay? So that's what you get in dimension two. But when you go to dimension 10 it starts to behave differently. Right here, the mean is
+about 1.2 or something, here the mean is three, here, when we're in dimension
+200, the mean is about 14, and when we're in dimension
+2000, the mean is about 45. But not only is the mean about 45, but it's very, very, the distribution, the variance
+around it is very small, it's kind of something like standard deviation of two or three. Okay so we never see any values here, and we never see any values here. We see values only in a particular place. So even though our intuition is that if you have a gaussian
+that looks like something like maybe contours or
+like something like this. In high dimension, everything
+that is here doesn't matter. The only thing that matters is data that is somewhere around some
+kind of variation here so, let me use another color, so there is some distance
+where almost all of the vectors are that distance from the center, and that's just because
+the dimension is high, it's not because we change
+this spherical structure or the gaussian or anything like that, so that's already kind
+of surprising, right? So we have, that if you take
+a vector generated by gaussian or by any distribution,
+any reasonable distribution that is spherical, you get
+that there is one distance that is predominant and then distances larger
+or smaller than that, are just, never occur, okay? Okay, what's the explanation of this? Why is that so? Well the length of a vector X is the sum of the xi squared, square root. Now because the distribution is gaussian these terms xi are also
+independent from each other, okay? That's just the property
+of gaussian, okay? Now as the mean of the gaussian is zero, the expected value of
+xi is about one, is one no dependence on d, that's the variance of xi, and the variance of xi
+squared, is also some constant, also not dependent on d. And therefore when we're adding these independent random variable, we're adding d of them, then we get the length that we get is
+square root of cd, okay? So that's the new length. Now the distribution of xi
+is concentrated around d, and the distribution of sum of xi squared is concentrated around square root of d. Why is that? Because the length is d and the standard deviation
+is square root of cd. So as d increases, cd relative to d becomes smaller and smaller, okay? So if we are right C square
+root of d over the mean d, so the variance over d, and that is like C over square root of d. So as the variance increases, as the dimension increases, the relative variance
+of the length decreases and that's what creates
+this concentration. Okay, so that's two vectors that's a single vector, what's its length? Now what about the distance
+between two vectors that are drawn from the same gaussian? So again, what we have is
+that in small dimension it behaves like what we would expect, but as we increase the dimension, the distribution becomes
+highly concentrated around a particular value. So take any two random vectors from this gaussian distribution, they almost always have the
+same distance from each other. So now when we think about things like using distance, like
+nearest neighbor and so on, it's clear that we have some trouble. So maybe these strange things happen because we're taking the
+data from a single gaussian. Maybe if we take it from two gaussians that are distant from each other, then it'll not happen, okay? So here is what we're going to do. We're going to basically generate, generate two gaussians,
+like one here and one here this one at minus five,
+and this one at five, and then the other dimensions are always going to be zero, okay? So these are the two
+gaussians we're generating and we're going to ask the same question, what is the length of
+a typical vector, okay? So what would we expect? We expect most of the vectors
+to have length close to five, and as a dimension increases, the length of the
+vectors becomes dominated by the coordinates with mean zero. So what do I mean by that? Here we have the dimension two, so we see that that the
+mean is indeed five, at dimension 20, the
+mean is more like seven, and then now a dimension
+200 the mean is 15 and at 2000, the mean is 45, okay? So we see that the distance
+between the vectors has very little to do with the distance between the centers of the gaussians. It has more to do with the dimension because the dimension increases the distance between vectors irrespective of where the mean of
+where they were generated. Okay, so to compare
+with a single gaussian, in dimension 2000, the
+distribution are almost the same, concentrated around
+square root of 2000 is 45. We cannot use distance
+distribution to distinguish between k equal one
+and k equal two, right? We cannot say that there is more centers, less centers based on the distribution. Okay, now let's think
+about the same distribution but distance between two points. So we have the same two
+gaussians at minus five and five and now we're going to take
+a single point from here and another point from somewhere, from maybe from here, maybe from here. Clearly if the points
+are in different places we expect the distance
+between them to be 10, and if they're from the same place we expect it to be close to zero, so let's see what actually happens. So indeed in dimension two, we have distance close to
+zero if they're the same and distance close to 10 if
+they are from different centers. And similarly here, so
+you have these two peaks even though the distances are
+now not the correct distances, at least we can distinguish
+between the case that the two points are
+from the same gaussian or they're from different gaussians. But once we go to 200
+and definitely in 2000, all of this goes away, the distance between
+the vectors is dominated by all of these other coordinates. And so we cannot really tell if they're from the same center
+or from different centers. So K-nearest-neighbors is likely
+to fail in high dimensions. Suppose that we have gaussians that are labeled plus one or minus one, and we use K-nearest-neighbor to identify the cluster
+which the point came from, in low dimension that works
+but not in high dimension. So given any two vector,
+the distance between them is about square root of
+d, regardless of whether they come from the same
+center or from different ones. Okay, so the distance loses
+its information power, it doesn't tell us
+really where things are. Let's think about one more thing that we could measure is dot products. So when we take dot
+products between two vectors that are coming from these two clusters, the result, what we expect
+is it should be either minus 25 if they come
+from the opposite centers or plus 25 if they come
+from the same center. Okay, so plus minus 25 seems like a lot but when we reach high
+dimension it all fails, right? So what we have is that, with the dot product in
+two dimensions indeed we have it centered with minus 25 or 25. And even at 20 it's a
+pretty good separator. And at 200 it's maintains
+some power of separation, we see that there are two
+peaks in the distribution, but once we reached 2000, then there's absolutely no
+information in the dot product, it does not tell us what
+is going on with our data. Okay so to summarize,
+the 2d and 3d intuitions, break down at high dimensions. The length of the vectors and the distance of the
+vectors and the dot product between vectors all
+become highly concentrated and independent of the
+structure of the data. So they depend really
+only on the dimension. The curse of dimensionality, is that most statistical methods break down at high dimensions. A way out, is to find
+some high dimensional data has low intrinsic dimension. For example, if you have small
+number of PCA eigenvectors to explain a large
+fraction of the variants, that's a case in which you have found low intrinsic dimension and now a lot of these
+methods work much better. So, that's what I wanted
+to talk about today and I'll see you next time.
+--- end {10.2_transcript.txt} ---
+--- start{9.1_lec.pdf} ---
+9.1 Functions
+As Vectors
+
+
+DSC 232R, Class 9: PCA for Weather Data
+Temperature Per Day as
+a Function
+
+
+The records of temperatures for
+each day can be represented as a
+function from 1, 2, 3, â€¦ , 365 to
+the temperature on that day
+(0=Tmin, 1=TMAX, 2=TOBS)
+
+
+We want to find a way to
+approximate these functions
+using a set of basis function
+How can We Visualize Vectors that are in
+Dimension Higher than 3?
+ïƒ 
+All of the Vector Operations are well
+defined, including approximating a
+function using an othernormal set of
+functions
+Function Approximation
+
+For simplicity, consider the vectors that are defined by sinusoidal functions.
+Define an Orthonormal Set
+The dimension of the space is 365 (arbitrary choice: the number of days in a year).
+We define some functions based on sin() and cos()
+
+
+                                                       Const
+
+                                                       Sin
+Check that it is an Orthonormal
+Basis
+ïƒ    This basis is not complete it does not span the space of all functions. It spans a 9
+    dimensional sub-space
+
+
+ïƒ    We will now check that this is an orthonormal basis. In other words, the length of
+    each vector is 1 and every pair of vectors are orthogonal.
+Rewriting the Set of Vectors as a
+Matrix
+ïƒ    Combining the vectors as rows in a matrix allows us use very succinct (and very fast)
+    matrix multiplications instead of for loops with vector products
+Approximating an Arbitrary
+Function
+ïƒ 
+Approximations of Increasing
+Accuracy
+ïƒ 
+Reconstruction from 1D Projection
+Approximations of Increasing
+Accuracy
+ïƒ 
+ïƒ 
+Reconstruction from 1D Projection
+
+
+                           Residual
+
+
+
+
+                           Residual
+Plotting the Approximations
+
+ïƒ 
+Cont.
+Recovering from Noise
+Summary
+
+ïƒ 
+
+--- end {9.1_lec.pdf} ---
+--- start{9.1_notebook.md} ---
+Here is the converted content for **9.1_notebook.ipynb**:
+
+```markdown
+```python
+%pylab inline
+
+import numpy as np
+import matplotlib.pyplot as plt
+from ipywidgets import interact, interactive, fixed, interact_manual,widgets
+import ipywidgets as widgets
+
+print('version of ipwidgets=',widgets.__version__)
+
+from lib.Reconstruction_plots import *
+from lib.decomposer import Eigen_decomp
+from lib.YearPlotter import YearPlotter
+
+import warnings
+warnings.filterwarnings('ignore')
+_figsize=[8,6]
+
+```
+
+```python
+"""
+RETURNS ->
+
+%pylab is deprecated, use %matplotlib inline and import the required libraries.
+Populating the interactive namespace from numpy and matplotlib
+version of ipwidgets= 8.1.8
+
+/home/scotty/dev/dsc232/lec/week_05/.venv/lib/python3.11/site-packages/IPython/core/magics/pylab.py:166: UserWarning: pylab import has clobbered these variables: ['interactive']
+`%matplotlib` prevents importing * from pylab and numpy
+  warn("pylab import has clobbered these variables: %s"  % clobbered +
+"""
+
+```
+
+## Functions as vectors
+
+### temperature per day as a function
+
+The records of temperatures for each day can be represented as a function from  to the temperature on that day (0=TMin, 1=TMAX, 2=TOBS).
+
+We want to find a way to approximate these functions using a set of basis function.
+
+<img src="Figures/TemperaturesExamples.png" width="600">
+
+* How can we visualize vectors that are in dimension higher than 3?
+* One good way to visualize a -dimensional vector is to draw it as a function from  to the reals.
+
+```python
+d=4
+plt.stem([1,-3,2,0])
+grid()
+
+```
+
+```python
+"""
+RETURNS ->
+
+<Figure size 640x480 with 1 Axes>
+"""
+
+```
+
+* All of the vector operations are well defined, including approximating a function using an orthonormal set of functions.
+
+To get an intuition about the working of the PCA, we used an example in the plane, or .
+While useful for intuition, this is not the typical case in which we use PCA. Typically we are interested in vectors in a space whose dimension is in the hundreds or more.
+
+How can we depict such vectors? If the coordinates of the vector have a natural order. For example, if the coordinates correspond to a grid of times, then a good representation is to make a plot in which the -axis is the time and the -axis is the value that corresponds to this time.
+
+Later in this class we will consider vectors that correspond to the temperature at a particular location each day of the year. These vectors will be of length 365 (we omit the extra days of leap years) and the PCA analysis will reveal the low dimensional subspace.
+
+### Function approximation
+
+For simplicity Consider the vectors that are defined by sinusoidal functions.
+
+```python
+# We define a grid that extends from o to 2*pi
+step=2*pi/365
+x=arange(0,2*pi,step)
+len(x)
+
+```
+
+```python
+"""
+RETURNS ->
+
+365
+"""
+
+```
+
+#### Define an orthonormal set
+
+The dimension of the space is 365 (arbitrary choice: the number of days in a year).
+
+We define some functions based on  and 
+
+```python
+c=sqrt(step/(pi))
+v=[]
+v.append(np.array(cos(0*x))*c/sqrt(2))
+v.append(np.array(sin(x))*c)
+v.append(np.array(cos(x))*c)
+v.append(np.array(sin(2*x))*c)
+v.append(np.array(cos(2*x))*c)
+v.append(np.array(sin(3*x))*c)
+v.append(np.array(cos(3*x))*c)
+v.append(np.array(sin(4*x))*c)
+v.append(np.array(cos(4*x))*c)
+
+print("v contains %d vectors"%(len(v)))
+
+```
+
+```python
+"""
+RETURNS ->
+
+v contains 9 vectors
+"""
+
+```
+
+```python
+U=vstack(v).transpose()
+shape(U)
+
+```
+
+```python
+"""
+RETURNS ->
+
+(365, 9)
+"""
+
+```
+
+### Approximating an arbitrary function
+
+We now take an unrelated function 
+and see how we can use the basis matrix `U` to approximate it.
+
+```python
+f=abs(x-4)
+
+```
+
+```python
+eigen_decomp=Eigen_decomp(x,f,np.zeros(len(x)),U)
+plotter=recon_plot(eigen_decomp,year_axis=False,interactive=True,figsize=_figsize);
+display(plotter.get_Interactive())
+
+```
+
+```python
+"""
+RETURNS ->
+
+VBox(children=(HBox(children=(FloatSlider(value=0.0, description='c0', max=32.29570559348949, orientation='verâ€¦
+"""
+
+```
+
+#### Food for thought
+
+Visually, it is clear that  is getting close to  as  increases. To quantify the improvement, compute
+$ | g(i)- f |_2 $ as a function of 
+
+### Recovering from Noise
+
+```python
+noise=np.random.normal(size=x.shape)
+f1=2*v[1]-4*v[5]
+f2=f1+0.3*noise
+
+```
+
+```python
+eigen_decomp=Eigen_decomp(x,f2,np.zeros(len(x)),U)
+plotter=recon_plot(eigen_decomp,year_axis=False,interactive=True,figsize=_figsize);
+display(plotter.get_Interactive())
+
+```
+
+```python
+"""
+RETURNS ->
+
+VBox(children=(HBox(children=(FloatSlider(value=0.0, description='c0', max=2.031575791925349, orientation='verâ€¦
+"""
+
+```
+
+```
+
+```
+
+--- end {9.1_notebook.md} ---
+--- start{9.1_transcript.txt} ---
+(mellow instrumental music) - [Instructor] Hi. So, we talked about PCA, and I showed you a little bit
+about the weather patterns. And now we're going to start putting these two things together, okay? So, how do you do weather patterns PCA? Use functions as vectors. Let me see, let me
+explain what that means. Suppose that we have this pattern of temperature as a function
+of the day of the year. So, simply put, January
+is the coldest month in Massachusetts and July and
+August are the hottest months. Okay, little surprise there, but there is much more pattern going on into the measurements of
+Tmax and Tmin and T observed. And we want to somehow capture
+what this pattern means. So, one way we can think about it is that we have a function
+from the day of the year, okay, to the particular temperature,
+let's say Tmax, okay? So, to the orange line. So, now we have a function, and now we want to see how we
+can represent this function. So, how can we visualize vectors that are higher dimension than three? Well, we can just think
+about it as a mapping from the numbers one, two, up to d, in our case up to 365, to a value. So, here is suppose that
+we have just four values, and so one, minus three, two, and zero. Then we can represent it as this function that has the value one on zero, the value minus three on one, the value two on two, and the
+value zero on three, okay? So, we basically forced
+this sequence of numbers to be represented as a function. So, this kind of mapping
+gives us something that is well defined and,
+in terms of vector space. So, it allows us to take
+sum of two functions, take function times some constant, takes even the dot
+product of two functions. So, in particular, it lets
+us do function approximation. So, we want to approximate
+a given function, of measurements let's say, using some kind of basis set of functions, an orthonormal basis of functions. Here we're going to use sinusoids
+as our orthonormal basis. And these are the functions that we have. We have nine functions. The first one is simply a constant. And this is sine is the next one, and then we have cosine, sine of two x, cosine of two x, and so on. They look something like this, okay? So, this is here is the constant, and then sine looks like
+this, the orange line, and cosine looks like
+this, the green line, okay? So, all of these functions, it turns out, form an orthonormal basis. So, you can take each function
+and measure its length or its dot product with itself,
+and that will give you one. And you can take any two functions, take the dot product and
+that will give you zero. So, we're going to check that here. We basically take for every pair, i and j, we take the dot product
+and we just print out the dot product just to one decimal point. And what we see is indeed that
+if you look at the diagonal, so the elements that are the
+vector dot product with itself, you get one, and if you
+look at, off the diagonal, you always get zero, okay? So, it is indeed an orthonormal basis. It's not a complete basis because our vectors have length 365. And so, for a complete
+basis we need 365 vectors, but we're just going to use these. Okay, so we are going
+to use matrix notation because that's easy to do
+when you're working in NumPy, and that's simply just stacking the nine vectors that we have. And we get a matrix that is
+365 rows by nine columns. Each column is one of the
+vectors, one of the sinusoids. And now we want to approximate
+an arbitrary function, okay? So, we're taking function
+that is not a sinusoid at all, this x minus four absolute value, and we're going to try to approximate it. Okay, so here is our
+function, x minus four, and you see that it is very
+far from any sinusoids. Nevertheless, you'll see
+that we can approximate it with sinusoids better and better as we increase the number of frequencies. Okay, so what are we talking about? We're talking about this
+reconstruction matrix, reconstruction formula, sorry, that says that if you want to
+approximate the function g using i basis vectors what you do you take the dot product of
+the function with itself, not with itself, with the basis function. And then that gives you the coefficient. And the coefficient you
+multiply again by the vector, by the unit vector, okay? And this sum is an approximation of the original function f, okay? So, we're going to do that
+first just in two dimensions. Oh, one thing I didn't mention is that what we're interested
+is that the difference, or the norm, between the
+approximation and the function will be as small as possible, okay? So, we're going to look first at a one-dimensional reconstruction. And in this reconstruction we
+have points in two dimension, and we have two candidate basis vectors. One is this red line, and the other is this green line. And intuitively the green line is a much worse approximation
+for our function. So, how do we see that? So, we're given this function, fx is x minus four absolute value, and we want to approximate
+it closer and closer using our sinusoidal basis functions. So, what does that look like? Well, basically the use
+of an orthonormal basis is always using this basic formula, which says you take any one of the ui's and you take the dot product
+of it with the function. And then you get the coefficient. And then you multiply
+this coefficient again by the same basis function, and you sum over the basis functions. Not over all of them, but
+over j from zero to i, okay? So, the larger that i is the
+better this approximation, gix, is to fx, okay? So, we get closer and closer by projecting and adding the terms of the
+orthonormal reconstruction. And the distance that we are
+interested in between f and gi is simply the norm of gi minus f, okay? So, specifically just to start, let's think about just reconstructing a two-dimensional vector
+with one unit vector, with one basis vector, okay? So, we have this function g one, that is our point in two dimensions, which is a simple thing here and our point in two dimensions. And then we multiply that by
+u one to get the coefficient, and then we multiply the
+results by u one again to get our approximation g one, okay? And the residual, the error that remains, is the point minus g one, okay? So, now that would be the
+part that we would try to minimize using let's
+say u two and so on. In this case the dimension is two, so if we have u one and u two we have perfect reconstruction. So, let's see how that actually looks. So, suppose that we're looking
+at this point here, okay? And we want to reconstruct it, and we want to reconstruct it considering one of two unit vectors. This is maybe u one, and then another one
+here that is u two, okay? Let's start with u two because
+it is significantly worse. And so, that kind of explains why the choice of u is important. Here we project the point that we have onto the direction u two
+to get the dot product, which is this length, okay? And when we multiply it by u two again we get this point here. So, the residual now is this,
+this is the residual, okay? And the residual is pretty large. On the other hand, had we
+used this vector, u one, then the reconstruction
+would've been this point, and then the residual would
+be, have this length, okay? So, you see that if we
+choose this vector, u one, then for most of the points that we see the distance between the
+point and the projection to the direction u one is
+small, and that's why u one would be a preferred basis vector, okay? Let's see how that works when
+we are doing the sinusoids. So, what we're going to
+show is these approximations where we have g one, g
+two, g three, and so on, where the approximation
+becomes better and better the residual becomes smaller and smaller. And this is how we see it right now, so let me get rid of that. Okay, so what we have here is worthwhile a little bit of explaining. So, we have nine, one, two, three, four, five, six, nine coefficients for the nine vectors, and the coefficients are
+initially all set to zero, okay? So, basically what we're starting with is the function zero, okay? You see down here, the green line, is the function zero, okay? And now as we start to,
+as we move these scales we are changing the coefficient for the basis function, okay? So, here we have changed the coefficient of the constant basis function, and we see that now the
+green line is much closer to the middle of the
+range of the function. And if we add more and more coefficient what we see is that the
+result is closer and closer to our function that we're approximating. Now, even if we have
+all of the coefficients we see that the approximation
+is far from perfect, right? So, if we look here the
+approximation is pretty good, but if we look here the
+approximation remains not so great. So, it's not a perfect approximation, but it is somewhat surprising how well we're approximating the original function using just these functions
+that look like sinusoids, okay? So, this is an example, and this kind of interactive widget we will use it later to do
+other kinds of reconstructions and understanding of what
+is going on with our data. So, one thing that doing
+this kind of reconstruction using sinusoids that is pretty powerful is that it is a good way
+to get rid of noise, okay? If you have data that is noisy, and here what we have is
+basically normal noise added to this function that is two v one minus four v five, okay? So, let's see what that looks like. It looks like something like this, okay? So, the blue is the original
+function without the noise, and added the noise we
+get the orange line. So, the question is can
+we recover the blue line when we're given only the orange line? So, we can think about
+various kinds of averaging, but a better way is to take into account that this function is just a combination of v one and v five. We don't know that these
+are the coefficients, but that we can infer from the data. So, here we have the data, let me zero it out again. So, we have that, we have this, okay, so right now we have the
+approximation just being zero, and the function that
+we see is very noisy. And we can see, we know
+how it was constructed so we can guess, but it's very hard to see how to actually extract this underlying, non-noisy structure. So, the way that we're going to do it is we're going to look at the coefficients that we added before,
+okay, so it's not this one. It's this one and this one. You see that these two are reconstructing the original data very accurately even though there is a
+large amount of noise. And if we look at the other coefficients their effect is actually pretty small. So, we can not only remove the noise, but we can find the coefficients
+of the underlying shape. To summarize, functions can be used, be thought of as vectors and vice versa. The Fourier basis is a basis
+of orthonormal functions that are made out of sines and cosines. And orthonormal functions
+can be used to remove noise added to underlying distribution, and this kind of noise
+removal is something that we will use extensively when we go to the weather application. So, I'll see you soon, bye.
+--- end {9.1_transcript.txt} ---
+--- start{9.2_lec.pdf} ---
+dimensionality reduction
+decompose_dataframe extracts the series from the row, computers the ğ‘˜ to decomposition
+coefficients and the square norm of the residuals and constructs a new row that is reassembled
+into a new dataframe.
+
+
+For more details, use %load lib/decomposer.py
+Letâ€™s do some decompositions!
+Join decomposition information with station information
+Removing years with little snow
+
+In some locations and in some years, there is almost no snow accumulation. We want to treat
+these separately.
+
+
+To do so we compare the error of using the average to the error of using a zero vector. We keep
+only those yearXstation where the mean is a better approximation than the zero Vector.
+Plot mean and top eigenvectors
+
+Construct approximation of a time series using the mean and the ğ‘˜ top-eigen-vectors. First, we
+plot the mean and the top ğ‘˜ eigenvectors.
+plot Percentage of variance explained
+Exploring the decomposition
+Intuitive analysis
+
+â€¢ Eig1 is very similar to the Mean --- Indicates heavy/light snow
+â€¢ If coef_1 is large: snow accumulation is higher.
+
+
+â€¢ Eig2 is a negative January, positive march. Indicates early vs. late season
+â€¢ If coef_2 is high: snow season is late.
+
+
+â€¢ Eig3 is positive Feb, negative Jan, March -- Indicates a short or long season.
+â€¢ If Coef_3 is high: Season is short.
+Studying the effect of Coefficient 1
+Studying the effect of Coefficient 2
+Studying the effect of Coefficient 3
+Interactive reconstruction
+Following is an interactive widget which lets you change the coefficients of the eigenvectors to
+see the effect on the approximation. The initial state of the sliders (in the middle) corresponds to
+the optimal setting. You can zero a positive coefficient by moving the slider all the way down,
+zero a negative coefficient by moving it all the way up.
+Studying the distribution of the coefficients
+Coeff_1-3 capture most of the variance in the snow-depth distribution.
+We can now look at how these coefficients vary from year to year.
+
+--- end {9.2_lec.pdf} ---
+--- start{9.2_transcript.txt} ---
+(upbeat music) - Hi, we've seen the general theory in power of principle component analysis and now we're going to test the ability of using principle component analysis to do dimensionality reduction, or to represent our data using
+a small number of numbers. Okay, so this is dimensionality reduction of PCA the snow depth of Massachusetts. Why are we using snow
+depth in Massachusetts? Because that's relatively speaking, a very clean signal that is
+relatively easy to analyze and to reason about. Okay, so to remind you, the basic operation
+that we're doing here is finding approximations of a vector. And the way that we measure the error from this approximation, of this approximation is the residual. So the original vector is V and the first residual is simply the difference between V and the average of all of our vectors. Okay, so that's the first zeroth residual. The first residual is then
+when we take the first residual and we subtract out the projection on the first eigenvector, okay. That gives us the first residual. And we can continue like that. Every time we take the residual, whatever is remaining, and we project it on the next eigenvector
+and we get another number v dot U2 in this case,
+that is the representation. And the residual is when we subtract from the previous
+residual that projection. Okay, and so we go on and generate an approximation like that and we hope that after a few steps we can get a very small residual. So what do we mean by small residual? We simply mean the
+square of the norm, okay, or the sum of the squares of the components of the residual. Okay, so the smaller this norm the better the approximation,
+the reconstruction. Okay, so a few things to
+remember about linear algebra. The zeroth for residual norm is square distance of V from the mean mu. The kth residual norm is
+the minimal square distance between V and the point on the hyperspace, hyperplane that is described
+by the first k eigenvector. So we say, okay, we can take
+any point on this first, on the linear combination of
+these first k eigenvectors and we're looking for the
+closest point to our point. That's the difference, the distance of that is the residual. So residual norms are non-increasing. The more eigenvector you
+add, the smaller they get. And the residual vector rn is always zero because if you have as many eigenvectors as the dimension of the space, you can always represent
+the vector precisely. Okay, so we have a code
+in decomposed data frame that you can look, but we're
+not going to go into it here. And basically that norm
+takes a set of vectors from a data frame, and it
+takes the statistical analysis of eigenvectors that we have and it computes the residuals
+and the reconstruction errors. So let's see what we get. So as I said, snow depth in Massachusetts. This is how we load the
+data into our data frame. And the most of the work of
+the loading is done here, df2.count simply because
+again, it is lazy execution. So we're not really
+loading anything when we, before we need to generate the number, here the number of records. Okay, so now we're going
+to join this decomposition information with station information. So we want to see for each station what is the longitude, latitude and so on. And so we generate this
+combined data frame. And another cleanup thing that we do is that we remove years
+with very little snow. So as it turns out, there are parts of Massachusetts where it rarely snows at all. So those basically have
+a snow depth of zero throughout the year. And if you include them, they
+tend to distort your analysis because zero can best be
+approximated just by a single zero. So it's better to think
+about it as separate cluster of almost no snow, and then
+deal with the rest separately. So we remove years that have little snow. Now let's see what we have in terms of the mean and the top eigenvectors. So top graph here that we see, this one, is it basically shows
+us that the deepest snow is more or less at the end of the winter, which is around January, February, March, March you have the end of the winter. And then it goes down to
+zero during the summer, there is no snow. No snow from April to, from end of April to
+beginning of September. And then in beginning of September there starts to be more snow, okay. So that's what we have and that's the mean. The eigenvectors are more
+interesting than that for the most part. So the blue one is eigenvector one, eigenvector one here. That's the blue line here that is very similar
+in shape to the total, to the average vector. So what happens when we
+add this average vector to this vector? We basically make it bigger or smaller. So what we see is that the biggest, the eigenvector with
+the biggest eigenvalue, the one that explains
+the most variance is the, is basically the amount of snow overall. If you have more snow, then you'll have positive
+coefficient with that. If you have less snow, you'll have negative
+coefficient with that, okay. Then the second and the third they look a little bit
+different and more interesting, and we will talk about them in
+more detail in a little bit. Okay, so the next thing is how much is the explanatory
+power of these eigenvectors? So the percentage of variance explained is basically what is the
+length of the residual relative to the original variance, relative to r1, which is
+the distance from the mean. And what we see is that this graph called the percentage
+of variance explained is increasing very rapidly. So it increases from zero, when we have no eigenvectors to about 55% when we have one eigenvector to after six eigenvectors,
+we have about 80%. So that means that on the average, if you take the six top eigenvectors and use that as your your dimensionality, as your representation of the vector, that explains 80% of the variance. So the residual is 20%
+in terms of its norm. Okay, so let's look at the decomposition in a little bit more detail. So first, let's think about intuitively, what do these vectors
+that we saw look like? So the eigenvector one we talked about is very similar to the mean. It indicates heavy or light snow. And if coefficient one is large, snow accumulation is higher. Eigen two is negative in
+January and positive in March, it then indicates an early
+versus late season, okay. So it basically pushes the
+beginning of the snow earlier or later in that year and station. So if coefficient two is
+high, snow season is late. And finally eigen three
+is positive in February, negative in January and March and that indicates short or long season. So if coefficient three is
+high, the season is short. Now why would you believe
+me about these vectors? This requires some digging
+into the to the files into into the actual reconstructions, and that's what we're going to do. But this is the first kind
+of intuitive explanation. And those explanations are important, because that's what connects your analysis to what people can relate to. They people can relate to a
+lot of snow or a little snow, a snow season that is early or late, or a snow season that is short or long. That means something in the real world. Okay, so let's look at
+first at coefficient one and try to convince
+ourselves that that's really the explanation here. So what I'm doing here is I'm taking the data frame generated by the reconstruction software and I'm saying I want the residual to be, the residual after one
+to be smaller than 0.1. And I want the coefficient, to sort according to coefficient one. So I'm basically sorting everything from coefficient one being very small to coefficient one being very big. And I ask for cases
+where this coefficient, the residual after this
+one coefficient is small. So this is the data frame that I get and here is the plot that I get. Okay, so what I get here is a sample of the values of the reconstructions when you have very negative numbers, - 1003, -999, and so on. What you see is that the
+target is very close to zero. It's not quite zero, because then we would've filtered it out, but it is very close to zero and much, much smaller than the mean in terms of snow depth, okay. So by subtracting a large
+amount of the first coefficient, we basically reduce the
+total amount of snow to something that is very close to zero. Okay, so that is the case when the coefficient is very negative. Here is the case when the
+coefficient is very positive. What you see now is that the
+the signal that we're trying, the purple signal here, is much larger than the average. You see here the average is down here and the signal that we're reconstructing is much, much higher than it. So this is a place where snow depth is much bigger than what is the mean. And indeed, you see that
+the first coefficient captures that very well, okay. So this is the first
+coefficient being very large compared to the other coefficient. So in absolute value,
+this is a very large value and this is also pretty large. And you see that as you
+go larger and larger the signal itself is much
+bigger than the mean. So this confirms what we were saying that basically this coefficient tells us if there's a lot of snow or
+if there's a little snow. What about coefficient number two? We do a similar thing,
+but now we are looking at coefficient number two and the residual for
+coefficient number two. And now the picture is more interesting. Here is the first case, the coefficient number
+two is very negative, the most negative. And what you see is that
+the snow starts early, starts like before the 1st of January. Okay, it starts here, and in all of those, if you compare it to the mean, you see that it tends to be
+earlier than the mean, okay. So all of these are earlier than the mean. And if we go to the opposite and we say, let's say
+the coefficient is large, then we see that the
+coefficient is always larger, that the start time of the
+snow is later than January. Okay, so that basically tells
+us that this coefficient moves the starting time
+from very early to late. Okay, finally, let's look
+at coefficient number three. Again, we just sort. We asked that the residual
+after three is 0.1, smaller than 0.1 and we sort according
+to coefficient three. And now what do we get? We get that if this
+coefficient is very negative, then the season tends to be long, right? So it tends to basically
+have a more flat shape, like this one that basically it is more, it started in January and stays more or less the same and drops, and in these other ones also. And here is the opposite. When the coefficient is very positive, you see that the season
+is relatively short. It starts at the end of January and it ends at the end of April, okay. So season is now a short season. So we have basically three parameters: one is the size, the second
+is the starting point, and the third is the width or the length of the snow season. So this is a way to explore what our reconstructions mean and see if they agree with our intuition. But here we're basically just looking at this kind of sample of places. Sometimes it is useful to look at a particular place and
+see what the coefficient and what the eigenvectors
+mean for that place. So we've looked at the
+reconstruction of snow depth in Massachusetts and we
+looked at it in a bulk way. We looked at individual years and stations that had
+large coefficient one or large negative
+coefficient one and so on. And we saw that the interpretation that we initially gave makes sense. But now we're going to look
+in a little bit different way. Suppose that were just given a station and the measurements that
+were of the snow depth and now we want to see what of the properties of the snow depth are captured by the three
+top eigen coefficients. Okay, so we're going to take just random station and years and see what we can understand from them using this interactive widget that you have access to in your notebooks. So here is our first example. The example here is
+all of the measurements are pretty much zero. So this is a very simple
+example, but let's do it anyway and see what that comes out
+to be in the coefficient. So these three sliders
+represent the coefficients. Initially, the values that
+is associated are all zero. So basically that means
+that we're not using any of the eigenvectors,
+we're just using the mean. And so what you get here is that all of the graphs
+are on top of the mean. As you slide the slider, you
+move it from zero coefficient to the actual best coefficient according to the orthogonal
+decomposition that we use, the closest point using
+the Euclidean distance. And here it is, we're
+adding or subtracting more and more of this first coefficient until we get to something that has much less snow than average, which is correct for this data. Now, if we add the other coefficients they make non-significant
+changes to the, to what we have. So really the main thing
+that we get is that if the value of the first
+coefficient is negative, let's say around -800, that means that we have
+practically no snow. Okay, second one is the
+more interesting one. Here it is. Here is the measurement graph
+that we see for this case. And we see that there's
+much, much more snow than average, than the average, it is the red line here, and that the snow starts, starts pretty late, like the end of January
+and ends early April. Okay, so let's see what the
+coefficients look like here. If I increase this one,
+I get to get, okay, so there's much more than average, but now if I add this one, you
+see the shape here changes. So now that the red shape starts later than average and also
+ends a little bit later than what we had before. Okay, and finally, when
+we add the third one we get a pretty good approximation of how the vector, how the behavior is. And we see that in this case we explained more or less how it started
+late and ended early. And that the height is pretty much a good approximation of the data. So we have a good approximation and we know that this is a lot of snow. This one means snow starts late and then this one means
+the season is short. Let's see, another one. This case looks pretty simple but similar. But here we see that the
+season doesn't start late. And so let's see. Here, we add and we get to the right total volume more or less. And when we add the second
+one, it actually is added with a negative coefficient -404, -673. And that basically moves our start to be a little earlier rather than later. And then when we add the last one that's pretty large and that
+makes the season shorter. So we get a short season,
+but doesn't start early. It ends really early and that's pretty much the approximation. So what you see is that
+these three numbers, these three coefficients that's what's called
+dimensionality reduction. Knowing these three numbers
+gives us the most information about the shape of the snow depth for that station and that year,
+and that's the point of it. So I recommend you play around with that, use different years and see
+that you can get some intuition about what these coefficients mean. Next, we're going to
+study the distribution of these coefficients. That'll be in our next video.
+--- end {9.2_transcript.txt} ---
+--- start{9.3_lec.pdf} ---
+9.3
+Visualizing
+Coefficients
+On a Map
+DSC 232R, Class 9: PCA for Weather Data
+Visualizing Coefficients on a Map
+Visualizing Coefficients on a Map
+Compute Spectral Decomposition
+Compute the count and average of
+coeff_1 for each station
+Cont.
+Map
+
+ïƒ    Each circle is centered at a station
+ïƒ    The area of the circle corresponds to the number of years SNWD was recorded at
+    the station
+ïƒ    The color fill of the circle corresponds to the value of avg(coeff_1) defined by
+    color-bar
+Is coef_1 related to elevation?
+Is coef_1 related to elevation?
+Is coef_1 related to latitude?
+Is coef_1 related to latitude?
+Is latitude related to elevation?
+Summary
+
+ïƒ    We saw how to use ipyLeaflet to present data on tops of maps
+ïƒ    We saw that in NY state, most of the snow accumulation is in the Adirondacks
+ïƒ    Snow accumulation increase with elevation, but the relationship is weak: locations
+    with elevation 400-600 meters have widley varying accumulations of snow
+
+--- end {9.3_lec.pdf} ---
+--- start{9.3_transcript.txt} ---
+(upbeat music) (transition swooshing) - [Instructor] Hi, we have
+looked at the coefficients of the principle components, the three top coefficients
+as a function of time, how they change from time
+to time, from year to year. Now, we want to look at how
+they change from place to place. So we need some kind of mapping
+device in order to do that. And there is a very nice mapping tool that you can use in Jupyter Notebooks, it's called ipyLeaflet. And we'll see how it works. So we are going to look at New York and the snow depth in New York. And first, we're going
+to do the same steps as we did before. We are going to compute
+spectral decomposition for the stations in New York. And that's what we are doing here. There are many cells
+here that I'm skipping. If you want to see all of the details, I highly recommend that you
+study the notebook by yourself. So now we're going to compute the count and the average of the
+coefficient for each station. Okay, so we have these stations. And what we want to know is what's the average
+coefficient across time? Because we are not looking at time, we're looking at average for all time. And how many measurements there were because we want to know if
+there were a lot of measurements for this place or fewer, okay? And now, we're going to put that on a map. So each circle is going to
+be centered on a station. The area of the circle
+corresponds to the number of years that that snow depth was measured, and the color corresponds
+to the coefficient. So it corresponds to the
+coefficients being small or high. So here is our map. And the one nice thing about it is that it's an interactive map. So we can basically zoom
+in as much as we want, and we can pan and look
+at different parts. And the map underneath it becomes
+as detailed as we want it, very much like Google Maps. And so what do we see? If we look a little bit out, we see that in most of New York, especially the south part, there is very little
+snow, relatively speaking. But if you go north, there is these mountains
+called the Adirondacks, and those mountains get a
+significant amount of snow. Some location get really
+quite a lot of snow and some just intermediate. So the red one is for very
+high values of the coefficient, and then the blue are for low ones, and yellow are intermediate. So we immediately get a sense of how the snow is distributed. There is this mountain area here that doesn't actually
+have that many stations, but the stations that you have here record the fact that there is more snow. And indeed this is skiing area. Okay, so that's the ipyLeaflet. And it's a convenient tool
+for doing many things. You might want to study it
+for your future reference. So now, we can actually ask questions about how do the coefficients relate to properties of the location, okay? So one is to say is coef_1,
+which is the amount of snow, does it relate to the height? And we see that when we do a scatterplot, here we have the average of coef_1, and here we have a elevation. There is some relationship. So the places with more snow
+tend to be higher elevation, but it's not very strong. And indeed, the elevations
+that you have in New York are not very big. And they go up to like 600,
+I'm not sure what they are. Feet or meters, must be meters. So in most of the places, all of the elevations get
+very little snow, okay? So this is what you see from this scatter. Another way, another thing to ask is, how is coef_1 related to latitude? And you see again, most of the places have zero gain, but there is a tendency with latitude to get more and more
+height, more and more snow. There is a lot of snow. And here, there's like negative. This is basically when
+the snow is almost zero. Now, that is interesting, but now the question is, which of these are the real influencers, the latitude or the elevation? How are latitude and elevation related? And you see that latitude and elevation are strongly related. So you have that as
+the latitude decreases, the elevation increases, okay? This is all of this major part. And so that's actually a
+relationship that is stronger than the relationship between the latitude and the amount of snow. So this is the kind of
+thing that we can do. We can now study the relationship between the coefficients that we have, and different things that
+have to do with the location, or different things that
+have to do with time, okay? So these are both the
+temporal aspect of our system and the spatial aspect. So to summarize, using ipyLeaflet is a powerful tool that
+might be of use to you in other places. We saw that in New York state, most of the snow accumulation
+is in the Adirondacks. And snow accumulation
+increases with elevation, but the relationship is weak. It's not really a strong elevation. Locations with elevation 400 to 600 meters have widely varying accumulation of snow. 400 and 600 meters is
+really not very high places. The altitude is not
+really very significant. So that's it. This is the part where we analyze visually relationship to space
+and relationship to time. And next, we're going to do
+the same kind of analysis, but we're going to do it
+in a more quantitative way. I'll see you next time.
+--- end {9.3_transcript.txt} ---
+--- start{9.4_lec.pdf} ---
+9.4
+Distribution
+of
+Coefficients
+DSC 232R, Class 9: PCA for Weather Data
+Studying the Distribution of the
+Coefficients
+Coeff_1-3 capture most of the variance in the snow-depth
+distribution
+
+We can now look at how these coefficients vary from year to
+year
+
+--- end {9.4_lec.pdf} ---
+--- start{9.4_transcript.txt} ---
+(bright music) (air whooshing) - [Instructor] Hi, so we saw the analysis, we did some detailed analysis
+of the three top eigenvectors of snow depth, and we could
+see what each of them means. The first one is how much snow. The second one is whether
+the season is early or late. And the third one is whether
+the season is short or long. And now we want to see how these things, how these descriptors,
+the three descriptors that we have change over time, okay? So this is part of the goal
+of dimensionality reduction. Instead of having 365 values
+that we are trying to compare, we're just comparing three, so it makes the task a little bit easier. So we're going to select
+all of these values and we're going to look at some plots. So this is a type of
+plot called a box plot and what it says for each year and this is about the first coefficient, what is the mean value
+of that coefficient. What's the 25 and 75 percentile? And then what's the range from
+the minimum to the maximum? Okay, so we can see that some years have very little snow, very consistently throughout Massachusetts and here very little snow,
+here a little bit more. And all of a sudden, 2011 and 2015, we see that there is a lot of snow, okay? And that the variation
+is also much bigger. So that's something we can see from looking at this
+graph for coefficient one. Now let's look at coefficient two. Now, coefficient two is about whether the season started early or late. So, when it's negative
+the season started early and when it's positive, it's late. So, we see again, 2015 was a special year. There was a lot of snow
+and it started late, okay? And then we can see other times, whether it was early or
+late, it kind of changes. Finally, we can look at the third coefficient and that tells us whether
+the season was short or long. So we see that 2015 was
+actually another short season. So it was a short season,
+but with a lot of snow, okay. Now another thing we
+can do is we can look at how much do the residuals to the different eigenvectors explain. So we know that if we have
+all of the eigenvectors, they explain everything, but we wanna see how much the first and second and so on. So here is the first, the blue line. And you see that there
+are some that it explains, there are some instances where, the residual is very small and some kind of here is in the middle and then some where the
+residual is very large. So this is the best part. This is the part where we model the best and here the part where
+we model not so well. And then as we go to
+the later eigenvectors, so to the orange line and the green line, the red line and the purple line, we see how we explain more
+and more of the signal and the residual, the fraction that a lot of the residual is explained
+is becoming bigger and bigger. So this is the residual. The residual here, you get smaller residual for
+let's say 20% of the data. Another way to look at the same thing is to look at the distribution
+of the coefficient. So how do the coefficients vary? So, interestingly, the first coefficient, the one about the volume,
+it varies from zero and up because you can't have
+less than zero snow. So there's a limit to how low it can go and then it can go up quite a lot. And if you look at the second
+and third, they can vary. They have a nominal value that
+is in the middle, let's say. No, that's the mean start date of the snow and the mean length of the
+year, of the snow season. But it can be lower and it can be higher. So that's what we can look at. We can use our coefficients as descriptors of the years and we can study the
+distribution that way. Okay, we'll see you next time.
+--- end {9.4_transcript.txt} ---
+--- start{9.5_lec.pdf} ---
+Analyze whether early or late snow changes more year to year or place to
+place.
+
+â€¢ We know from previous notebooks that the value of coef_2 corresponds to whether the snow
+  season is early or late.
+â€¢ We want to study whether early/late season is more dependent on the year or the location
+â€¢ We will use RMS Error to quantify the strength of these dependencies
+The Pivot
+An operation for creating an XY table from a list.
+Estimating the effect of the year vs the effect of the station
+
+To estimate the effect of time vs. location on the second eigenvector coefficient we compute:
+
+â€¢ The average row: mean-by-station
+
+â€¢ The average column: mean-by-year
+
+We then compute the RMS before and after subtracting either the row or the column vector.
+Conclusion Of Analysis
+
+The effect of time is about four times as large as the effect of location.
+Iterative reduction
+â€¢ After removing one component, the other component can have an effect.
+â€¢ We can use alternating minimization to remove the combined effect of location and time.
+Is this conclusion justified?
+
+Check the graph for individual stations
+Summary
+â€¢   After removing one component, the other component can have an effect.
+â€¢   RMS can be used to quantify the effect of different factors (here, time vs. space)
+â€¢   The snow season in NY seems to be getting earlier and earlier since 1960.
+â€¢   but the high variance places doubt on this conclusion.
+
+--- end {9.5_lec.pdf} ---
+--- start{9.5_transcript.txt} ---
+(light music) - [Instructor] Hi. So, we used visualization to
+understand the relationship between the coefficients and the location and the coefficients in the year. Now we want to ask more
+high level question. When we are talking about coefficient two, the coefficient that
+corresponds to the season being early or late, is it more affected by a year to year or is it more affected
+by location to location? You might have your guess, but we want something quantitative. So, how are we going to do it? We're going to use the RMS approach. We'll talk more about the RMS approach in general in the future,
+but just to start, the principal component method
+is an RMS minimizing method. It basically finds the representation using the top eigenvector for a point, such that the residual or the
+square difference distance between the reconstruction and the point are as small as possible, so that's minimizing
+root-mean-square error. Okay. So, we're going to look at
+New York and at snow depth. And we're going to extract
+longitude and latitude for each station, so we're going to get this table with the name of the station, the year, and then the coefficient. Okay. From this table, we want to
+form this list of things. We want to construct a table where one direction would be the location and the other
+direction would be the year. So, for this, we use an
+operation called pivot, okay? So, that's the pivot operation, pdf.pivot. What we are doing is take
+an index one is the year, index two is the station, and the values are the
+coefficient two, okay? So, this is how the beginning
+of this table looks. All of this is going on in pandas. We're not using Spark for this table. Now we're just checking again how many undefined we have. And so we see that there are many stations
+with many, many undefined and that is because
+stations came onto New York over the last 150 years. There are very few stations
+from 150 years ago, but there are very many stations that are just 10 or 20 years ago, That results in this, many, many of the places of
+the entries in this table are actually not defined. Okay? And then, here we're looking at the years. Now like how many stations we have, how many fraction that are undefined, and as a function of
+the year and then we see that we used to have
+most of them undefined, then it improved until
+here and then it became gradually worse and
+then it really improved in the last 20 years. Okay, so here is a part of our table and we can see that for these years, we relatively have more entries for the later years. And here, we're looking
+at the number of nulls, fraction of years that are undefined, number of stations, and so here, we again see
+that for most stations, many of the years are undefined. Okay, so the estimating
+the effects of the year versus the effect of the station, okay? So, what we can do is we
+can look at the average over all of the years, so the average amount that we have and we can see how well that
+average explains that row. It basically is just the
+variance of that row. And then we can do the same thing and do based on the columns. And so, we can see how much
+would explaining things just based on the year
+do and just how much about by the station do And so, what we get is so the total root-mean-square error is 489 and then this root-mean-squared error reduces by only 23 if you look by station, but it reduces by 88 when
+you do mean by year, okay? So, if you take years,
+the explaining variable, then it explains much more of the variance than if you take the station. So, that gives us reason
+to say it's mostly by year, which kind of makes sense
+if you think about it because some years, the front comes early in the season, some
+years, they come late. It doesn't really depend
+so much on the height, on how much snow you have, or it doesn't depend so
+much on the location. Okay, so the conclusion of this analysis is the effect of time is about four times as large as the effect of location. Now, we don't have to stop here. We can actually do this
+iterated minimization, where after we subtract the
+explanatory power of the year, we then go and on the residual, we explain using the station and then we go back and forth. What we get is something like this. So after removing by year, we get to 400. After then, removing
+by station, we get 377. And then, we can continue iterating but things don't really, we basically reach a stable minimum, okay? So, that gives us how much we can explain using both the station and the year. So, one thing that might be interesting is to look at how much, if
+the explanation is by year, what does it look like? Like is there a trend over the years? And indeed, if we look at the mean as a function of the year, we see that this coefficient
+tends to go smaller and smaller which means that the season tends to start earlier and earlier. That's the conclusion from this. And it might be a correct conclusion, but we need to check ourself. So, how would we check ourself? We can just look at how
+do the coefficient change for individual stations? And what we see is that
+the change is very big. It's on the range of -800 to 400, while the range that we had the decrease is actually very, very much smaller. So, we are are always
+suspicious when we have data that has very large variants
+and some very small trend or some very small change in the mean. So, it doesn't mean that
+it's necessarily incorrect, but it would require a
+much more detailed analysis to really say is it
+true that over the time, at least in the State of New York, these seasons are becoming
+earlier and earlier? So, the problem of
+missing data is prevalent and needs to be addressed, so that's one of the
+advantages of root-mean-square. It just doesn't care
+about the missing values, so that's one nice thing about it. The RMS can be used to quantify the effect of different factor, here, time versus space. And the snow season in New York seems to be getting earlier
+and earlier since 1960. It seems to be doing that, but the high variance places
+doubt on the conclusion. So, we have something
+that has this slight trend but meanwhile, it varies
+a lot from year to year and from station to station and we are a little bit uncomfortable making a strong statement. Okay, so thanks and I'll see you next time.
+--- end {9.5_transcript.txt} ---
+--- start{environ.yaml} ---
+../../../../environ.yaml
+--- end {environ.yaml} ---
+--- start{lib.tgz} ---
+‹ ©` ì;]wÛÆ•¤üÆIÚ´Ù6»/Sûè ”A õ±e‹e$kãSËVM%nÍğ0 0¤` €éÔOîÃÓ_²ÿ`ÿÃş½îSöôiï ’“œÄÙ³kØ3wîÌÜ{ç~ÍÈsGÍÊü´àÙÙÚÂ÷Ö±Ã¾áIß¬ll¶6ÛÛ­ö=ã^¥e´[›÷*dë‡>³8±"B*“ÈrhÔpb»ık£Ñ2ÊpQ$ob>oøñ€ÿO¨øqÍìÄüaèI¬‡‹ïmdğöææü76ƒóßØŞÚŞŞFşooïlVHë{›Á%Ïÿsş»Ó0ˆâÏ¦á‚X1ñÃš¨
+5ÂªĞKjµqL	‹Î ‡¡eŸÊİ(²ÚÌ_*ûNÏ¶<š÷w@Ø _L£´ÿFŞø'jE‡ ~IŞ*U¥3›Z	Ê(vX*ÎÒg®3¡Iœâp}èmÙ‰–•ÜSª‘±;§N^7œZşÌòÒQ$4€^k5Û³â˜D¸eØNéÔ<·oßîŞ4"bGÔJ\B,_’8tÊvš…cb…aÌİ)‡f¨,2ùl'Â É1¢€é~M-Ä4Á)Ìz9tL†C×w“áP©7Ö¨;¡ş“[[ ‡ÖÜÍ}Ë‹©6v'æ£À§š5çoi–äÈM<Ê:v_PSİÖ6ëu¾b±j’}<€±]Ë8’SÂøÂ©–tB+²¦"O­Cº>¹Ï*öX	FÏ©½Ü)[B‡Ñ 	h,JÜ1ù#Áj3Ï!vE4ßa00 yr#Õğñè5yYé¦Ë“3å"˜L0©\B2ÃO±HnÍ³ª;aİUÅõ%¡ÒSV*À z±;çû½4ã’x—¦k¶²ŠbK.Yi@ì@&Y+>gJV»²Ÿ´‹ÕºŒÀ))Ós.$Ê˜0r}¶wÔ%fév@ÇãzÎÚˆ&³È'lÎÙ&y>ÈÇb{Ei&±CÏ×NˆÉg}…"Vq&ó_]9]lläèê¿É¹/±Tù„Æ	‚Ì+%ÈoC‡R£H+¿p$A6±PıóO‚¹ÚO¿>Å¯œHuíL·]Ï‰¨ßoƒA½Hé”Z%*Ã¦£àŒ=L¯j,PèÅİ;¢dS'gi‡wÀ¡Ù$:–pgºõ&à-“Ää„ñ¢úß@+Z¤:"J6ÄöeÊfi:Ià0H'TZ	¨"ĞÔ:ä8IÂN³™Û,ƒ N`Çº4©ßô¬ß¤skz4n>eëíV/Yx`ôãdê­ÔWŒÑæ² ì–Äh~ır…›ıAV‹†ËÅ…F–?‚\@ë×‹;¶/›Aßü®ÕY¢sdö[Z
+0(4S00+;¤àZkP+´çSÖÁfRßQS‚î{•ôáÕ©ë›Q¿5Ğ¦ d£¾1Ğâ„†¦ŠÅ6Ô›FK×¾X!¯{N-oFÍ–D.õ¶ùLå”F‰ş¢‰"7µÊ]ØVª[¯×W¬™ÑWìf`æKÃ´¤¾Vj¤|—¡Fà¡ÃF=SQ$>ŠZşrEÍŒºĞRƒ¢	‹%P³ßù¢–Ù(ÀõlVE	šg“ä˜~S\GA³±5mlpeVP©{Á|¦ÌYbzÜ ·CF‹|Ã‚¶ûR&Ìêa×åŠeƒßà B¬bÕèvĞ„mgĞ€OÚá«4RÁ6ÊÛ´lë¹½ÓJjš+x÷®iäU²[Â–²Vv0a§¬CZ`Ç"ƒRw–ÄTôœ`Ï—É¯Ô—ùŠŞ¸ÙøETMıÙùXÑvb
+¡[BHc4CK34c ™ëî
+M6¥–_4dL²º©¨c»"áøÖ:Lr¿Ê$ˆ5ò™[!ØMm“h+®x²bŸõ;š;à‚,oüBÇ®Ù½;Y&^qµ<Z Ã]£^_A›å	ŒÓşé‚ÊTJ½`»N"×Q9[3fÕ—.…öèğ2ªa‚†šûõËäµÈ”-pâÏTú9:É<Æ8óÌÂ¨jæ³MDd@PäEA¤Càq¡6¿Cä„œøÁ9;^B’ :‰E>™%`ØÓıÃN¿ËmœÕm&\£ B2yÇÁL.éé~C†f!èàãÈ£ÓX.Å]Ãi²Ú­ÍT'çµgÚl
+BªÏ©½èIaİRÌWÏ‚ÙC¦	È+{ŠYXêúcŒIÙÂÛù>ä™tHÊ'½?<$O€LC¦Är}®zaûÆ sS°¨<p¶Pí‚Iyh²D8Ïh Ë%xÈƒá’; 2¥ON!€l`{^q¬#˜2XŒEHe$§"2mğî|F8MŒoäfiÔ.#Ôe@mt(óá›
+5ÒÙ±k£Kz–ÇÈrwk^êjçoĞ—ñ‚inÎ;H şI¶6-LRŞ ?ö¬‰0>¸L<Ï)Œ¡9Á -Á­ÿKÙ6’ğÃN„4åRšÛD‹j@Å«¸aÎ]â¦YÆjÑÓ‘ j©X²7×b¦êfšÔb¦	w@]s‚ŒÑ;ÜŞäóÄÈ´lEx´“&Yw°f=VÖW_b¨4ö‰Â˜–%AP|ŒBúà¾ô¡r“dh÷¶·ë_„¼UywA.3_¼zA"ç(šñ<ºi,§ ]“Ğ¤”E¨1˜¤Eø°ÌÀã‚*±o6õ‡¾¹©áæ†Â=Ì¡‰Ô±¥­ºvL1j*vÛ\¿§·ÇZ$
+ŠÆ¤/6U…YÂa[Ñ”ˆÆğ®çz‡ûb'€­¤xXfº¬d@Êö¬ÄbE¢‚© ó¢ÆÒKzÆèÆ8JU~AƒtSÕÑæ!óB,'×7I’“¢ŞAS¢u0Å:¢L'ñº¸´„‘€p9%Õ‚„•Š6Ì 2Í"ƒpÚóh˜kæ4å-"´†ğÉåf@=jb™DVx¬mÍ<ˆ‰—ÙW—âœäù@Ç,·&Vú#ˆ)™ÀZ€
+æƒ¢*Ë§#x‰l”4Jæ§j¢¨øf 1sTãÙˆ‰ŒÊÈ›	°FÀs‹è¤4€Ğ-L ­”E¹š‘>+ù—¯äQbóó¼9°äsB/ÙÛ?)ú€'²ïÏ¡™ÌBPi}T6á€¡™·ÎÈ5(úÜõ29q×K®Õå.B¦ChÜwµç¡28Ê‚¬EG~ìsŒ·Ïw{ğü¥b–ĞÚ¹œ¯ïõğ¯òºó¿ÖÎæö6;ÿÛlm›[ìüÏ€ª·çoàáGfüøO|yÿz<ôzØ­­8üögä¢ÃÀÃƒáán7í/Dq78å@‰;¥i–kµ¡lËÍ¾rtĞı#èp¥÷èñSş~º‡ï£ƒğ}ød÷}?ş¤§Jİ_wûó»Ê°g´¦hç¨h r—p˜öÅ0Å¸kµ´ÁÔø+o!pU4g¬]<§Ü3Úå8X@#¬mœá±kĞ¿Éİ›>të|À‹#h„ÁĞì«\ì…3îäxxÀÇ¼
+—zNL
+ ½Däë Dò'u=©tşy% ©hG&4‚ÏÏÑ5 wm´H(“>¸Æ„yìÆ¶p…bÙÔ€ùïu´¥œ}öëĞÉ¾ÅôÓúù5µâÄ!À¶ñ” Á)¤±!ÏôKüŠuq¸ÇšY~7ÎüVÈ	«Gtì º£ûH¸n|dA˜¯‹•3ü!¤ÉDj~ı’¥(ò•Äà=f)‰"s™Ÿ&­…aÉ\lÀ‰Ë¢“û‰‰[GÊ ü8¾0o÷î?¼¿{D6Èş“ÇDLğÿ‹äé§÷ŸÜ—‘“@l¤Ü^W±2G4uÆx6–“ Š*Ã^€ÚÁÌOL(é¬$M…§ß«¦tË¨±ó-ë]È#å8Í¥ƒL0¸şŒæIAd6xä8úÔ
+UÏš‹g(VDR>ñNºíFVìÚS2ädç?0…Ø<†¨»ëy{ ¨âĞ˜H»CRD%ŞJC¥bïSdË‡H|øÈÍ‹vdæ*’c—0@ÈâÔ¦é%7ªñ \r¼ Šù°‹YBPö@¦È©Xœ‹çA4sºQË×½‚}…¥L^¸†Ú†Ú+`ôYk¤8Iiv"eËlH¿¢qñqcEã‚ŞÒ"{©ˆ´ÆÕ1’iĞÉv=«=0/ÔkyµP½1’V=êKPõ¦V$é?hÒWã!’I6²”€\¶Äp¹ X˜•=š’?}ËGÎÒb¬Ógşç	DW–óx6UÀ¡3òºÎñ«üºGK7êºàº*¢®±g%&Ã†¥ƒãiÏ£ÔS@2v=<ÔóKe#ÍÂÕ•jŸ\ÈÇLIcRO¨avX[Şal“k=CëµMœƒ¼,+Kğ¨}C›kóö ^_u¾ÚÙ™Ù4ë¬-:d~Wè)ğÍÑdÃqµ8HĞø«(Q{mŞĞ@0A®;=Î£–Ş2ˆŠ”a§ÜÆáÓ'd*
+Â8%2¢ÀÎô˜™¥ø0âKWƒ(ÙİÛgÃ¡,q:”x‡÷è$öq“‰_.|t•	1‡ò‚3£ÕÒİÉ1¼ÍËö´Ë}²N¯íÕ*l’¯&¯J‡½
+‡±ü<§ƒ¿‹õÀ¥¿Šµù(JG± ÃçªtÄ:mbşJGVõÌº®î›wnI­/kµ;Â¥Ó¤±Ã’TRtYÔ–|³_c.B1ÿ<óYzŠ:Mñ&@wîÃ©‚¸àñæê#W¬gÌ´ËvEä»xÆÔÜÜ°SæHP&g”½
+¥®á îc_¶+ØÚÄ4„È#zÇZ ˆ
+V‡>¸É€@Ÿì­ÅI¬sÕÌÚˆ¥ ÁÏ,§¦ÊìFG?[õ»/†	Æ…#Ã™×y#JFÄ+­Bõ£ I N1Ö¥ÖT¬ ³ƒ…¶T¨ò® xWtÎzš™Ú)Í€·(¸ké‚«
+ãUo6ÍiµŠC x q¿Éø+7=–p3Lèƒv…šÄ) :ïøÑãL:¸÷úÚè€@—ÇMÖµÜú¹±)Uá‰€ûé¸Öügæ§p<òÄ…#‚‘ 8F"O›
+L¼‘" §cqJµÁÿ¡læ0‹	xŒ×?¾×Äx^“ÿÙjµv0ÿÓŞi·ïmPoln·ŞŞÿ~#ÏŠüK¼„–›Á€.Í¿<	Î4L¤‰‹,Ì]ê¡cf>Îïw‹ºòÌi‡qœDœ:¥I"Õ0„wØ¾…~‹ï0Ï%ò"Ëå~nSf"ÕÛ.f8˜ç”âJ¯(_XŠD'Ø!×‡0İrÈmv‘BŒV/8)˜˜à.“¥'~Åèã”¥Ì–:×Ğ¬ÓÓFŒm±]T Ïh6ƒ›<'“Y¯:'»íË÷à0¿x¤
+TœPĞ8dÑP,'ˆQœDO©«ÃšBAL´ş§Æú´±îõO;ëõ¾>)ˆ©U ?>~È+sÇ±/¹Úózü²Krê¤hÊ²KPË‹àÕ%X6è*è´¡Ï3N+: h‘û,eöy‰*?%"¬,>`ûCj»Ü³ ´¥67¡+"jı`eÓìàĞÅ&Xj±)¤ÖIa+[Z±ı Ç²™ŒœŠÖnµK­‡R«±€Üztø´gp#ğJh÷.hØ¿¨‘µ/BvAÃşEˆìŞEÈ.hØ—ÄuÉ‰ŒÀ8dÍ ÑP]=Îÿ’àNÑo#§	?RÆ‹ìHºÌ08	Ez7b:—ÎÿXeŸ‹Q.g\°æ¾‘§EÄ3±İ3`pOM{~šº«xDJ£)óììøT¤\åäCDLS°»SÌjr%bJ;»xHˆÃâtø4ÛÒö¥^Špgâ2ô´º;Ê÷e=]?Yİ‘‹şe]ÄêÎL&¾Ó°¸U/ëÈµŠÔ·|YKä¤f>^Y˜øîæ·¢•ø¢e~­à±¹ÒáLh´.ïZ‰ŞR#õÑtÙ¹ÔÎg®tø;¿öÍçÈÆÔpù¤$©O¯Wøh&ÇwÃ2d‡ÿfßêóõÄ9È°„‘ï„l;šXT7$Ã+ïa	FË·s-Sö,‘Õù† ôõ4Æsw==x¥	C¸—nt¦¢Òìs63˜aÔÜÉw8Ğ‹Õ#còÚT€ Apd oc np”¦Q”¥½”¼›ÊfŞg°ƒzı!¼¤cªE'#º±÷c»¡oŸéÁøo8,I;ş şMÿş{Óhßka»±ÙŞÚ|û÷ßoâ)óŸÅpáá½c;\àß6îmë ğİÇxMüßñ?şıÿæÆÿmÃØÜyÿ¿‰çŞ{ïÕşóê_¿üïµJå¿ä†+ğó/ğÿür*NÕ«<ãïê³*¼×¼êtíÙZµâ\q®ş¥òìŠsV_u®ÿ¶B¯¼ª<»F¯Ók¯ªÕ¬­>¿õ7éÍçï87°J5ç¦(½ë¼ãÔ^­‰ò»Ğ7-ß’Êï9ïgåœŸdåŸ:fåŸ9?Ç²SíUêı×ò¨^=¿Õ’¹[^%şìâJ;¸RX›WyYùså9şTágíÕÚËêŸ«Ïa8W(]}pW^®AùÚ«
+Ô­ÁX×EUÀğ÷ÿ¬³;„¯úZ„ø£«X¾~~=ìšœßèî<ºt^ë=Şııpï_ŸtÎoØïƒ=>ÿ° Ñó9¿f{ALëW¢k€â¼Ÿ¯¹á¿W¢÷p¨¿6ãè´é¸ğ6÷z» ¼ÃŞaÛv[­&uæ©kGAcjáÅ„†ë7Øí×ÂZß¦Í‘;á–oyL(7ØE4˜húABÁ§>‰›=Ê.)´‡»İ&ş ŞuE¸8¿Åş3°-oè†8Ùø’¸z³ú“j­zŞÑ¸„Ê³÷{‡İ'¿>|¼Û}8|pøâ=†‰>9xøÉá‹Ùg§Ésïì´vv^ü‚ç˜F0ÌÉ&=Áœe%Ï®m¡&yñKŞÎ.£GúÜÖ®ãD4_ü´ĞrÄI©*Eˆ^|À[ì ºêSk~^m¿øˆ×Ñ9µgIéS:¢ÅùÕ-£=}ñ!o´fÉ1á-úıú­óµ >¿!cÑÊ£ÀêŸºQà?{—=Äéœ_cşùù;© Ï¯Úø»Ó¤†PŞò£Çù(2)~½Øoşv8àºş¥1¾¿nío­İ¼Y«^¯Ş\Ã¯ãHşï‡Q.oŸÿõOÙşóTíKPüı¸ ¯³ÿmCØ0ûÛ›Úÿ·öÿÍ<hÿÿM|i]-Ùÿ›aÿõÊ
+ûÿsç#çœ_8¿t>\¶æü£ó¡ó³¿TÁ@«ûOÜê_-ß±Àb…Îß¯·tã×zûüËÈŸ¯ùáÿ°w5Áq×¹{şwv± IIıÀIie ‰’hZ-Šr,’MRTÆbA€°äì’·fs0èHq¹âKR>:©Rñ)ÇTåCN9äĞr
+“[¬T)ï{İ3;; "YvH»‚E¡g¦§gzúïı¿×÷¼™©™Ù©iå·¯®--$-eµ¯r¹¦f”w#Y£ÉyÏ¡BÏç@ô;;5C„}ú{î©©é©éó‹–ùrŸş§ÿ%›ÿœŠsâÊ?_'ã©õÕ³{N+¤3g=÷VÜ®··dÇÚ©sFèã!Ñ´{=õnÇ‰é~ê¤Ş²=&@´&)ÏÒy©»ìè\œ_ÉŸĞ=›KyÂeqİsDÇ½&#ş¨„“šwı1İÍr;è$äR	·Xâ]ú¿Lc@=ìÍu÷=	“¼É<iLvOŸ™æh5ÇŸkOT±´á~œÎ“¥ë7VhèuæK”Û}ä)ı›¸ÄVVïè{:·;®ÀÄq¸a¶'ZÙÃİú±ó«kÚfemc!è7ïmª¢á	¤ -Ê×›¶ªÎÏ›÷ÎÏg8°~¶£–^ƒ“'áº[m,m.ÎÃç°á+ß ¨häRŞ­ìmå™
+œ–F˜R¥8ªÔ	Y1å›¢¤¥)rïÓJI• .­ú`Vsùf7!nG†VhYDVÕè|ÔB§œ:åx”—LP9"™àèSŸš‚L<$¾ÎÀ"O*HBztRÓƒ´e€€ÑÉ2äù†“ìÃåA$‡ zîÕBò˜ØF™àyĞ"VşçÙ¿ ¶÷ûÊ¿2şï‡çú±ÿ_ÿmzvú¹şgşš{øÿ>ü€ÿo;úş›#»ñÿß9ş×|¿µnGöº9ënä2o¯yë~äKñºˆ	gİ1qìQ{±[D¦	Ã‰Ûª’+ˆUµ KWõASlâÙín|40ñ¬ì£&(Yâ"âd‡ÛT•£«ÜØ£*}U+:àvPÑ6yí+]ÓJSÆU‹®ù0ÓkíS’:Ÿˆy‘JJ‰n ÔJ-J‰>¢Ôé¸Mşı”è‡qÂïŸˆ¦ØÂı€r+tlÉf¸%LN•ïË÷P¢FÿC‹eÉM:u”nVc¢U¶ä9~×üpì‚FX˜&8[ËfB²åzãÒ¹yÚñiÇüÍ	0ò}w‡BÉeã`šÇ]á IkÕ¸üÄzîœo¼½‹Oox2ó±m”Ÿ¼tº<Ú ^ÒzîoúdßÂ13}£ÏºÑfÇûcøB;n¹¸(“Èò@6áVE*®Œ÷x´Ryˆf~G¦rKa]w¨Ç¥’‹KÉW‰`é$tf©*W)ßA0‡ÏÅ½Ÿ>P2£ Ü¯İºë	r^zMÔíí6Šk&D7u†%;í—¦úO±¸k®1¢ä%%7•ƒ!Tr9ª±ÆéÆµy„ ¥¯ìx££ÂÖBk¾³1OcÅ„‡rY=­|4w–ZÊe÷%×•¤v¡U®’ã2=¢	ŒG²_
+„‰“†Ô÷µü#ûf6íQeèYäyXî—£rBvÚ±ùèWÌè3ñ¯‚%ƒÖmÑƒDx…Ø†ü¯c5í”ÖáAZw=›î8='•©CW.ñ¢é‹,'µcâ+6£—ZX©Wæˆ³ wÅnìşÄ"¾Â:‰£{ õ0«‰QÑó©JêkxĞóé­~ñ©‡ÚÏˆëo_te½@Ÿ¥î‘¨7ö‰G±â (­ ekÙ¦9.œ¤/8ÜX_/DBô$Ùañ<ùDg£³°6÷•[OL¯eÕ´¶i¯Æ7h)ßDPe†²½7L.gàœ2;955õÄdVnÊıhúÊÓÅŞœ9}åéRé]jM Õ×n\§Z“¥ª%ûüÒæµµ6o«{‰âGìöE£R:më±ìåÕF±‡µ{;{€c4®-¬&í)£ÚwbiMûRcØ;8JGş‚ú¤váÑ®(”…CaŸÅÎ3>wœÙ÷Ò¶sıO€Àz„4‚‹¦+¥õ@GÂvw¬Î0_å¤ä„ñ.[ÁÑªÆêÔœÃ–®oLÌ’‡°¨­ÈÓ}¥äÍ²³j¬ç1Ş'Q=¾CÈ1Ù}şµÁXˆy±ş`õYáö]´Jƒ4fT­8âİ§—Ù~a:¿ÊîÚu´U¹˜YeHØ]J6ÚÈö0@eÍq£O*Ğ¡³•¼ÕŠó^ÙUV‘ù8%W¢p>Ëo—»ñ¡ûg"O185Y'À	‘q8Ìc²Nç£vM08íıòîkx Ê`Â‰ÅçSKçµùùëôYæ??o,ÎÏk±‘éà73Ëêœ–c9oÑ1ÓÒ}Å3Í‹%= ğ   Ü iLVwªİıl"¹Ñ'´u	”pCàè";(w‹Ì)à¬sck‘º®ä5[ŒõÑLËNùLÒNBÅ)¢öäèÒÏH‘ÊZy™A%?!òdËé¹	ÕT&à¢vz„>¼OˆÁ©Hˆb.B(¸]“çŠz¿Ä¶ÎoVøEèê»„ŠLéÔ7¥ıNÔD÷\~S€¼˜ÉZ 0.Wé—»\ê²H½O%£Ÿÿ FfNaùÒ*÷‡1,ÊâQm|¤!Ñ62öşÄ€&laƒŒïÒìC3Â¤–äA²h"åñh4hÀ­SÛ ÿ@3ú-Û`/RjÕ¹l¦ ¬_]iiq¦1µv5f„Îºµ£pœk…ÓÑ:enç“}>Ÿ·ı;÷€ÂAYÛÀ8&®2B©[,´3ó+öÎø`M„9š¿ühÿë‰R{ŒAìã ?bé1¼ üß[‘ƒ3†Ã‘§cÂ4jl¥®åL^+”·Ğ>G¤©r‰hz(¡€@Ù4FÊ»Àï‘Ëñ…H¸£JF>ÂpóÃO"â=İ|å ?
+°³’·o.'4«£ëT£Dj>,'e÷ÄNœc ü&qÆvÇÊ¦‘RÃ:P\nbO4ì»Y++^NÅ‡ÀD&9…ïwèÙYM[…{ü¥vø‚ïeT8õñšLÎàÉĞˆç5VªÆx(ÉUµ`ñ_-Ùn—¤ i„H€T^{¿õ+ËÿvÜâ·”~‰üï™gggJò¿gf}nOşw?~ÿıêÊÇïw¼$ÿÃZ~…şÛŸˆùŸ\³"›å€,ÿ[÷"#ûc9`pGg­²F¡±ı©6kü„»6´^êëÃÑğúH4²¾/ÚgJEû_ZZû[Vt …5ĞmÆfñ!–")¢|Š’j!}ÃQAÒJUÁ­u`K5\Úb`ÊûYÇ ĞÈ ÷sdäÄA\a)dWéèÅ`¸Dw|-QÑWÔ˜QöÃüuo>˜$ÎÏİÅPßH_LqÌÍ¢Ş£„Ø7ˆ3‰„83…8Ó¡ÔN=JÔ§ÔQÆK‰*÷c¤Aj%ßéT¶ŸÅÚ~—Òp™«šÕO%¿Å”÷?üÁo#ada5U+~•–sÙË«+ÊZØT.GU#.WÇ–SrUUòïQÕBnF¥j¤’8‡Z ¨ù!¦ŠrœÖé± œäçšº÷ó*xÜe‡¡¾¨Ÿß~˜—¸ÊLX§S‡8NøÍîvÈÈy$Çüç¦|˜eÄgÔ³:lÈ·,SëSÙ³y¦Ú§éÒ¿nj7}p/+ó‚Î\÷ğî[%°¤àîô£¨¶9Ğ}?–€òM~ä`…ÈÁæ	*ÈöKh8ÌÒ«°á=;‡ˆUÉ4ùÊÉa”.o^!!%$qé6qã‡=T*œw¦V5ë¨_šjÊ\=kEôìÍŸ‚µ¤<›å”]-m$ÖN^u’3Ôy|µbõÜV-»ƒ+êDÖl#(!{Œ­BJ9ã„!@êÄ.XI0„±wÇc»	;¨œûÙbe™¦µ QYx°·kÄ×Û5‚Á³D+z{EÙîJŞ$şÂ^_mùØ$ØÒYº¦\ö’WÕÂ†QØßæ@ÉEf”¦îå«™È^¶ˆc?fõ¢ja‡­ñxâkNb¦äÂÈõ•LJ“…A ÛcŒ™Ü	oÕ¬rL[İ±Ò´7İ¦ÄbfQ`‹‚8?ƒÉ°RÓvk²ø& ¼ãHÑÃ™MLhÉù¶ÔÆ7Z„©w0ğ5ø…¼R9¨¿ ‰u¿l6l½Îå-Í—•Ú6íu‘1cĞPXİáB{äk×5Èx@HİŒöšA«3HN±FvØÖÉÈtcVÚ±³´húÍ ‡æU¨i.­BKB7ò*¯ûï±FÃoÖhÅÊŸX©Í
+I+t–RF?A]–:Eş® wcç 0«›Ş{=º,ø.ŞV'Ês!’jó—‡w¤¹akjœí£tÿ–ÎÉQ»à^+äñ9S„Õî/ÿöƒ )£%»ùBÔú2ÊæI1II×7ş•§ÃCÓ4ót˜ßÆ¨Æ-l>l_[ë$§3Ù®
+ıY—¼Í,n$Oóü»”ÌğqY9°¬<ÈŸŠu¤W¶œo¸ıEªäY³:WÊ³‹òû"WG¬9f´6÷[Çm?J+Ößuš×¡Êî‘ÒÌ.R7Ÿ[Z¸ÍBïüÜÜù¹iÔGÏàPùÍ¤ÈGğ®cÑ½16¸ ûí BDål³XAp0ôøÎùEß,@ØIù@ì(‰…$ÔÂbŒi±å«”z‡Ì{DwtÜØƒ-‹hg‚.[N/èx)ñ™A!-
+¯WI+˜â?·„ØÉ¿’ÿ÷-$®Ê›ëÄÎ|3S”ƒ™UãÃĞoµE€ğb¦Ü{iøl9 m´À1ÓšõhÇ²ÚP‹wYP›‰mïŞ—Wğb(#ßtF™Ô®"f'\u˜Z–£ô—ü0UwA[ÜE5wîíÛ<=ÖœH$D5Ïùl<T5ÔIû3MhıÛĞUAŸrÇ%ş%èUb§n¶Î8Œš?èU7ß£+M ¿İ«¥"‰?£4vŸ½°c³‰äAêÃ,hKö†®ô©wœOÀÑ[iVÒjZcÄ^‡ÔâOèúÙËâú‰Ë"ö¼H°g/,ÿ^Xş¯–_ÙTwò§­<vßo•è¡mV¬ìxXİUvW°ºúÛZõ×kffuÈ„·ñ½ğØ;¶Uú…è[8=^Úê¢`Û”—‡Yóc Ö· ‚lo?Êe3†	aå`–$pÿK~ÀZ6İ"—g·\yº¿á%^Ö´BNÉ«†Şj*ùväâì¦…ŞÊÔp©!g=&†Ç‰Iª³®> )'dò!wæˆ¬"Bë"^r‰:¿Œówq×ÕêØs$«HŞAÒÄ­±L5ô·—wÖ]ñ%j¢úà®¿j¸´Ñ¯uíÛ¶©/õ‹>|=X!X²Zg&SÛ¬3Hşp¯¤B7Qç°ñ|M†Ö8×—Ã‡Äÿ¯_YÿÓÇûeÿ=ıÌÌ©ÙAÿÿÙ™éçf÷ô?÷ãıüëÏŞ?éífÿı”(è´™µeÌ¬í%Ùt™!#·hçCs!µ`†	°²#˜Y’Mëªí©CÌçAb°%,;Æ\…E±V÷WŒIx—…,PGy#Âwƒ²òPmátKqvÛ}©¸†#—Ëˆ~»ºÿt^™	7±Î+.">ı–îé¯•(_¯bú×7…T%xÇ24UÉkW¾	P]×Âç*>`Kã¹v« «c?&t…uÑ ª·!~*Ğ®Åll{ÕKÖòûÍ‚-«'[¡Î!ª–ËÄ>•z!¥©x&º<»ë—XØ(¶‚lqùB´TÍĞıÈlav”È6ŒÀhòCñêMXÌ¯43q…¨wqi­½zC„Êš¿@#PÉCû)/Dzö]Jéuw—Õ aÑp£jaÏ„Au¦§wJ`|j ™SDò0£#ojÈ	[û•´Ÿ@~šsqB¹ß‚×w Y®“{KÚÅNŸ†œ¢‹­9­\´a±-§›ç«âŒ{à,4i¹tíkÒ,Ò?™…¡½ %ŞX¸­‰“/¾8=ñdkcû¬İÂõ‹–é¯ƒNe=B.´VêæKQßÉGB³Ì¨f$±Yy­½íh2|°´¸ÀˆjŒHlìñáÆGô­[\Q{beC·‹Ét°´·2ÚØÊ–AElIĞã8@0—ÁÂ*óçÍ˜*1İ«¿¦Á[=úß_|A„O°j2ãœY2mS§.7LúÒ¼ajó¸È´I!<	ë’s^Fø1IÇ:g»ìRÛ¬†ƒ	OÅAr‹m5Ã Ô~cµ÷û?ü•é¿í{Aıödà—íÿtêTÿ‰~ÏÁşgöÙgöìîËôß7/|öş©áışèúoÿZdôßºäx?°ılÑcï`ä¬ë•¨ÂçîZhì€<»aÓWW¼¨ºTkñĞm±T=§õDõâîKº"Êæ22ª!¾Ñ›CˆíCÇzüB|:şVüHüè²X¶ãÇâÇø8ƒGãÇùx,>ÎÇñ|üvür|6~5~-~=ş£ø•}Ñ0 ¼É4+´-zï«ßÌ¾(ìïÈO/DÍÔH?r°)ÒËç419ØJ;“=Eyá`qĞÈ;2r°7Õç¹¼c³ï¬}ïg”ØÛiÿ¸¢ì8ÁÈ^˜ôù:-Ÿ6æ¸}QÁYu^xu¡ª\õ‹²~VŒç9¶Ñ7ˆµ
+{‡¿Kaàş·=§#·DÏ­ÔìeÁ«ç§~Ó¦;AÇ|lÙ’ıª®ZÉÛ×Çè®Ûô E½?°JÇO+ì›û ç½°Si†i³áü{V¯Ú«¥U”€Á<ÑQ5s^9#ôY³š†&DHuVñe©;.¶)®Á.‚z¦¶ğç²à»µ·3ØïÃÎ`‘ovÒê>½ã[ae·íµºû·ï€ÅòÑf³›®@ªiÆ‹
+fWC1ğ¥ÅAÔ˜Şøæ%èiÛxW÷ñíë¶ Õ¥•MPMyz}\ZìÙÖKÊZm7jj|·Ï´#•MS–k7Zy«¾¥ûşíÛ h‰ õæYeS…ÊÓ›@5†Ê&ğªVT œ¥ñˆ Uo+Ù‰\Ş‡,²©#£J¾a˜r0y#û­K5é:º’¨}Ûz0¤}İV©IÇâ@ZÌL!¬™eØ5;°÷Û56K·ĞÒ,VnM©İäÀ½ˆG 0,b·Øù3µªâ`s'Obò¸«Ö–@»‡ıİOTØßjGÉ7Ë_?RŞçy‘ûÇÈä›Å	…*EØØ11ï´·ë¢Ş!î…˜w†Ùv	Òé{áu}æo	v9²Ïëœ€ğ=Ÿå.HNj,A\œÃ1è€€£AX‹k
+uMi¡V	ÒJ†¨Õ´W·¹'ìUùªÆWµŞP*S/%ˆ›†Pe¥CñĞ/êÀú ÊÎVMİô¿vRÌÖM“ôÆºÖ8òÎU´šFvÀ1à×¿¯ cÛçîö%t~å¯ş¿¿ù+.cå sB˜ss§ê_Êªßùuµ|·dM˜™Ä.’¬© ví„;w±›½xÔ¼B™”hÀbÅÖssÚ Ÿ`ªÊUµÿKu¯äÕeëÄ*wÄu2ì·Á’j‡Í^˜ÌR²ròÕ‡ÿóßN~ùnLW«ÿn³ûË»#Wu»İ‰ØPİÇÛò(ßì¾£|³O
+²ıx5İ2ÃVáÇôKPïòÆ[Ú•ıûÕ<½-A=ğUÊÓ›)û‰!$–2¯ÄF=w¦Ù‰G9x^³×Ö…™Èº0›`ñ²9Oä`íó÷jı5[ A£]nJ=•nê¨AÖ„|˜ãrÌaÍĞÿ°w%`M$Û:„$lAQT2 - AQGtD10€ AD A 
+¢ÏePPQDtPqEeD\p\À}•(ÊÀÌ¸0:î(Œúºªº;‹ÜÏyßçuŞ½Ÿ­¤“êîê®êZNóŸÿ¨ï€Èa
+<F‡å§CGu8ÿc-)hÂŸˆõ `;8šñ`Md²•AšÈ	TE&‹Ãk%“â.ÁÚÉÔU	´«
+›¿ğÀJ
+êˆÓ.##!A‡…¤ g©G2Â
+ĞÑó_:‚v¾-ÕHA’uØü½Fpfêàh,‚sU‡ÑGá‰ìèğµÉF?ìc;UæOšFàå-v²p” ›ÏØO.lÈ²8Q-4bÊ"(ĞXÒ‰ƒĞŞ…“>>HZe‘„¦_h\œ¬v;Ò)‹RK‡Sõğıqfp
+ °ã
++hˆ„NÔ°çjÚ)I%bVÕWH¬¤Éé«Eä…S;ìº°ÃˆŒ>’Uz¢ªü…kÃÀCÉÁëÒƒÆGLb q¨\L¦Ğ³gj1{c=‘NƒV[ü]½—R>óÖ%ÿ3¨€Ïgşû¤ıÏÃCÓÿËÅÿUÿóE6‚ÿ±BGCÿú„ö'?EÑà¢$ÑDt’÷Y­{EÎœ$:b¶.>.fK0)“Î‡6Ÿ*Ö3£˜PD¬8Šˆ=C ÑëCğ’½HOy&y–¾„`€¥Jô%¬ù4°(b	'ÁH‚%2–0$ÆØ¾›„`"é&6@ëj‘©¨»¤‡ØPb
+Ù {ˆ9’î$´É«yH9§Ú@(€ùYŒ-0QÑ2>ãş´Ì1øÂ[cÔç"÷j„ÛÃa‚$™ÒŒ(Œ€aƒä%(L
+…(ÌCé
+êxlRP…„e/÷Ÿ'}† |†ˆ
+†RdÛ£éë´í²çHU˜¸³€gm=¨CÀò€¥İ-P…Ó²´bA³¡B‹Ÿ&â3b‘·˜Å0±˜›6=Q¢€9“‡êÔEŠF’(`iâÁäa(¬2ˆÏc>f*&ÒÆò±?Wm<¶bã]±½+B–@ ‰†Eƒ]Ÿ6E%…z&†Æi3*Ä“MJ—¢ô¢“_  ¥±¨‚tâØ®ıhÀ®	•BØ2)õµ³i “pÂ	Ú@å¤LÃ®a`Ë'`ç\0]å
+&~…F:XD´Ÿ9z<aµ9ŸfFÉ¿t”HÁ4f`| Tb@qî®Ì¡`W±ÅÌbàŒ“™«Tz8`¼$]‰ ÙÑ‚|}¡ü˜‚¬^r5ıĞ!™W½ Â˜¥Ç¬iÁÆ¡¿Qi„#.ıt½ZéEQe£?Ÿ­˜ô<h³D\íPPòÑh¡¦‚óR1â¥r‰,Me-Ó…Á•Ô« ;ZöVVÍÇ«Aåm…jjPğàğ„¨å À[¼?ôFŞ\•[¨h”O¤ªx
+ôÖ·ë§"NµÓÁda £#—EL®E”K„W€®MŠJİšXĞ <=”¡ Š²  ë NßõYvº"m¬= ÿ"l'b€Qû¦ £Şı 'ÄëC€ ˆ@Â,0U‰óRÕ¸AyÑhlªù òš%úU ·¤¨xid$Âë²)¤T³7\Â¼3ušË}‘ÄxÙ™¢$,"‚ÔRH‹Ndû0°R‹““ÔP êÉÜÀ¸^à®Qˆ&Qèc5¶|.¯2 ¶Ê)¨úi(ŞpíÙß0·‚»AÎwğb`ÒĞ«6&RSÙDÛÓ”ÿH¾·Ï'ş}JşsqssCòŸË wÿ¸ó¿Ê_b#ä?ğ]MşÄ‡‚+ÅH	³‡ë’9ÿ¨,B6VàJ¬Öş¿hş'ošı_˜û¥âÿ¸¹¹»jòÿòİ¿òÿ‘ôÿ‡{çN^£ÉÿOâ?aTÂşOÅíÿçü 1 ü¿:ˆ„—°­kA#•	h
+½±€PÁ,’e
+}_3ºG`mO­µif5%ã¥Et1“dİ Æb–ÓÇG"\~@Fc6¶²ƒ+Ø4(d‰ö”„^à5›FÃJ€“¤aå3æÓÄÀ¶ÁÌ£Cª0ê
+ã“°üªYèÔ(ˆ e9H‚Éb‘$ÌøHĞ-èj•HJuHÿpˆÕá@İ¨H„lÉS=­ÆXò¢LšuôCÒgÊ&bGg@Z qEœ,˜¸«:ˆğ.H‚Ö#Gš:bâ™”†/íĞo¬ö +ÖÂ ÿ¬²‘ÈJrM@î@Äš …‰‰lj¦IWÏ¯ ‚!µØò§hµK$f°ˆ™—†µª4:Bâ™b€ŠĞ€#ØĞ Â!K'˜ı°\Ë¥¡YX»šÊ”It%YgiÏ¨¦DØ`:¼²XĞ‘K;‹ı@©Y ) |½ÿ5âYÀ~j]­»#KV¥êe!Z‚>ôÁ¦'à{CèkZ<­šà«ÉtDÆtq|’D*Ç½0CT0În7ôu^ˆŠ8@¸Íwİ]T ¨ñe]‹H•UP‹êo
+÷¦*Í²ŸZëÇ]-|88t`¸	dÜvWÜ¥j«‰I¤=èDFÀc:)*!Y^aãTB‹º)Óc‰¡yò(}¬EúQÓÒ’c“Ò"g€6­î‹mÇF€MjÉƒœW°Şä
+m˜‡B+ëíX…LIé²&À@	½™¹°’™¨š{Ó€31ÕwbCåE&G³pf¡¹iÿ¿kÄæĞWıa”OÄÀ_4'±»êÀ¡SÁ$B£ñPl*â¨8¡şOªë‘~¾‹;u;VyÎ×W]nP¥‡èº±şßsOÊÿûÏç»ºƒøŸ|WÁWùïKlVÜ@<0:ö¹Xƒ!+.Ğ·©¹ÙÀ;ıNÎ¶â~*Î1&3=\ä”—	öÎöX;bc‡a«â1f‡Pö\
+hSÄD—s¥)D
+$Ê§‰(*ñ¦°Él%ÄÀ?p`?W5ø#:øò7RÆ1d³Qlµ0¨Ø°ÊKLäÙÙ±Ùò®—Z†<p†—æ%)#ãay[¼zl#ìğìmU«ÅËÖAC±S©:ì¤V$@·I<¹½FÙÁ1xÎïı‰§7a[ÁPMäKîªú‰êQ±•rÉ7‡Ã`T ±êˆXåõ¤©€¸\©¶SôÔJY6v$î]íÅã»8x€§·²âúƒ 1ÓJYe¶*S‘¡J’ò<¥cªò¾äÁ®hËT<O=Vq†zª¾g«'óğ=|ïø…*W†JcW÷…=(oJ'Yòş8/„ƒ*C„R*ÓpŠCübâf*Ùaw!â­$¾øüÖŠ	²*•€^vdïœuelÙ!çr­¸ÁÓRR@PNnÈ&:!Üñ“g'M–Ilá»ÇÃŒ©à&Õ 'š« [±v—:“·À˜íeë`â—ÜY,c»<Å•ïˆ­S¦E'ÆÇ8ÇM‰‘:â—Ø²ÙªÆ~¬ñ§MñRÍ®¿­³Ú	ˆ¾F"v"3P=ì¥ì‹Â‹8‹÷ÑMìØj§v§T»ÌÁVõ¨!üí¨±*@ª_u¼®µ28ÈÄr[kµ, ıäÀ(‡Wk—U@T–šHù—%VËïï•–¸ÄÁ–øf«@‰·şÉ’Ïª,Ü?=éş?ÚÀŒœ(ş·Ä}'6èäó7â¿óù¾‡»&ÿ¹
+Ü\¾ÆÿñşÕ€í)Nq™ŸïŸÿ±WåWWW7ˆÿÎÇ^ÿWıïÙ,3™ĞşC×h”uã"’×º˜Ìº6~ÍFy·‚¤Y>-›—¦¯.Üå2(e·çÚFÖš×÷¦'q}Bª¯Íhn]/Ï:–5vRaPOË²Íå¬ë¾…ëÛçŞ©Û\®Ç©¤[¶o4»ßï|õ÷o¹4ñ•Ö­Æe)¯’ßR¤4¸ó:­‹¸ÖGo/üñÄ‚DÙòŸ7ZkGÉ<ÇG›å{ñwÅ'Ä,k¶á×­Ş§æ˜
+uÔM¶·q4òê‰›¿½cg\š©øuÿñú]ƒ¾B_)ù¾íIéì±–çXÁ‹V›”ëì£§Õè¾Ñ¦TcY^®öæÉ”Í¾—1nrŞxµßšì!2ƒí¬›ı8›ÔóûÎ>;ëB’ŞÌ‰’rz})ßÈøöõƒ–V’‡óbO‡„Ö\ùm‰ÓıÜ¹YiÃª~®òWÖ3Ö_µòš4ñBXÔ›óñµ7}‡…nM1¾îiS0­uÅ¦à·ÄGw-¬Ş™ÿ~§ÿbã[·nZ82fêİSi“Š¦„ôúîÉíú›ƒÃ›×4í90äÂæœ'Ïl8>“ùlÓïı2ÃLó×-î%1¼Ó=Š“+_ÅÌ´¸]1`ö’ıÕí-µôeVÂn;,ög,İ#˜í-œ|ÔñqõUÊ»Å­ëç
+ÇMJ/YË?© ùŒ¼ñªk‹£Ån‹HéÌuÂõ?O.êwº0â^geâõ-ùöº([wNñƒß”É†øİ˜l@©‘
+"ìx{¼†Û¿›·Å»YjİY¹Õxà5Eç¹ş<õj…`V’åçŞ:ŠmA×†zÆÜv®Ú½•¿—[¹Œ^ÕfV3rULy[˜sÍîÜ€Gno.5ì·gèT\ô©¶u´ctxËôÚ´Ö·Ní›7Õo_p%º9 %4pKˆñeİ’Á–'ÂïËSŸo?Ë0¶«eä“bş´kò—¹v‹‡¶XœN_krHoÔ<ï¾ûVÎK5U^rI©Û_T¹òÃƒ6o´[W™_ÎÍ_oÔ4ÔS×,.î·Œ”%ë*Ôùt'ù/Şˆñ_•–ñóşŸÿ-p 1ş»{¾ò¿|‘M9ş«µ Êº°¤äÛÎû'‘'¬Íú\ò‡ÉÉ¡?]™#¯˜mÇ¨jÒrr«µâ÷o—Óün¾^ğ®½ßÏ«ÖD»åçXş¹´½ãNî¸êFnÌ¸HÎÕQõ•ë
+L;Ö¿rûñL`vQ)kß‹ËNoÛ’]şhïÎZ÷™¦|÷§©ûÆ¶-h\œ =b),¿\ŞÓÿ¸é—á&%}_ß{ïvˆooV²3ëÔœ—±ƒÖšOÉ3y`%xı(qAót¹üÅœ¿®
+íCx£õºÍôõamo-`lõ‘-Ñ?#veiúf¦¢Ïˆ_˜Â½Ë™÷¹Ù!¦¿Œ
+éŞëÀ­Ô•iæ6E‰Ñcß\?ú†¶ën¾Ûõ·SkÜOŞwùŞèaüAq%ÃŸ¯ï)|÷MàÔ×=.¶&?óğkq”–l:o~`­‘AZ]o,êÙ¤¶Q{×ğ‚$¼Çá†›YÏ‡>•uÚ:ñ_ÇZıbîòºŸ¬F$.œ=<İüáü!ÏMƒìÊ¦Úş^6çòÅaá»=úÛ®Ë¤MmÛ? ÄÉ0rxÓÉy¯òëõ|¿`m³LödŸtªö©§|óCâÍÏ1i…z³&ŞùpUâ4úâ‹ÑMYIzõBcæmóğL+mîÊkzÒ/2ğQª1›“o}ó}q¾dİŞ¹ÜÄÕ)Õİ.ß/™¼5{ËáˆkC¿—‡Ğ­;l97ëÎ‘‡Êª·T¿¥§˜|ÌaBTà“ê=Gô9Z¡Å5ojW<Š°¡½¥ ,Ø(¯ïvÁPÊ7Kw*iüğº¦^nÓ†ŸJÅÄvœ/R»ãõcÛÎ‡y'J«ºL²·ŞŞ6Íõ¥¼mG‹ágİ÷ßÊ¬/^y¥ÛÇ?8>òI¥v	¢×Ô‹CÌ¹sJÓG‹…‹"ÙæßÛlS×gK'ºÕr9U¡°1ç§1‹9;í×1Bµ‚º¹#W¹Î—¾ô¥¡äPJëéi·xÄ=¿ ºÖù«ö^±[¡kß½Ø,§sŞz¿qò²Ç<Ïítº·Zwá¶ü¾ş§m¯Óö´°=Şv6QÿÂ‡÷q–§_4º]´xÂpS£N›<è®åcx“JO,Úy,<ÖÊ{GVõ)Çı–éã³é„ÿŞ—z3®×çeV?XR˜ÚVs¢ñ‹Kƒ¼wÕ5$<cz¼\Ô´»BPu)æğ‘J³-³W·xÛ<os,à‹ø»	9[£CÌÂf¼Ìµ?É®±Ò»T.M/éÅS ®11ÿq\HÕ€¶#û¯t¿Î¬µÙ´İy ®ÁÑ‘.¶áç^ğØß2~éUóîEÎã=6G›÷U6o›æ¾¹éÃİŸR‡˜?¯ºPä_èçü°áÊRjİ µ¿Ë—M¥›Äß×ó2-xÅ|N‘;<ÛZ1©C¡İÜiVÆêub¨Édï½ù4FÎ5vU¸ôö%‹úçã)Ã*æ^ßè·ÀtfÓËY­'Ãrfµíüµı]è­s#¯)®,Xa"7÷lÓ=?P/pğô9~³ƒª­L
+?Tw–ˆ{‡¾qü@Ò†ïF´¦?e–æ³œxu«,­%,¿QÓô¸§ÚßÌîóòñBVàQk¬™wÕvéåŸ3ÿ³ r²Ááô¹g/3Ü² û¢Ú‚5•›Nw²Ì‡–»ê]ùİ¨ï/jëğ÷O£½Óï^Q,õXıôì›–ˆóq9´SKvØèß¾he…a\-âÂ)î¥3‹áçû›ÇÄå°\pÿyš}m°ËéÑ:ºÿìí3²ï¨g?OÍí“İ?¶¤¹?ıè¢Ñ¾+ì³—]÷ÖÑş›ùú™ÆÏ.Ô~:Ö²aÅ{¶W_ı—¯÷]ryã$-õpÚ¾ÏøèÙšÑô±ë1	º“]ÿä<ç)chç¾âPÏwÆ	Ï†®.úA{LÌ–¢dÃvüÿxşwıìÀ§æ>–¦±şsàöuşÿ[Wó¿+ B#v´
+8³.ïæì/8=ÂvÂ¹ ‰™·^nuøã¤Ôo~XEm®h‚kAA^xÇ½Á‰Gõ†C<İÖ\.Ùshù9Nêµ«ÇúV––ŸİíÓ0Ó):¢¨v‰oßİÏ©Ã7½ÜX‘Øp6!¡W}ëÅvF4Îï%=bz£*r|µd¦¹³Q•KêøŠÁ§¶Dòt&L
+N-9â-3vN?ßPöÃ¢ñ‘RÆóÁã®öa[5ØDe=Y=Å¸Ì$Éj"Ó^f%÷±lÑ˜ë‚ÉÃL¬?ò6½µŞ¤h­qQÙ–B›CµÓMv³…Õgv~»èÎ™323=9ÇÆù`k×»ü/{W×Ä™÷­µV¡­¯VtAÌŒB42¨Õ T	*¨ÔHc€!‰I€€UW¬ÕRj]¯VÛµE«°ÚzÕZÅ£^X-P¯Z[¯ÖÖÛÕU¼ö9æL¢nß·ÚîûaşHfyß5Ïó{îï3¦SÊ´ŒĞ°š¡Ùï;’Bä/¼¿ëéræÈ‚%|özå›”®u]”ÊŸZ;çÙf;º^o{ÈrøÆÕwšš¯Ä~³¹¼]|›R}…E<(ë"ypÿé²«ï¼:óİ!ïÙw·QúÊŞ£š+}²sŞ‡Kò_Üq&ÙÙ2­ÿíŸ?ï·xÂW5ûæ”-cë€ôšfMÊwÊÒ·÷3œ>/5¡¬wÌĞ9Í'­ııŞaGwŸ·î­ŠªW×Mgï9oz¯†çäSÆö<<èûM‡SjŸ;Ñ/bt·Á*íK	Ó‚º¶îê3şpÄĞŞ‡¶ÓÍn~£İx Iÿ·—é«;,Šüñ3eñøÅe{û÷ &ığEÓc¯%Î*<ùS{Û‘äE¥ásÏTô+¸œ:gğ©§ZÿQÓìôà5åÆ±÷¾ÑË×¤X{bßs©ïK¹]}vnEï´Ï=Y¶âüÑe…aÑÿwáéüS3f•šuğî_‡t>TÖ}j‡”Wîˆ:[ĞÓ1´d’!díœÉºùß•ræô~;<6û˜cÿÑ™Ío^ûõØÓÕÎwêNåäl:´{Ó3µÏ©YôKÃª»u·&×t¡{..©¹ÒzÍÄ®]-«ªJ«Ö–§fº¯®nñ¹{nÖß:iá?naƒ	æ!¦ÁS—Õ6RmXD„—ïÇ-¿HË'8vÍÌé¢ÎÿnÑ‰…q{m?Òû­kŸÜJk}oışçî]ûú²òÙÛ{·‹ét¸®ùîJ®äO[>´âì¿pºÕQktà˜CK:ÔÎìaêëùÊ~ıııŸ'<¿şä–ÍÊ¼+³êÕ²¬3+Ú~›³[qO×rÆSK¢®”¦İ.‰ÓT_(l’óòŞæ‹­ZºèŸMtÅ'œ¿ægoÜ÷êuA;Ó¦ÿ¨sß£5öÿ¨óOíF}aì5óX¿™ƒgTÇŒ2¯İ\^¶¶ñ?v¾~¾ªÑéİœ%ÖµLì^»Ò8&uşá]Ó÷/c¶öê}\rËÜø¶öøv{tD÷ G$d¿”>±Oÿîã>÷_L
+lÜ±®ËÇ?­Œ)¿÷uÃy“G_(øë§i^YR°³ù*ÅÕÅ4mİó^˜¬¿VüZ×S“¯Ñwi?V_iÚìù£{©~¿Ç(z}ÜuıVpçÚ÷—tü£Yıõ›/®ş—œâûxÇÕ*e´wı¯Š©_ÿÿX.¡ş÷Ê ÀÌ€ówäMFª¼vÇbòm¶¼\Õ§ôène£‘K¬æ°ÙõÕ&âùA¿!«ÛŞtü½vväÕ×ìæ¿lï¶.lÉÅšéƒû¾:rÌ—5CÊGZôã÷Ö6;îĞ¯+¨Í>Üj¥mÂ¥ºm&1mçZF¦¿¸¸gÀÖU‹¿İ=£tñúĞÏ5^Òb•|õŠ‘9ÏÜ\ğî|2wø.İùáÆÿz­Nv"&hyÓa/î‘OIù´{«¾Ü â¹–»7mÓH¹oè€cæ¶3¿n5ÿÀ¾gTÇ–Œ­©èdÚõÔ'¦í¾>Ü-wõŒ!³6–ÅMÙ2åvÃøwÖß
+½¾÷µS#¶d.ûpiÇO/(»´İÛ½\n1i;^ÿfõáo8ËwÍÒöÏ¼öÍ“ÕGf­úaÛ8…ªSËN[<ÙsÌñ‚›µWËe+Cÿf½Õüç„÷T3=i?UÙU¾nËÚâIS·µo?ct«WÍëVÛ¹jèGóW¿Ş!3z‚üûÊÊW~9ê§@ÏÔ†Áo´L<°·í´²#×WXGwİôËøÊ{DEWIÔnº±ôHæõ¥©'ª"ïÅÄd­H­ëc[5ypQxŞìÍ†>Z‹©)Vµ&£ø™ÙCúLûKûãmævºtu@FØKÕ—J#‰wLÌI´Ç}|0jÊÉÔ=ıf+²/nØqÔ7'Î˜›—ßp%ç-VÛ4©0îÂâàïÚ©XºôDÔ/ëFßºØâ¬ÁQz¼ø×æ-Ë¦5ßâ:Xr\ÙòŸ-+*'›µ°ƒ=³ãò-Åš/¶:ŞÉx©ñg»kÃ>_1·òP¢ìæÏ‹{¶óTv,é;á3÷‰£˜Ÿwff”•åíjT½,(¥W]DUÉÖ£>ÿò¤Ñ­v¾¾¿qîÙmÊ?­úár=W_ykzÁü—®·~z±İV8eŞäkOïÌ¿8¹Á†xwÅœ­/÷–/•“»¶êxw£ömı›n»£É=˜½Ö´W¹¯U“ÔU#_«<'÷­y9?Tµşvµ-»C|ùšÈÍqï_5¨ìÓÊĞ¬•¯ r²úÅw,	ysnPÊcÕm«Ê[vˆ<¶€0'Î½±U[5ùË=Qã¯6®XÓşëÒøDùò;—§¸ÏÄ¹¯­ç›]Ùdc÷êm#z³G›ÚĞÉEéMØ[Ø<(|Ò¡ãóçv)šp$nªúHİèf}¨Ê ë{S§Œí²a;“¼-jºí,SyãJ‡Ìö]Z:®ÉµsíoÄ06¿ûDÔÏ–K‘[|6#  0a¬¡æ_Q/›n_:ÖùÍ[	Á-§ìo¹¬ÿĞÛóß|¶õàğœà‰ú›…gzløıæ° òå·>hÏïÈæò²óı;h;ßìØk`ÃDã'ÏÔv(¢(öµÿãºÀ’±—ª&;7eí4~Â§·nş¥éÉ6{†~İ(gİÿ3û^Eõô7Üù¤„9ı¯/·}^öäÅw´;÷Şµ.mê	OäÖ¬¹}9lŞÊ»‰ƒj[i}µÿ_|yoé~<¶ş3:ZåUÿG©áü}ıÿè¯û­ÿÃì[— _êibapØ}ÿd*¥A{¸CBB~GH@QMbl"G¦Ò©ôOÇ¨ÂA(BH “Ä@€™Dë(,¤°]ŸLTÑ‰jAÌ‡ p¬ÉT­SQL¢Š}TÓ:5xT³BèTr¾Oe025`I‚;Œ1@Âô©jŠ¢á¦F-•3•—SXI¢]Ò‚œšMöœE CÉ¨È3:H¼§(Ğ •‘ Pw¼k, •´Š¢ÑÆzhn=E„8
+a$T„ÑI7eYlè`À¡j³ğR.;‡WÈÏÁœ÷½B3ŒVxnZ½l´ZE¦Ò-=•ç3vS:Ôi'Îã¤l÷j»ùó‡ŒdR¼î‡'2íÀ²ğ|.¼÷ƒGZ¡ÃğXPa5±K©d-œLùá„P`z¤…qæ	å í&W¾Õ-ş¢ş?(›Š]5Õ“Ñ>‹XFR”4?™"&+Ğ#-„ê@¨‡z%Dñ½ÂPl¦e’õ Ch0 ¾N+Ê¤¿a{¢D´¾‚À`V,
+D*` ^ë6’õ*À1IÊ¿Â	Añb FNğ®£á§ø2¨ĞY]vö :cDìÂŞÌ‚óo|XŒP6Îd!é‡_Jô€£ŞB[ÒP<ô€h—	ÁFze•&ñceZ™FKËtàOş“dš$ğştà$”iÀ-ƒ2Ë4H|`*Ó€Ÿq3Áíáa˜!DÃj‡Î%¬ÈÔp[2ĞbZÎ' 5•9ø$/˜á€¬¹D.J‰ucÔ]aÉÇàì©WÓ* E¸RÑ+Â"0züM¼”G({¾|›ıRU‹Jˆ*0®ò¾v7i¦‡óY›+ ş,®……ä‰b
+IÃR©¦0(DÚ$àwn¹…?2#7Ğ,’Ä >
+pGJzô­ØoËæuwBFãŸw€€Œ¥DıÎõ?lÿIW¤ÿşÀ‡ÿDy·ÿºEÕïÿ~<—d¯‚hg«ÈÀfFOÊğ–-sd‚¥BÕC¡–Qt )CEfs€•B¥V(ñvûuåâ4İ*ü
+oâüHƒß±;Y +şN­PqT…}	 \ò­PÂHi¸Qå›=Ì–k³Ú¸
+.&xtëv CÂQ£'<ğ¡ŞÉ…—ğ‚ş•ve¾ğÁø&ÀèAñi§iG˜KËGw;‹¤i³¬öt :Iéyiÿ¥[RHø–’$çøø##ŞÀ!IôP~+„„ˆÖ4ÿCÑ!a¤—¾,J*™¯™DTÃTJÔëæ"F¹9%Âà¿ˆÁ÷å)¶5ES>ì,fL¬(¦¯X‚h²®ø"†!´jb8»G‡Ê|Yø×S  $1¡£Ÿˆ>n¼ïR–¦åö~àÜ’;svNY˜4`ŠşH€‚¯ oğ$aÒëÓˆ5%â+>”oËá9³†`YşÑ®şzà%ÿ1ñ(†€6şã³ş?*Z]ÿùX®úñŸ?~ügÀƒ9ß–F 4lo;ÜPBËu-]õ2EçëØ¨¡à‹*`vÛìîp °¿›ßÒº¥v9ã6ù#ŠzÒˆ(¼ãÈ&Šq'Ñ¾L8•f»I¼ĞI~„–"cs}rNö$²Û ì.îd5	…Ø”õ£hõ£hÿñ(._´N‹Fwhà-’q¨ÂÚÕ	ı·	ı_ö3Ãöè@#¤ŠG ó°ñŸnÑ>í¿úõ?é‚!:?äİañ¹÷Íf˜-P({xPä\À·¡V¢+ViÜ˜‘â ¿ a) 0’Ü3XâÌıt"Ä•ŸjóˆÁáƒ€â†ßÙù0Ğu›ò¸PÌ€´rAùh‹+ÓâÄm X ØåÏÀú\f¸0È`ªB0L7°jâ:ÀD£¢X
+ôÏÿ%”‘‘ï´R"ƒÙL¦LĞ5FG¯A{söä¬*2#1,aW˜$TC!hğ~…È¡ ?ÑpŠ,—!$¬†Và_ğ`ğ¥µşd’SA.‹ÉÙh"¿ŠÌµ ²İn‡K‘gt²`
+·ªpE*ŒyÆb»ÍXaò"F`="Ò‹ˆ¹A:şq ÷]X‘yÓÑl EyñDBb3NI„÷%PzïtÂ7ğ&àÌã™Ş‡™È¬Â±xØ~–Œ\«‰‘¡<Â@ŞBÏ²0á«àCV1Á°÷ÀÌœùyÃîeb÷QZ˜—L°1äc¤¬|[±Åák(q
+‘™¸ƒû`Ùl—äA+—‹"äFÀÎ–2_”gLo
+¿‡ış”Ùòvú¢ÖÿéxZ¢Áe2:3²A#àaø î÷ÿQ«£êëÿÇqùÿu¡$Kì¡íÀPY|©ä*,ö”wØ£İ,< œºèˆ3Ø’·Ø`OÕ“ø+”,ŞÂvù¸q ÜìçP­ƒŒlÜiEÏzK¸*ˆeX!ˆXQ0Wö8‘¬öBPÇ2„=å;è	ôá±"¸¬‚NšÕÄFÅ‘4¨k ;š±°sí†¾ÔÔ±_¸=J"u?"(""‚Pó¦ *ÑÃ}+?ÃÀ8ÒxDˆñHÂÆ#WIBÓEsEKİ8_²à%k†ğøÎ8 Z„¯ @~_±¾,8{ÄİSDåÎßõ×ƒ/_çßŸÇÃúêHŒÿ®ŒŒTEvS¡ñÿèúñÿÇr¡~‡ÀËu¬à³Ÿi 4…Ã½y¹(bHwš@ºdXA!FaÄ>V7æ6	ñ»EÍ>„ÉDFwëªy@	³eôğO!‚P'-”÷ "B£_9 E¥I	ñ`âÀI&CÂÒC(‘AL±¢$;XEªHŠ&HsFÅâ,Â¡œHT(¢ea”¼ 5‘öt
+m¶dÑFŸ™ß¸İf¢ü3¾…ĞĞ6"{	Âf;‹½-®}@¸^™Ftb <·Ô‡;Pó	(ØdÈoø‘Ã“n8”„+¬zgŠaTRF‚WQ:E¯Š¥±ê£_ªçQ@úÈ@°ã[Å±ÔC	ıä`Uš([ÀË_Ò÷×€¶Htpé-i‚Q@2„$®ğ'Eùìñy€qRš%–‡=-”eüåqÉIô+Ê¤N;ìx¢á]£Õ’…g óœËÙ{ŠŞÏ|……œ·Ÿ%K!Á9'%Ê@ÌsiÆ?ÂşL¤ÿÇ¬ÿÜG3üàú_;€ÿôÕÊ(Xÿw‹ªÇÿ~,×£ÂöV=Ô^À6Ä{M…Iy¿DÃ¦‡Óî±äáiB£0B&Œ .rB´rè­ì$+?bã¹XšÂ O3ƒöĞfN_ÒÃD~¤!@$‹NûàA[´ÄPXŠ§óBy +Åbçù<ÂŠï˜fætÀ=dAES¦w
+(–†€‡E[°,bƒ 
+$7õJy§¦ñ¶xÆ.È°[óó€yHa¢œ†bÁ¾/¨ó$SW"¸cçÒ šDl2Á8¨.ÆóÓ$o<¢î-®¶àRøãEÂÌ˜¥ì!³Õ˜Å¤8óMÒ×}v–Ä1n»¨HšÃ‘™(F‰&ÿœè«HNÒ¯Lf³ãv)üpÀ“µø™RÀÓÚİ mãİHÄÌl0n±Ì¥Ñ/f¬,C&Ç¦«÷Æ/„yàq@‹Áùnvõ/27‚’iAÍè,"p+¤€& øÀ íVD„ˆ ÁCEÙ;ú¼|©aÍe(0:&Ãj„«s¼[êÂÚPZ]ùyy9»„B:ê';‘27hkX&›É™U$£ÅOíÓæ"eN“Ë’™27‰0šá·D%~MœUÓ
+…BFsñ ìÀnbÂÒ—*MZ„WìûpÎÄhğĞÖ;Z3y{±v˜œà“óáïC,ÄıçWIv•Ñl¶[®Ş'ßaE«'Ğz'r,fÔ¸7Y1:P­M€Ğ`0›.œlNãõ#'(ãnsN|N£e4(Ì…mBE€Äi,$™ŒÄÊy5¶ñòQ	gcû®‘‘önpÎfD] WĞD ¨$ş*ÜB Ê×uå2¸ ³Pq$ÄYò.69í.2W®òC…‹‹‰™	­á±¸ùĞó•ŸLœg±™¸d”/î&œ÷±hİÍ}X…ãU<~•Ùğ!L…ÅÜ;[$QzR—–ëõ}³Xë5 ãÔUpzÁ?¦y%à3D–?Wìß YĞùénèûàb²|ê´Ì-ñ¦¨!Ã¥ôKYÈ"WİÏF"#áÚ¶)x3ño|#¦ìí~–K&"ßtçŞ–ç4„'T¹úr‚ôïO-qPŞÕù›ı´	lûŸ:lA¾ÿ•óCAüd&ÁlŞ×»hŞ»h\#Ü3…ÿJPBÓ!|ÉÀ2A
+'Ğ™f´h‡›2ğò0¾EK8ó…Æ”‰tÚ)­¡³â•Sh O‘æìlægA¿*ëÌ·÷ôÏmÛJş¿‚µç©T‘å8IS_İ÷Ò¤éä^çâ\Ú7‡)‹	EjHÊ²šËÿ~û )ŠRÚ¤ïÆì4²Dìb± ûÀ¼Ú@ô7ªaœ¤Ğ®9HcÊ/Hôa@9ŠU]F	]£ID–±Wçs«èÆt`]x­©Èğæ˜3öÎÿû%êÿ¬‡ ¿sào‘@XŞVÁx 1ã0UAå¾µ
+pàÄÆõƒR¸”ºDNJ3æå!]l.ø>©Ğh§¢DÓô.U@CKh˜y5šQ¶ôUB;o¡UÏCqi„U3¼Š9†ƒ Z‹³Öã»†¬=ÌŒìíY’¢^7³’J¿ÅÂ<Ô(Y:C1•söá2I?àº7õpêáR` íÈ÷šWáó S„K¡jZu4JZÖXšE'º]ç“’±r®%®9óšæg§I©<;²^ö,Ä­ÌåÏvÚ¾<©¬òèÈÓ‹Bİ.
+£¢d)#/Q[·„öõ’¥vn.lRC±ˆ5U¢»†øPƒâ% ŠUñŞaï²W•Ô0F»w‹œÄQâ“2Ş0¾8`çû÷OüÉ >)g·(g¤›jW¶pnhqa‹ƒşRi·OÇı§‹(_ËÁßÂ³!ş7|tTËÿ<zx›ÿñEj4o¾Š¼òb¼Åˆî<£ı+wT˜ÊE#ÑÁúhBTòArÚ8î®Á5íŞhuÖ6B$)™ jÀ¼?áT|ıv¢jùz¿_Ş ÷¨ÿH¢JŞ¬S¿@‚’sEöÕ!ÂÑ—"IÇT€¹x_Zï¿=)Š”ü?“¸[˜É¶j+ë8ØÉÔà>æûQ&×qA5mğÑ?,	\ĞMÕ˜ŠÊÇ ó®øt
+ô_B òıïrcó×Éÿ¦¿«ùßnçÿyŠıŸrsåWÈÿ8<zÈ÷¿Ş4¼txÄù·ç?|‘§HİßúÕ"gîÔvC0hXªÅ#rú0ğ‡#ß<w_¼úùm_½=?{úO÷Ù/oœ²XÄ\Ş8ÆsŠœ½Çúo¯o=Š@çˆïfEx”™Np¡uk¨°áœBI6âë0Mâûüõ“7ÿt_=}òÒ}ñŒ °Û÷ı4¼Rwšdùío¨Îl±\G¨éÕî£ÅË`1\"bŠ‰€¦«e³ 2Ÿ¿Bê÷˜İ`œ¾üéõ^YàÔÃåŞØã²÷fôëñwÃï¾³Ë²‚e02?€yé]a`(Öí=Ä„«½zanÁ`ÆşßGï”6šµ_v,ZÒ T4Ğ0N ^0@n°P‘êöáÁ,˜%éŠpŞŸé%™C˜z0…U–6Û}‹ù¸5PêÊÿ2Îû5âÿÃ£¡Èÿ‡÷ï?RşßÃG·÷?|‘§!ş‡by>ïXÅQA!øØ·Ø#Äyàäï8Oà§Ñ*Tœ;E*7îc÷<f„O¬B‘˜štøŒŠ¾†”½…AÉØ/rÈ)XéeâÒI7ñdm–óæs.Œ‘æ5XàO„	ºõ„w2ƒÕ 9bÕväX`°~¬¥(  ²M…6}îPœì•áxÛˆR)Öò`©S=VO,(œ­b- ÕL/…'†>â~õ‹ÊbŸ±óëÂYªU,oÈÙyÇ 3¿áWhÍ7tÊ£*-,Nü™N”	“ØÙc÷k”œĞ²‰…d`½È¹Ë8Û“¥¶±t„:Ş Oğ[F·±#Ç\•¥^L,àûÜµĞ*ı&i"Âº°ß¾xe÷áãÉoøqöÓ¹Íúù|­¬Ã!6ÓáÇA”…‹¬Ê2Û=·ÉU˜,§eE%Û®O´¤y@¹—o*2­‡˜fòã:¢MœJÕëØÓ‘^uÆ_<¦ºnLa…æPçâÆÈ–¡n€¾ì	±Îg¸ÕšNMˆ­{ß?´œ8™aFo´Âïß÷Èá=Ã-İ49lŒ÷›†Ío
+r9©†ÜØ*;Ab!ƒH zÀ.uê@ˆS>3Êõ™&K "^QE™u•p»(Ö	LNWÆ6–AmÂé“(şÕg_mÒ¢ç–(.š10gè;) °“	¨‰7â¨/Ê÷Êb<‡ŞU\ùj„½»x÷rÿRÎ3ÑÂ»[ıéÿßƒú_x“(ø³¼¿›ô¿jûÿ0ôVÿû™ùå9ŠÊxwhâ¿ôVÉ"ï[¿ÒË¾õììTıùSrÓ·&nóx
+BzÒşYÚH>ğãs³ ¥LJ‰âjYgw`íæ,èyT«û9Š¥>¬Ş!êu}ëEßŞb"Sßzf9ş]$&‰€ºp¿Faü¡o%#¨ù:è«p··ˆrZkBÌEDX)ms¸Ã:Úô`¤_Ã¾ÿ\ŞQ¹ªÀ„ -µ›R0 …ŠÂ/¤§áM;ÉÓKzÇe.b g Zwï~XzéU¦-ÀDEé§Fm—¶[Şh”×¸º0Ì ÌƒYæT¢ÒVvT€ÎJMõ ¹‡  Ö)é6ì—+tø£¯0›Hd‹ƒ´\±úN‰z¨;V!ÈJ)ìEÜk	³”1g“®`÷ú–Ş(“ ±:ô…Ê—˜t aÜ:ãiùiŸŒkS,eö¼£F¼ÑµÂu÷:–t† –¡êØ/Yø;(`÷¹wåd«xL™«\+ÍD­À§Xb4Õ,‡.jàïsĞKÒ{"Ó[«ŞšÀGIÃÄ=¡yç4ÖÌ9û„æªCsüDªiFú_-°rd&åmË;W^U“O¥ó.ˆ—jÆàL¡¤ ª<s®íò°ÀCça™ézfáˆ¸A­“&ÒÄ±¥NÚ‚ûtåÌñ4
+—^æ–5ğë;‰|»œêË0Š
+Å0€ŒÄÔ(¢¿qOÏ¾õbbz éù¾á0â³@ƒk:I¬<f%ğÙn3ÓÚÈ’«<ÛÀåô¬,™hÉ	J$ÕÎ7­ïĞÚ·ª(€^•&‰“’[=2ÆuÖÔ%Ë¾uƒ•  †%ªŞAlãÁ\xœÅªÈ³‘Õp(¾òÌ}>£¢o¼Å§,X6”†i+ÀK®ƒMÜ =×úÀAN04v4ìI~p-%KvãÃn<0ZÈlPRõ^°\¥»ÈQØU’
+øYª¨:õ0{Ê‘Â]Èbˆ]©bèuDq/âè=X¦¡FSœ” BU´–ÆÊwÃØnÜd2Éh‘‡Õ«*©AK2$¶7ó%ÍË9[Ëï[%eã(ğ4éIÅÚ ıÔ»ºòjò¶äC°%^êw®ƒ÷=–¬o-ì‘ÎÔ©h
+BÒMbwš\Ó¡è×àô¹ÿp=ÕÀ|ÌómÆ%ì:,	xÃTyCQ§-'±´+mŠ¾£€éÓ`ºPY îJc mf›úSÃ8Ö®ÂÇzJº€•nnÙ«•Ğib p3.E@ı¥wí…N7ÊÍx)!/óxšd ğ¡f‚E·$*á½àô©lpæÓÅh&Å‹yš s4Íæ`/ ÿÊìïóß@Œ»H£±ÒÙ§AŞs<Ä)Ã£ár\=’ôêàãïŸ>ŞÀÿ«Oƒy|e#¸2n¸$6­D¶p•>¨Ò÷¬<kš““=ÕˆZ5{?ÁOçô€şpàıH6 ³¤YeUéÎ“y²–jLBŸ'Ö·Všx>çeçÉR¸è>¶şcœÌWÿiÒU.—Ë.aÙ4¼šæé×p`¯àù”A:÷â$õfĞ‘Ä„ó7oO©íÿ‹ú	ğw…C¥‰ÅE­Ñ\õ[øAqĞ©PÂ(˜˜ğŒ'‚!í°h@s‚ì SÄ¼ƒ£Áğ`ïÇ§Oïıô¯{çOOÏ–1(ü·ŠqCêx:ğÒñU˜%1˜‰úõ$ÿòâ÷MäTjÈ~MÒÈwÏ§øîĞª‚ÉPzN8°¹ÛVÔuÔmZ½Ò?ÏAå
+ãoşHŠ^OWYˆ‰@LAÍb¨…¸-ŸRÖàWMØX·'÷°.¢CÀ›Ö¥“G}»¿'$ qlW3fŞ^øğñ†%?
+\L»+ØG›éÙVóÁ`À8wÁèc¯ãú¯ÜC3ï*8ƒ^ÅxÛµI‡İuyÒq´­P4´×iC=YÄ±_ø¢Œ’›ÿ¸ì[Ó šŸìÿJBïÕÏ¸]%ø¸uŠè"-{k¼ÛõHó€ÜØïhÑ–ŠŒ´k/h(6(2¯½|êhÅ;é ³³ú°mãŸäCw-Œşa(M~bÇŞ?¯â6a–.g2ne²à)Ğmå' &;Ó…İ]@€uÒî·Ë/›ºíëh…à
+ãÉ‰Õ½üû$ì4Cv3êæ	¹’İàš6su®Fzu@v0‹¢6ÉÁ!ÛÍ,b€İ-#†o›å"ëÉf	hİîÄ£]Œ]e\œ¸Ğ#óíÖ$ú*‰E|WFÌçğ	À7Ù Ó<Ê¬—òlH´³©´[gúÂÆ‹˜ÚÛ^.f…3†öÖgõuLµôi˜£îÃ”‹ïÚ@†î2D»8‘RÏ™Ò¼†Ã¡ZÓå0dLÒ.˜"±‘âfã/İùñy¾6Go*ímkí<¼	¢–ÖÒjıKš,æİ5‹¦¥¡İ´ rüªşWAT!³&QîŞmŠä–}vİ"¶lªµk¯ê86H›_‚ä¿ÎÏ^9:H2nW
+¼­3ÈUqbñşÕÆÅMñÖä†tÛË1±´¢»c‰Öó@—Şo
+á«ÛßØÑ¹\3\j
+xg‹9HáUŸb½AV ”å1ÈÄî,»âsqÜ)Èd°ûfø“^µş»ÔïöÉ½ƒ°,N–ÒI	'ê-î)plRdì¾eÛ=<<×&ÚfìƒI¨°ÈD½ÎÈgÉ"ÓTú@¯ h00…èPAH)Ü—HqÕ%>úîoL‹#àÌÊ½xQR,¹|¯n3ú¬–Iê[Ğ/‹™yR’²‘3ƒ4¸
+Ñî-~rjtò‡Ù0jÿ®cOıÜ°JlÕ0t¢·J“İV:Ğ;Ç¡t$›bdª,ª”;Sûº¥£%7b³^(%èêM¢®Ù=R\RB:©/±³æÂàÑ<Û$¿F’Ç˜GÉ–iµ±oWğ}^ªG‰ä+&{»¤{h×„ÕÜ)Š ¯•õÑ!»2Ãlh%÷ãYê-••Ï.RTÛU’j(6Gº‚k,s#DUÊ:BÚ$é´ô˜šœ3+óù9&‡m67ú$‰¢d‰[šˆŸ£•u^Ë•S3ÜM æ~0›ç+:EÄ
+Ö%Š ãœv‰İ¡$¼li óÎä·l1º‡øÉy±b	cüKğ©Ï¹?}C‘!(Ş=;;™“S#U°—’>¿#Ã);ç£­SdüôiM°l[ê@Á0yÔ‰¶+ò«lIÔó•û'O ‹2ª‚âôì e¯C›˜*ÇVk©y@Z‹ÀóCÜ»¥dD€_7e*ˆÌi+&³+Ë]äqÁ¥bÔÛ¸Å>¶l÷vyü›}$³ OW¶vğì'¥2§¹eıÇºşdÃU,Ÿc¼Š¦Å¾ó#Öxÿ¹Æ,¦›ááh<²+ë	•í[_’yÂ×ãÊİöÔ,½§`èK÷}–ÄkŠ:ùSØìTá—>á¾¥ª91©1mJü¥«IÙTõN&Ÿ7w´mÕ¤òúÊ‘,ò5K¼Y³vğ¾gJ¡´ûÁp8¿±û|Š¿‹ x7”Om5SÚ3wvÒè_Ôx!µÌXñ0^-q3&ƒ‰	.Í%å4nòé‰í%·K{¨dTnHÜTƒÎ=Õ@I™¨7tÎ°Lã©ª¹H6A¹Ëi }§CnN õ“,ŒâPÚªÒQr³@îÍ·)ëæIÅ[„¥ÚÑKÊÿÁì*÷ıbÖ1¦GC4qç˜¤é*oß\X …®—/Ü(œ…¥í½uú­pç^l¦½>nt€D¦Ù>²A3LóĞëL¡”Çó*ì?Yx°¢#¼xº,NÔl~Ñó ÷Ğ|Š'˜%‘ı{Q°1£™¡,ı®-Ôc¶†İ·&Ã%V—àß7@¡[B™05Î<ØP%+¶î¶5ÿ›8±2XË§E€¬KxÎhãªãİKjd>\Sxt+¬¸AŒÈéFdMó.R¤Q!Ó(ƒfş8š¸œó5Í<.“ÀŞyš€Æ¯
+<Ä«5à¬ğQ‰uàÔ1­àTb8ò¾¬Æ¾hÆë€9ÅÁ“uİe…8À–Í q6Ë]+ˆ”¯-HLÙ¶ U}ÙŞ ö†Ô°unÈåöV!è–[Xƒ`óÏÑä‹M8	SĞsd—jùÖˆ%ò…cÆ$“CuêŞb1‚$îïÔAûŸc¡®¡VX¤6ï6°
+å;Ü” d+·¢âo%ú:;'t(<¯r
+£rxš8å×V¬¥?™F;ÏeuØ5g¢@ˆ~Ô"6%cZíMw¡!îÔ;v*“gA’y‘ø|'eé˜º¤İ»qJ±O<,àhÿtú)¯x}LŞÃ –A¿`pƒéOì,èµúÍ¤7÷"*½ËÔõ”H#¸Íİ—F„.äv½W¯‡ò;ã÷¦«»Y}èH:NÈÙÜßg~à®r¯òÛØ¢¹*D¢Ôˆ.gƒ¹ù³ÏhL¯èš£}ÍŞÊæV0u*æÊÎÌ›[KmëoR¥ÙQ	…aM=„İC‰lÎETööşÒúúÿ¼¬b.ƒY8úKNÔ¶€va††Ù!ŞÊŒ-šLÔ•”áˆ3hmarÚJ :S}îVıJ¥hi ¤Ö:Á£b'[‰-ˆ³^ø¨šÅO½ê$€ŠFüY"¨RFƒÉ^³ácS·C¶Š Òß4ÙzÄµFjİZ'Ôû’Œë+TuW1®ˆ5±´6ô·®MŠÒfá¤*¯vâz¥Í™¯ã²ßŒ$¤äËe½†‚j&éâjgFÕ…VI[2‚h5DW•òVö4Š/cîW˜FšcÆPpø)m¬1
+U*‘†/ûÖËÊ
+QÔP®«„¥(@áòš§µŞ3©®6Qiæ“Ñ„l1úCš`,ˆŸÙŠÊ˜íÔû®è
+Ó*ÂÜ­¯}¾ÖísûÜ>·ÏísûÜ>·Ïísûü•ÿÈqQÔ  
+--- end {lib.tgz} ---
+--- start{main.py} ---
+def main():
+    print("Hello from week-05!")
+
+
+if __name__ == "__main__":
+    main()
+
+--- end {main.py} ---
+--- start{pyproject.toml} ---
+[project]
+name = "week-05"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "gdown>=5.2.1",
+    "ipykernel>=7.1.0",
+    "ipywidgets>=8.1.8",
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.1",
+    "pandas>=2.3.3",
+    "pyspark>=4.1.1",
+    "pyyaml>=6.0.3",
+    "scikit-learn>=1.8.0",
+]
+
+--- end {pyproject.toml} ---
+--- start{README.md} ---
+
+--- end {README.md} ---

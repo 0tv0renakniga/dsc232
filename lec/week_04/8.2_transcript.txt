@@ -1,0 +1,123 @@
+(gentle music) (air whooshing) - [Instructor] Hi. In the previous video,
+we talked about vectors; dot products between vectors, multiplying a vector by a scalar, and then ultimately bases
+and orthonormal bases. And then we ended with a simple expression for representing any vector
+using an orthonormal basis. Now we will do something similar, but we will do it in
+the way that you do it typically in a computer, and that is using matrix notation. So what is matrix notation? So a matrix is nothing
+but a rectangle of numbers with m rows and n columns, so we say an m by n matrix. And the elements in the
+matrix are indexed by, have two indices each, one is the row number and the
+second is the column number. So this is nothing but a convenient way of representing a rectangle of numbers. We use this in software. If people are familiar with MATLAB, MATLAB is based on this kind of notation. And in Python you can get similar notation and similar functionality
+when you use NumPy. Okay, so the first operation
+that we want to describe is basically the transposition. So transposing a matrix, that is denoted by T in the superscript, is basically replacing the rows by columns and the columns by rows. So a matrix that is three
+rows and two columns becomes a matrix of two
+rows by three columns just by replacing the indices, the index of the row with
+the index of the column. So here is how this looks in NumPy. We have here a matrix
+that is two by three, zero, one, two, and this is this B matrix. And then we show that
+if the original matrix has shape two by three, the transpose of B is this matrix here that has shape three by two. And all we needed to do in order to take the
+transpose is this dot T, okay? So it's a very standard operation. You use it a lot in order to
+get things in the right order. Now, by default, we represent vectors as what we call a column vector, where the values that are associated with the different coordinates are written in a column, okay? So this is a representation of a vector that is a column vector. And then this transposed is the corresponding row vector, okay? So these two vectors have
+exactly the same information, it just that one is a
+row and one is a column. And that will be important when we want to calculate
+things with them. So if we think about a vector as a matrix, then a column vector is a d by one matrix and a row vector is a
+one by d matrix, okay? So they're both matrices, just skinny matrices or flat matrices. Now, next is that you
+can think about a matrix as a collection of vectors, right? So here is a matrix that we have, a two by three matrix, and we can represent it
+as vectors in two ways. So one way is to
+basically take each column to be a vector, okay? And that way we have
+three vectors: c1, c2, c3, and these are their values, okay? So this is a completely
+legitimate representation of the matrix as three vectors. We can do it also another way. We can represent the
+same matrix as two rows. So here is a row number
+one, row number two, and this is what's in the row. So the row here has dimension three, because that's a number of columns, while the columns had dimension two, because that's the number of rows, okay? So you can either represent the matrix by row vectors or by column vectors. So here is a way to split
+A into columns, okay? So there is this operation, split, and it says that I want to
+split it into three parts on axis one. And then this is what we get, these little matrices, okay, that are two by one. We can also take the vectors and combine them into the original matrix, and basically we do that by concatenating. So we take the columns and we concatenate them along axis one so we get back the original
+matrix that we have. So we can break the
+matrix apart into vectors and we can put these vectors together. And this is just checking that what we got is the same as what we
+had in the original. Okay, now some operations
+between matrices. So we can add or subtract matrices. That is a very simple operation. The matrices have to have
+the same shape, okay? And then we take the elements,
+the first row, first column, and the first row, first column here and we take the difference, okay? So we do this element by element and we get the difference matrix. Next, we're going to do
+matrix-matrix products. Okay, so if you want to set
+a dot product of two vectors, well we already know how to do that. Let's say we want to take 1,
+2, 3, dot product in 1, 1, 0, then we multiply one by one,
+two by one and three by zero, and we get that sum that
+is equal to three, okay? So the dot product is equal to three, we know how to do that. When we do it in matrix notation, there is this extra
+bit of work that we do, which is, what is a row column? What is a row vector? And what is a column vector? So, by convention, when we have a row vector
+multiplied by a column vector, that means that we're taking
+the dot product, okay? So one times one, two times
+one, three times zero. That's kind of the standard operation, first with a first, second with a second, third with a third, okay? So we're going down on the second one and across on the first one, and that gives us, again, the same result. And that is indeed the dot product, which is sometimes
+called the inner product. As we will see, it is sometimes useful to have a different kind of product, which is the outer product. What is the outer product? Instead of multiplying the
+elements pairwise and summing so that at the end you get a scalar, you actually get a matrix that is, the number of elements
+in the column vector defines the number of rows, and the number of
+elements in the row vector defines the number of columns. And what we have is basically we, each element here is the product
+of the first element here, the first element here, and then the first element here
+and the second element here. So we get 1, 2, 3, 1, 2, 3, and then zero times 1, 2, 3, 0, 0, 0. Okay. Now let's go the next step and
+ask what is the dot product of a matrix and a vector, okay? So we want to multiply this matrix A with this column vector C, okay? So how is that defined? We basically think about A as
+consisting of two row vectors, so this row and this row, and then we basically take the dot product between this row vector
+and the column vector and this row vector and
+the column vector, okay? So these are the row vectors, and then we take row one times
+the column vector dot product and r2 two times the column
+vector, also dot product. And that gives us two numbers, first here is the dot product, and here is the second dot product, okay? Okay, so that's what a dot product between a matrix and a vector is, now for a dot product
+between two matrices, okay? So when you multiply two matrices, you basically have to have, the number of rows in the first one has to be the number of
+columns in the second one. So when we want to do this
+product, we take the matrix A and we think about it
+as three row vectors, and we take the matrix C and we think about it
+as three column vectors. And so now when we wanna
+take the product of A and C, we have these three row vectors and we multiply them by
+these three column vectors, and we get basically a
+three by three matrix where each element here is the dot product between the corresponding elements here. Okay? So this is the more
+explicit way to to write it. So we can basically start with the dot product between vectors, and using this convention
+of row times column, we can define dot products
+between a vector and a matrix and the dot product between
+a matrix and another matrix. Okay, so how is that useful? We're going to use now this
+mechanism that we developed of matrix notation,
+multiplication, and so on, to represent what we already talked about, which is a change of basis
+using an orthonormal basis. Okay. So suppose that we have
+an orthonormal basis, so a set of unit vectors that
+are orthogonal to each other, and we are thinking about these
+unit vectors as row vectors. So here is the row vector i,
+it's a d-dimensional space, and if we can collect all
+of these vectors together into a matrix by basically
+just piling them up, making each row one of
+the orthonormal vectors, so this gives us what is
+called an orthonormal matrix. And the way that you can check that it is really an orthonormal matrix is that you take the product
+of U and U transposed, and what you should
+get is the unit matrix. The unit matrix is simply the matrix that has ones on the
+diagonal and zero elsewhere. And that corresponds to
+basically the dot product between any two different vectors is zero and the dot product of any
+vector with itself is one, because the length of the vector, the norm of the vectors is one. So that gives you this simple relationship between this orthonormal matrix and what is called the unit matrix. So what is this unit matrix? The unit matrix is something that behaves like the number one in multiplication. It basically doesn't
+change anything, right? So if you have any matrix A and you take A times I or I
+times A, you get back A, okay? So it's the matrix that doesn't... It's basically the matrix
+that acts as a unit, as an identity matrix. It doesn't change the
+matrix it multiplies with. Okay, so what about changing
+the coordinate basis? So here is the standard basis, we wrote it here. And then suppose that we have some other orthonormal basis U, okay? So we have vectors that are given to us in the kind of standard basis, which is just the coordinates
+as they're given to us, and we have some other
+basis that we want to use to represent these vectors. So what did we say that we do? When we want to calculate the coefficients that are in front of the vectors, then we basically just take
+the dot product of the vector with each one of the basis vectors. And if we want to use the matrix U, then we take the dot product with the unit vectors in that matrix. Okay? So these are the
+two representations. Now that we have that,
+suppose that we have vs and vu that are represented as column vectors and we want to transform vs into vu. So we want to basically get the vector in its standard basis, like 1, 0, 0, 0, and then transform it into this other one. So how is that done? We basically take these
+products to get the coefficient. And then what we do is we multiply this, this vector... Oh this is... Sorry. We basically transform
+vs to vu is this way. And if we want to transform
+in the other direction, we basically have to do
+the opposite transform, which turns out to be
+just U transposed, okay? So U transposed transposes from, transforms the vector
+from the second basis back to the first. Now, as you might remember, this was the formula,
+using vector notation, that is how to re-represent
+v in this form. And so using the orthonormal basis U, and so we take the dot product, we multiply it by the first unit vector, the dot product multiplied
+by the second, and so on. And so we can write that in this notation. So this long thing we can write
+in a much more succinct way, which is to say U times
+U transposed of V, okay? So you can check that
+basically U transposed of V is simply this notation. And what does it do? It basically re-represents
+v in a different basis but essentially gives you the same vector. So that equivalent to that
+is that U U transposed is the identity matrix. Now, as we will see,
+sometimes we don't want to use all of the vectors, all
+of the basis vectors, we just want to use
+somehow the basis vectors that have most information
+about our vector v. So what we do is simply
+we take this product here and we just use the first
+k, let's say, basis vectors, and we leave outside the basis vectors that are beyond k, okay? So this doesn't give us
+an exact reconstruction but it gives us an
+approximate reconstruction. And the residual error, which is the difference
+between the actual vector and the reconstruction, is simply the norm of this
+difference vector, okay? So the norm square of
+the difference vector, which is some of ri squared, that's basically the part of the vector
+that is not explained by this reconstruction, or the leftover part, the residual part. So this gives us the basic tools for doing this change
+of basis using matrices. And next time, we will
+see how to apply that to principle component analysis, which is what we will use later on. See you then.

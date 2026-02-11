@@ -1,0 +1,157 @@
+(thoughtful music) - [Instructor] So in
+order to do the analysis we're going to do on weather data, we need some linear algebra. Specifically, we need to understand what is the principle
+component analysis like. So to help you review that,
+I have these few slides. This is not intended to be the full course in linear algebra. For that, I direct you to go
+to Gilbert Strang's course, but it's more of a refresh. So what are vectors? Vectors are the basic unit of
+analysis in linear algebra, and they can represent many things. They can represent arrows, they can represent velocity and direction, they can represent location
+in plane or 3D space, and many, many other things as well. So here is a representation
+of a 2D vector, simple 2D vector, and
+it's basically this arrow, and the arrow has a tail,
+that is, in general, in the origin at zero, and then it has a length and a direction. So that's one way of
+thinking about 2D vector. 3D vector is a similar thing, but now, we have three
+coordinates, one, two, three, and the vector represents a point in this three dimensional space. So let's talk a little bit about notation. So what we're going to describe
+vectors with is a letter, let's say a, with a little arrow above it. So a, b, v1, v2, and so on. Vectors are grouped in a dimension. So all d dimensional
+vectors are denoted by Rd. So that's the Euclidean
+space of dimension d. A 2D vector and element of R2, the plane, can be described as a
+sequence of two real numbers. So a can be, let's say one and pi, or b can be -1.56 and 1.2. So this is one way of describing, but that way of describing it depends on the choice of coordinates. So it's not a unique way. For the same vector, you can have many
+different representations. A 3D vector, similarly, is
+made out of three numbers, can be represented as three numbers. And again, it's not a
+unique representation. So with d dimensional vector in Rd, is represented by d numbers. Simple generalization. So numpy allows us to define vectors in a one dimensional array. So v1 is a vector with
+the coordinates 1 and 2, v2 is a vector with coordinate -1 and 1. And here, they're represented as an array, but more specifically, as
+a one dimensional array, where the number of
+elements is the dimension. So here, we have these
+two vectors represented. Note that the vector dimension is not the same as the array dimension. So this array is a one dimensional array, but it defines a vector in R4, it has a vector of dimension four. So keep in mind that the
+dimension of an array is different than the
+dimension of the vector that is represented by this array. On the other hand, this
+array is, of course, just a one dimensional array. So it's a list of numbers. The array 1, 2, and 3, 4,
+is a two-dimensional array, and it's a rectangle of numbers. And we have a special name for
+these rectangle of numbers, we call them matrix. So a matrix is basically
+a rectangle of numbers. So here is such an array, and Python knows how to write it nicely, as a two dimensional array. So in terms of visualizing 2D vectors, here are two vectors. 1, 2, -1, 1, and 0, -2. And this here is the
+representation of these vectors. So 0, -2, 1, 2, and -1, 1. So what this basically means is the first coordinate is the X direction, the second coordinate is the Y direction. So these numbers describe
+uniquely each vector in the plane. What operations can you do on vectors? You can do addition, inversion,
+multiplying by scalar. So here, we have the vectors
+from before, v1 and v2, that are 1, 2, and -1, 1. We can write the sum of the
+vectors, here's the sum. we can write four times the vector, and we can write minus a vector. And basically what that means is that we do it coordinate by coordinate. So 1, 2 plus -1, 1, 1 + -1 gives you 0, and 2 + 1 gives you 3. Similarly, if you
+multiply v2, -1, 1, by 4, you get -4 and 4. And if you take minus
+of v1, you get -1, -2. So this is just to show
+that you can add vectors, and you can multiply a
+vector by any number, including negative numbers. So what does this look like
+in the 2D representation? So what we have here is we have
+a vector v1 and a vector v2. So this is v1, this is v2,
+and when we want to add them, we simply take this vector, the v2, and we put its tail on the head of v1, and we see to where we get. So you can easily verify
+that that's equivalent to what we did in terms of adding and subtracting coordinates. So two vectors can only be summed if they have the same dimension, right? So here, basically, I'm
+trying to sum the array 1, 1, with the array 1, 1, 1,
+and it has an exception, and the exception is because they don't have the same dimension, you can't sum them together if they don't have the same dimension. So we said that you can
+multiply a vector by a number, positive or negative. Here, we're taking the vector
+v, so this vector, 1, 2, and we're multiplying it by -0.5. So we basically are taking the vector, and we're keeping the
+direction of the vector, but we're multiplying the length by -0.5. That's how we get this vector. So we talked about these operations that you can do between vectors. One more operation that
+is a very useful one is the inner product, or dot product. And the mathematical
+notation for it is a dot b. And here is a calculation of it. So basically, I'm doing the
+dot product of v1 and v2. And what I can see is that you can write it in different ways. You can basically take the product, v1, first coordinate and
+the second coordinate, the first coordinate of v1,
+the first coordinate of v2, then the second coordinate of v1 times the second coordinate
+of v2, and then sum them. So this is basically what's
+written here, v, 0, v, 1. And then the sum of those, that gives you the the dot product. So all of these different operations give you the same result. So basically, let me write it. If I write a dot product with b, that is equal to the sum, i
+equals one to the dimension of ai times bi. The numbers, I just
+multiply them pairwise, and then I add them all up. So that's basically the dot product. The norm of a vector is the dot product of
+the vector with itself. The square root of that, sorry. So the dot product of
+the vector with itself, taking the square root, that gives you basically
+the sum of the vi squared, and that gives you the norm of the vector. And basically, the norm is
+the same as the magnitude. So the length of the vector, that is the same thing as the norm. So here are two ways
+to calculate the norm, and you can basically see that they give you the same answer. So here is the dot
+product of v1 with itself, and you take the square root of two, square root of it, and then
+you just use the function norm, and it gives you the same number. So what are unit vectors? Particularly important are
+vectors whose norm is one, these are unit vectors, and basically, those are vectors such
+that their norm is one. So their length is one,
+and you can normalize them. So we can sum two vectors,
+but we cannot sum two vectors if they have different dimensions, they're just incompatible that way. So here, what happens is we
+try to sum the vector 1, 1, with a vector 1, 1, 1,
+and we get an exception. It is not possible to
+sum these two together. Here is what happens when
+we multiply the vector by a constant. Here, the vector is 1, 2,
+and the constant is -.5. So here is the vector 1, 2, and when we multiply it by -5, we multiply each component
+by -5, or you can say we keep the same direction,
+but we make the length be - .5 of the original length. So that basically gives us this vector. So multiplying by a scalar means you keep the direction as it
+is, but you change the length. Next, we'll talk about the inner product. So that's an operation
+between two vectors, and it takes two vectors
+from the same dimension, and it basically gives you
+back a number, a scalar. So that's a dot b. So there are three different ways to describe what a dot product is, at least two, and at least three ways. And here is the way as
+it is defined in numpy, you just say numpy dot,
+you take the dot product of v1 and v2, and the other ones are that you multiply v1,
+the first coordinate, by v2, the first coordinate, and multiply v1, the second coordinate, by v2, the second coordinate,
+and then you sum the result, or you can write it in this
+way if you want to be fancy. So in any case, when
+you do this dot product of 1, 2, and -1, 1, you get the answer 1. Next, let's talk about
+the norm of a vector. So the norm of a vector
+is simply the square root of the dot product of
+the vector with itself. We also think about the norm of the vector as the length of the vector,
+which we talked about. And so that was our example here. And so the magnitude is
+the norm of the vector. And it's computed exactly
+like regular dot product. You take the first component squared, plus the second component squared, plus the third component
+squared, and so on, and then you take the
+square root of the result. So here, we have these two ways to calculate the norm of a vector v1. So the vector is 1, 2, and we can either take the
+dot product of v1 with itself, and then take square root
+of two, square root of that, or we can just ask for the norm of v1. In any case, we get 2.23. So unit vector. Of particular importance is
+vectors whose norm is one. Those vectors are called unit vectors, and play an important
+role in linear algebra. So here is how we can get a unit vector. Let's say we have a vector v1, and its norm is 2.236, and
+we want to get a unit vector. So what should we do? We should multiply, which
+should divide the vector by the length of the vector, and that will give us a
+vector in the same direction, but of length one. So that's basically what we
+call here as normalizing. u1 is v1 divided by the norm of v1. And then what we get is
+that u1 is this vector, and its norm is 1, up to
+the accuracy of numpy. Projections. So projections are one of
+the operations that we do when we talk about coordinates. So taking the dot product
+of an arbitrary vector with a unit vector has a simple
+geometric interpretation. So here is our interpretation. We have a unit vector, that is u1. So u1 is a unit vector, and v2
+is just an arbitrary vector. So that's v2, that's u1, unit vector. And then, what is the dot product? The dot product is basically
+the result of taking v2 and projecting it on this direction, meaning having this 90 degree angle here. And then this vector now is the projection of v1, v2 onto u1. So in the sense it basically
+is the component of v2 that is in the direction of u1. So next, we're going to talk
+about orthogonal vectors. So two vectors are orthogonal
+if their dot product is zero. In other words, if their vectors are 90 degrees to each other. So that can be seen in this way. Here are two vectors that are orthogonal, meaning that their dot product is zero, or that the angle between
+them is 90 degrees. So now, we can talk about bases. So we say that vectors u1, u2, and ud, up to ud in Rd form a basis if you can write any vector, you can take any vector in Rd, and you can write it as a
+sum of a scalar coefficient times these basis vectors. So the coefficients here are
+the only thing that changes. And so you can think about
+the coefficients here as a representation of the vector x. Of course, the representation will change if the basis changes. Now, we have a very special kind of bases. These are bases that are particularly easy to compute and interpret. And those are bases where the u1s form an orthonormal basis,
+and that has two properties. The first is that the vectors
+themselves are unit vectors, and the second is that every
+pair of vectors is orthogonal. So you have orthonormal basis. So the vectors are
+orthogonal to each other, and they are of unit length. So now, we're talking
+about representing a vector using an orthonormal basis, and it's just like any
+other basis that we use. However, if it's an orthonormal basis, we have a particularly easy
+way to compute the coefficient, and that is that we take the dot product between the unit vector
+and the original vector, just like what we said before, where v2 was projected on the unit vector. So in other words, we can
+write an expression like this. Basically, these are the coefficients, and these are the basis vectors. So you see that the basis
+vector is used twice. First, we multiplied by the
+vector to get the coefficient, and then we multiply
+that by the vector itself to get a vector with that length. So there's a standard basis, which is what we think
+about when we think about usually about vectors, and that is that the basis is simply the one followed by all of these zeros, then 0, 1, then 0, 0, 1. So it's one in a single place,
+and all the rest are zero. You can easily check that
+they are an orthonormal basis, and the dot product
+using the standard basis is just taking the coordinate of v, the appropriate coordinate
+of v, which is vi, right? So that is a very simple operation where we have all of the vector
+coefficients given to us, and then each one of
+them can be represented as the dot product with
+a standard unit vector. So here is such an example. Here is the vector, 5, 6, 3, 4, and here is a unit vector, 0, 1, 0, 0. And taking the dot product
+of these two, we get six, which is exactly the second
+location in the vector. So that second location is
+picked up by the unit vector. Now, we can talk about reconstruction using an orthonormal basis. So an orthonormal basis is basically what we think about as coordinates, but coordinate systems are not unique. So you can have the same set of vectors described in a different
+coordinate system, has a different representation. So let's see what that means. So basically, the vector v is represented as this list of numbers,
+which are the coefficients. And if you want to reconstruct it, you use each one of these coefficient, and you multiply it by the
+corresponding unit vector, and now, you basically
+reconstructed the vector v. So you had the components, and then you combined these
+components to make the vector v. Now, in the standard unit vectors, this is kind of a very trivial operation. However, this works for
+any orthonormal basis, and that's the important thing. So representing a vector
+v using the standard basis is just the same representation as before, but we can represent v using
+a different representation, a different basis, and that's what is
+called a change of basis. So we wanna visualize
+what we mean by that, and we're going to look at that in R2. So here, we have a vector. The vector is v, this is the vector. And we have the standard
+coordinate system, which is this one, the black one. And then we have another
+coordinate system, which is this one, right? So they're both orthonormal basis systems, and they can both be used
+to represent the vector. So the standard
+representation we already know is basically using e1 and e2. It's basically taking the
+projection here, that is -2, and taking the projection
+here, that is -1, and so we get that representation. For the other direction, we basically project on this vector, and project on the u1 and u2, and we get a different way
+to represent the same vector. So that's the important
+thing is that when we do change of coordinates, we're
+not changing the vector. We're not just changing
+how we represent the vector using orthonormal coordinates. So this was the introduction, and next, we're going to talk about matrix notation.

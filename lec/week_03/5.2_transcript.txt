@@ -1,0 +1,132 @@
+(gentle music) (intro frame whooshes) - Okay, so we just talked a
+little bit about DataFrames. What they are, how to load
+them and write them back. And now we're going to talk
+about DataFrame operations, which are the reason that
+we like to use DataFrames, because they can do things
+much more efficiently than RDD. So this notebook, again,
+has much more detail, then you can have links to
+the official guide and so on. But let's start. Okay, so the first thing
+that I want to tell you is when you write- When you run, When you run Spark, you can run it either in local mode. So it just runs in your
+environment on your computer and then you're restricted to whatever files you have
+directly in your computer. Or you can run it in remote mode, and then it really uses multiple cores, and the remote storage
+that is usually bigger, and you can do things much faster. Okay, so here we do the
+standard loading of context. And then we start the SparkContext. Okay? So here is the SparkContext
+and some details about it. Here it's running local. And then we load the next level, which is the SQL content, okay? So in order to have DataFrames, we have to have also the SQLContext, and that we generate by SQL, okay, You generate an SQLContext
+from the SparkContext. Okay. So now we're going to read "parquet_file", a pretty large one. And this is the command for doing that. And we're going to look at the schema. So how is- what is in this DataFrame? And what is in this DataFrame
+is a column called "Station", a column called "Measurement",
+a column called "Year", and column called "Values". So the special one here is "Values", which it says it's binary. So it's really just a long
+binary string or a binary array. And we need to provide a way
+to map it to what we need. And what we, what we need here is, is an array of 365 floating point numbers. And the mapping from that of that to a binary array and back
+is something that we need to we need to take care of. So the "values" is basically if people are familiar with database this is what's sometimes
+called a block, a binary block. Okay? So here we look at
+how many rows we have. So we have something like 12 million rows and we look at just the
+first row and you see that it has a station name,
+measurement type, a year, and then it has these
+binary values basically byte by byte in hexadecimal. So the first kind of
+thing that we want to do is know basic statistics
+about each column. So we can use count, mean,
+standard deviation, min and max and then this is the command
+described that generate it. And here is how it looks. You will have station, we have the, the number of rows, and we have we have the minimum and the maximum. That's the, the mean and the average the mean and the standard
+deviation are not defined because it's a string. And here we have the first string and the last string in
+alpha numerical order. Similar here. And here in year we have more
+value because it is a number. So it's the same number of rows but this is the mean of the years. 1977, it is the standard deviation. And this is this beginning
+year, 1764 to 2022. So 1764 is the first year that
+is recorded in this database. Now obviously 1764
+didn't have any computers but still people logged the temperatures and those made it eventually
+into this database. Okay? So another operation
+that we can do efficiently on DataFrames are group by and aggregate. So group by basically collects groups. The the row by some value, by some column. And then the aggregate performs and performs some aggregation
+for each, for each one. So here we are doing group by measurement. So we have the different types of measurement and we
+look at, in the aggregate we look at the minimum for
+year and the count of stations how many stations and how many years. So what we see here is that
+the counts are very, very very different from each other, right? So this TMIN had a very large number of measurements in the
+first year that was that in the first year that
+it was measured, 1764. So it's a very long-standing thing which goes well with the fact that we have so many stations
+that we counted in this case stations simply mean how many how many rows we have for each one. Okay? So basically we can use SQL on DataFrames and there are
+just two styles doing that. The first is the imperative style. So we basically write the
+commands that we want to execute on the DataFrame as as methods that operate on the DataFrame and the sequence of methods
+of select or group by. And the advantage is that
+you know what you're writing in terms of order of operation, right? You're basically saying
+exactly what order to do the operation. The disadvantage is again,
+that you draw the order of operations because it
+might be doing the operations in a different order will
+give you the same result but more efficiently. So that's a disadvantage of doing things in this imperative way. A declarative way is SQL, if you maybe know about SQL,
+it's a declarative language. So what you need to
+describe is only what it is that you want to calculate. And you don't need to, you don't
+need to calculate the exact or to define the best way to do it, right? So you leave that to be
+optimizer, but on the other hand you are putting yourself in a narrower box so you have something that
+you can do very efficiently and some things that are
+close to impossible to do. So that's, that's the trade off. Okay? So let's look at an
+example counting the number of occurrences of each
+measurement imperative. So we take the DataFrame
+and we group by measurement and then we collect those into L. Okay? So now we have a list. So we, we group, then we
+count, then we collect into L. And then when we look into
+L and we sort it, right? So we take, we take B and
+then we sort B according to the count we see which are
+the counts that are measured that we get the most of right? So precipitation, TMIN, TMAX, snow, snow depth are the
+things that we get a lot of measurements in our table. On the other hand, if we look at the beginning of the
+list or the other end we see the things that we have
+very, very few measurements. So there is like this SN57, SX15 you can go and read the description of these in the documentation. But the point is that even though there
+are millions of rows very few of these rows are
+any one of these measurements. So when you do statistics you'd usually want to
+avoid trying to do analysis of the measurement that
+appears so few times. Okay, let's do now the same thing in terms of by using SQL,
+by declaratively using it. So in order to uses SQL on your on your DataFrame, you
+need to register it. There's a kind of a formal operation in which you take your DataFrame and you make it into
+a table in a database. So this is the operation
+and all that is done here is that you register the DataFrame
+as a table. DataFrame is DF, and weather is the name that
+you will use in your SQL query. So here is an example of that. So we basically have a query in SQL which says select measurement and then count measurement at count. So how many measurements
+you call it count. And then you have the minimum
+of year as many years. So you define it, define count and min year as local variable. And you do it from
+weather, this weather table that we just registered and we group by measurements and we
+order by count descending. Okay? So what you see
+here is a declaration of what it is that we want to compute. And then when we do the, we execute this query. We get a new table, a new DataFrame and then we can show this DataFrame. Okay? So, so here it
+is, select measurement. So this is the command and now here is the result of what we did. And you see we get the exact same result. But in a way you can say
+this is more understandable and easier to, to debug than the way that you do the using declarative. Okay, so one of the command that we had we used a lot in RDD is a map, right? We take an RDD of item then we map each item to a new item. So this command is not available to us when we do DataFrames. We can't do a map command
+on each row, let's say. So in order to, to do that we first need to translate it into an RDD. So basically once it's
+now translated into RDD it's an RDD approach and now we can do whatever
+operations we want to do in the map, then we can do reduce then we can map it back
+to maybe a DataFrame. So this is a quick and dirty solution. In general, it is best,
+better to not do that but use whatever is available
+directly for DataFrames. And that's in this link here, you can get to a list of those and if you want to then you create a user
+defined function or UDF which is your function, but that operates in the context of a DataFrame. And that is quite an advanced topic. So that's kind of one
+way that you can do it but in general you would do it only when you tried already to do
+the RDD and it's too slow. Okay, so here is how do
+you do with the math. You basically DF dot RDD the RDD makes an RDD
+out of your DataFrame. And then you have the
+map where the function is you take the row and you map it into row station and row year, okay? And then you take five. So you get these, just these two columns. So this is exactly like select but we did it through map operations. Okay, aggregations are
+ways of doing statistics in the Spark SQL and, and
+it's a fast way to do those. So here are some of these operations. So these are operations that live inside the Sparks SQL environment. And so you, so they will be,
+they don't require moving back to an RDD and they are count approximate count distinct,
+average, max and min. So these are just some of
+them, there's a longer list and the one that I'm going to look at is the approximate count distinct which basically allows you
+to create a sample, right? So, and use an approximate count, okay? So So here is an approximate
+count distinct of station and it gives you the number of stations but it's not the exact
+number because it just because it just, it's just an estimate. And another thing that you can
+do is approximate quantile. So suppose we want to partition the years into ranges, 10 ranges
+such that in each range we have approximately the
+same number of records. So we have 10%, 20%, 30%, and so on. So approximate quantile
+will do this for us and we give it the level of approximation. So here is the first time that we run it the approximate quantile,
+it's with accuracy 0.1. And you get these numbers and that took about one second. And then if we want to do
+an accuracy that is much much higher, 0.001, then we get different different numbers than
+before because the ac- the estimation is much more accurate. So for instance, 1931 instead of 1764 that's a big difference. 1951 versus 1948, that's
+three year different one year different, one year different two year different and so on. So you get a more accurate estimate but it takes you more computation. So here this was five seconds. Okay? So the accuracy, the accuracy is basically how
+many examples you'd sample before you count how many
+different ones there are. Okay? So last thing I want
+to describe in general about about DataFrames and Parquet is that one of the really nice thing about Parquet is that the data can be all on this and you don't need to bring it all in in order to get the answer
+to a, to an SQL query. So here is, here is an example of that. We basically are doing select
+station measurement gear from parquet dot s. So that's the, the actual file. And this lives in Parquet path. And so this whole thing is a query and we can run this query directly on SQL context without
+reading the file explicitly. So this is what we're doing,
+select these variables from parquet datasets, weather
+datasets, weather parquet and where the measurement is snow and and these are the columns. And here is what, what we, what we got. Okay? So we basically got just the the measurement when
+the measurement is snow we got all of those elements. So that's a much smaller
+set of rows I think. So we just selected only
+the roles that I have to do with snow and that, and that basically was giving us it gives us the right, that that gives us the number, just these rows about 1 million out of the
+12 million that we have. And these are the, these
+are the top five rows. Okay? So the nice thing
+about this command is that this way of writing a command is that this parquet path
+is not going to be read in whole into memory and then manipulated. So that makes a very big difference when you have very large files. Okay, so to summarize DataFrames can be manipulated
+declaratively, which allows for more optimization.
+DataFrames can be stored and retrieved from Parquet files and it is possible to refer directly to the Parquet file in an SQL query. Okay? And we talked
+about aggregation methods and how to do them
+efficiently inside DataFrame. Okay, so I'll see you next time.

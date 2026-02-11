@@ -1,0 +1,2447 @@
+--- start{7.1_lec.pdf} ---
+7.1 Weather
+Analysis-
+Massachusett
+s
+DSC 232R, Class 7 : Weather Data
+Week 4
+Weather Data: Initial Visualization
+
+Notebook Link
+
+
+For MA
+
+
+In [1]: state=“MA”
+Data Source
+
+
+   The data is from
+    NOAA and is called GHCND,
+    you can get the details and
+    download the
+    data from AWS S3 Bucket
+   We translate the raw data
+    from the S3 Bucket into
+    parquet files that store tables
+    called “weather” and
+    “stations”
+Read Data
+
+
+Show 3 rows of joined weather+stations table
+Read Data
+Read Data
+
+
+
+
+            Vectors of 365 values
+Read Data
+Read Data
+Read or Compute Statistics
+  Information for State
+Read or Compute Statistics Information for
+Sate
+Read or Compute Statistics Information for
+Sate
+Print Statistics for TOBS
+Print Statistics for TOBS
+
+      Temp Observed
+
+
+
+
+                        TMAX
+                        TMIN
+
+
+
+
+            Celsius
+Print Statistics for TOBS
+Distribution of Undefined Elements in
+        Yearly Measurements
+Distribution of Undefined Elements in Yearly
+Measurements
+Distribution of Undefined Elements in Yearly
+Measurements
+Find Out the Definition of
+   Measurement Types
+Find Out the Definition of
+Measurement types
+  Find the Number of
+Measurements (years) for
+  Each Station in State
+Find the Number of Measurements
+(years) for Each Station in State
+ Get All Measurements for
+        year=1945,
+measurement=“TOBS” and
+        state=“MA”
+5 of the 35 ; TOBS measurements
+
+
+
+
+                 July     Jan
+Plot all 35 the TOBS measurements
+Zooming Into a Small Number of Days the Correlations between Stations are Clear
+How Different Measurements Behave, Relate to Each Other
+
+
+
+
+                                        TMAX
+                                        TMIN
+                                        TOBS
+Script for Plotting Yearly Plots
+                 Statistics Across the State
+                             Distribution of Missing Observations
+   • The distribution of missing observations is not uniform throughout the year. We visualize it
+                                                below
+
+
+
+
+Valid
+Measurement
+s
+
+
+
+
+                          Day of the
+                          Year
+Statistics Across the State:
+T Observed & Precipitation
+Statistics Across the State: Snow Depth
+Plots of Mean and Standard
+      Deviation(STD) of
+        Observations
+Plots of Mean and STD of Observations
+Plots of Mean and STD of Observations
+Plots of Mean and STD of Observations (Precipitation and
+                         Snow)
+Plots of Mean and STD of Observations (Snow Depth)
+Conclusion
+• We loaded the weather data from Parquet files
+• We explored statistics for the data
+• We explored where there are a lot of empty cells – limits the
+  accuracy of the statistics
+• We visualized different measurements as a function of the
+  day of the year
+
+NEXT: Using PCA for more refined analysis
+
+--- end {7.1_lec.pdf} ---
+--- start{7.1_notebook.md} ---
+Here are the converted Markdown files based on your instructions. I have combined the weather notebooks into `7.1_notebook.md` and separated the others as requested, preserving all details and outputs.
+
+### 7.1_notebook.md
+
+*(Contains: Processing Weather Files, Weather Analysis - VT, and Weather Analysis - MA)*
+
+```markdown
+# Processing Weather Files
+
+### NOAA Global Historical Climatology Network Daily (GHCN-D)
+
+the noaa data was downloaded from an S3 bucket descried here
+
+https://registry.opendata.aws/noaa-ghcn/
+
+#### The files and subdirs in noaa
+
+### Main Data Directory
+* **98G	csv.gz**
+
+### Documentation
+* 36K	ghcn-daily-by_year-format.rtf
+* 6.5K	ghcnd-countries.txt
+* 32M	ghcnd-inventory.txt
+* 6.5K	ghcnd-states.txt
+* 9.9M	ghcnd-stations.txt
+* 6.5K	ghcnd-version.txt
+* 36K	index.html
+* 4.1M	mingle-list.txt
+* 6.5K	readme-by_year.txt
+* 30K	readme.txt
+* 6.5K	status-by_year.txt
+* 41K	status.txt
+
+### Logs
+* 37M	download.log
+
+```python
+import pandas as pd
+
+```
+
+```python
+!head -4 file.sizes
+"""
+RETURNS ->
+
+total 102208244
+-rw-r--r-- 1 yfreund root      532654 Apr  5 15:59 1750.csv
+-rw-r--r-- 1 yfreund root       25276 Apr  5 16:00 1763.csv
+-rw-r--r-- 1 yfreund root       25283 Apr  5 16:00 1764.csv
+"""
+
+```
+
+```python
+!tail -4 file.sizes
+"""
+RETURNS ->
+
+-rw-r--r-- 1 yfreund root  1220722777 Apr  5 15:57 2020.csv
+-rw-r--r-- 1 yfreund root  1207975107 Apr  5 15:58 2021.csv
+-rw-r--r-- 1 yfreund root   276207286 Apr  5 15:59 2022.csv
+-rw-r----- 1 yfreund users          0 Apr  9 16:22 file.sizes
+"""
+
+```
+
+```python
+i=0
+D={}
+with open('file.sizes','r') as S:
+    S.readline(); S.readline()
+    for line in S.readlines():
+        if 'file' in line:
+            continue
+        #print(line[:-1])
+        L=line.split()
+        size=int(L[4])
+        year=int(L[-1][:-4])
+        #print(year,size)
+        D[year]=size
+
+```
+
+```python
+years=[]
+sizes=[]
+for year in sorted(D.keys()):
+    years.append(year)
+    sizes.append(D[year])
+
+```
+
+```python
+%pylab inline
+"""
+RETURNS ->
+
+%pylab is deprecated, use %matplotlib inline and import the required libraries.
+Populating the interactive namespace from numpy and matplotlib
+"""
+
+```
+
+```python
+#figure(figsize=[15,10])
+plot(years,sizes)
+grid()
+title('Size of GHCN-Daily data files (in Bytes) by year')
+ylabel('Bytes')
+xlabel('Year')
+"""
+RETURNS ->
+
+[Plot/Image Output: Size of GHCN-Daily data files by year]
+"""
+
+```
+
+---
+
+# Weather Analysis - VT Voc Quiz 4
+
+## Weather Data : Initial Visualization
+
+### For VT
+
+```python
+state="VT"
+
+```
+
+```python
+#sc.stop()
+
+```
+
+```python
+import pandas as pd
+import numpy as np
+import sklearn as sk
+%pylab inline
+"""
+RETURNS ->
+
+%pylab is deprecated, use %matplotlib inline and import the required libraries.
+Populating the interactive namespace from numpy and matplotlib
+"""
+
+```
+
+```python
+%%time
+%run lib/startup-voc.py
+"""
+RETURNS ->
+
+172.17.0.2
+sparkContext= <SparkContext master=local[2] appName=pyspark-shell>
+
+    pandas as    pd 	version=2.0.3 	required version>=0.19.2
+
+     numpy as    np 	version=1.24.4 	required version>=1.12.0
+
+   sklearn as    sk 	version=1.3.1 	required version>=0.18.1
+
+module urllib has no version
+   pyspark as pyspark 	version=3.5.0 	required version>=2.1.0
+
+ipywidgets as ipywidgets 	version=8.1.1 	required version>=6.0.0
+
+version of ipwidgets= 8.1.1
+
+measurements is a Dataframe (and table) with 12720632 records
+stations is a Dataframe (and table) with 119503 records
+weather is a Dataframe (and table) which is a join of measurements and stations with 12720632 records
+CPU times: user 181 ms, sys: 33.1 ms, total: 214 ms
+Wall time: 5.4 s
+"""
+
+```
+
+```python
+import warnings  # Suppress Warnings
+warnings.filterwarnings('ignore')
+
+_figsize=(10,7)
+
+```
+
+## Read Data
+
+### show 3 rows of joined weather+stations table
+
+```python
+%%time
+### Total number of stations
+stations.count()
+"""
+RETURNS ->
+
+CPU times: user 675 µs, sys: 77 µs, total: 752 µs
+Wall time: 55.2 ms
+119503
+"""
+
+```
+
+```python
+%%time
+weather=measurements.join(stations,on='station')
+weather.show(3)
+"""
+RETURNS ->
+
++-----------+-----------+----+--------------------+--------+---------+---------+------------+-------------------+-----+-------+
+|    Station|Measurement|Year|              Values|latitude|longitude|elevation|  dist2coast|               name|state|country|
++-----------+-----------+----+--------------------+--------+---------+---------+------------+-------------------+-----+-------+
+|AG000060390|       TAVG|2022|[79 00 6C 00 66 0...| 36.7167|     3.25|     24.0|   8.0234375| ALGER-DAR EL BEIDA|     |Algeria|
+|AGE00147716|       TAVG|2022|[85 00 83 00 7C 0...|    35.1|    -1.85|     83.0|0.5224609375|NEMOURS (GHAZAOUET)|     |Algeria|
+|AGM00060360|       TMIN|2022|[5A 00 19 FC 4B 0...|  36.822|    7.809|      4.9|  3.16015625|             ANNABA|     |Algeria|
++-----------+-----------+----+--------------------+--------+---------+---------+------------+-------------------+-----+-------+
+only showing top 3 rows
+
+CPU times: user 2.43 ms, sys: 1.19 ms, total: 3.61 ms
+Wall time: 892 ms
+"""
+
+```
+
+```python
+weather.count()
+"""
+RETURNS ->
+
+12720632
+"""
+
+```
+
+```python
+sqlContext.registerDataFrameAsTable(weather,'weather')
+
+```
+
+```python
+ms=['TMAX', 'SNOW', 'SNWD', 'TMIN', 'PRCP', 'TOBS']
+# ms=['TMAX', 'TMIN', 'TOBS']
+cms='or\n'.join(['Measurement="%s" '%(m) for m in ms])
+
+##  read all data for state
+Query="""
+SELECT *
+FROM weather
+WHERE state="%s" and 
+(%s)
+"""%(state,cms)
+print(Query)
+"""
+RETURNS ->
+
+
+SELECT *
+FROM weather
+WHERE state="VT" and 
+(Measurement="TMAX" or
+Measurement="SNOW" or
+Measurement="SNWD" or
+Measurement="TMIN" or
+Measurement="PRCP" or
+Measurement="TOBS" )
+
+"""
+
+```
+
+```python
+%%time
+weather_df=sqlContext.sql(Query)
+print('number of rows in result=',weather_df.count())
+weather_df.show(2)
+"""
+RETURNS ->
+
+number of rows in result= 27068
++-----------+-----------+----+--------------------+--------+---------+---------+----------+----------------+-----+-------------+
+|    Station|Measurement|Year|              Values|latitude|longitude|elevation|dist2coast|            name|state|      country|
++-----------+-----------+----+--------------------+--------+---------+---------+----------+----------------+-----+-------------+
+|US1VTAD0019|       SNOW|2022|[00 00 00 00 0D 0...| 44.1006| -73.1172|    151.5|     222.0|NEW HAVEN 2.4 SE|   VT|United States|
+|US1VTAD0019|       SNWD|2022|[33 00 00 00 19 F...| 44.1006| -73.1172|    151.5|     222.0|NEW HAVEN 2.4 SE|   VT|United States|
++-----------+-----------+----+--------------------+--------+---------+---------+----------+----------------+-----+-------------+
+only showing top 2 rows
+
+CPU times: user 1.02 ms, sys: 2.18 ms, total: 3.2 ms
+Wall time: 1.52 s
+"""
+
+```
+
+### read or compute statistics information for state.
+
+```python
+%%time
+import os.path
+from lib.computeStatistics import computeStatistics
+from pickle import dump,load
+
+weather_dir=parquet_root+'/weather_statistics/'
+if not os.path.isdir(weather_dir):
+    os.mkdir(weather_dir)
+
+pkl_filename=parquet_root+'weather-statistics/'+state+'-'+','.join(ms)+'.pkl'
+print(pkl_filename)
+!ls $pkl_filename
+"""
+RETURNS ->
+
+../Data/Weather/weather/datasets/weather-statistics/VT-TMAX,SNOW,SNWD,TMIN,PRCP,TOBS.pkl
+../Data/Weather/weather/datasets/weather-statistics/VT-TMAX,SNOW,SNWD,TMIN,PRCP,TOBS.pkl
+CPU times: user 4.95 ms, sys: 3.54 ms, total: 8.49 ms
+Wall time: 215 ms
+"""
+
+```
+
+```python
+%%time
+if os.path.isfile(pkl_filename):   
+    print('precomputed statistics file exists')
+    with open(pkl_filename,'br') as pkl_file:
+        STAT=load(pkl_file)
+else:
+    print('computing statistics')
+    STAT=computeStatistics(sqlContext,weather_df,measurements=ms)
+    with open(pkl_filename,'bw') as pkl_file:
+        dump(STAT,pkl_file)
+
+STAT.keys()
+"""
+RETURNS ->
+
+precomputed statistics file exists
+CPU times: user 0 ns, sys: 21.2 ms, total: 21.2 ms
+Wall time: 34.9 ms
+dict_keys(['TMAX', 'SNOW', 'SNWD', 'TMIN', 'PRCP', 'TOBS'])
+"""
+
+```
+
+```python
+ms=['TMAX', 'SNOW', 'SNWD', 'TMIN', 'PRCP', 'TOBS']
+# ms=['TMAX', 'TMIN', 'TOBS']
+cms='or\n'.join(['Measurement="%s" '%(m) for m in ms])
+cms
+"""
+RETURNS ->
+
+'Measurement="TMAX" or\nMeasurement="SNOW" or\nMeasurement="SNWD" or\nMeasurement="TMIN" or\nMeasurement="PRCP" or\nMeasurement="TOBS" '
+"""
+
+```
+
+```python
+print("   Name  \t                 Description             \t  Size")
+print("-"*80)
+print('\n'.join(["%10s\t%40s\t%s"%(s[0],s[1],str(s[2])) for s in STAT_Descriptions]))
+"""
+RETURNS ->
+
+   Name  	                 Description             	  Size
+--------------------------------------------------------------------------------
+     UnDef	      sample of number of undefs per row	vector whose length varies between measurements
+        NE	         count of defined values per day	(366,)
+SortedVals	                        Sample of values	vector whose length varies between measurements
+      mean	                              mean value	()
+       std	                                     std	()
+    low100	                               bottom 1%	()
+   high100	                                  top 1%	()
+   low1000	                             bottom 0.1%	()
+  high1000	                                top 0.1%	()
+         E	                   Sum of values per day	(366,)
+      Mean	                                    E/NE	(366,)
+         O	                   Sum of outer products	(366, 366)
+        NO	               counts for outer products	(366, 366)
+       Cov	                                    O/NO	(366, 366)
+       Var	  The variance per day = diagonal of Cov	(366,)
+    eigval	                        PCA eigen-values	(366,)
+    eigvec	                       PCA eigen-vectors	(366, 366)
+"""
+
+```
+
+### print statistics for TOBS
+
+```python
+S=STAT['TOBS']
+for key in ['mean', 'std', 'low100', 'high100']:
+    element=S[key]
+    print(key,'=',end='')
+    if type(element)==numpy.float64 or type(element)==numpy.float16:
+        print('%6.2f'%element)
+    elif type(element)==numpy.ndarray:
+        print (element)
+    else:
+        print('unidentified type=',type(element))
+"""
+RETURNS ->
+
+mean =  5.40
+std = 11.71
+low100 =-19.41
+high100 =-19.41
+"""
+
+```
+
+```python
+%pylab inline
+measurement='TOBS'
+Sobs=STAT[measurement]['SortedVals']
+
+#figure(figsize=[15,10])
+n_obs=Sobs.shape[0]
+p=arange(0,1,1/n_obs)
+plot(Sobs,p)
+title('CDF of '+measurement)
+grid()
+"""
+RETURNS ->
+
+%pylab is deprecated, use %matplotlib inline and import the required libraries.
+Populating the interactive namespace from numpy and matplotlib
+[Plot/Image Output: CDF of TOBS]
+"""
+
+```
+
+### distribution of undefined elements in yearly measurements.
+
+```python
+for m in ms:
+    figure()
+    undef=STAT[m]['UnDef']
+    hist(undef,bins=arange(0,400,10))
+    title(m)
+    grid()
+"""
+RETURNS ->
+
+[Plot/Image Output: Histograms for TMAX, SNOW, SNWD, TMIN, PRCP, TOBS]
+"""
+
+```
+
+### Mean and STD of temperature
+
+```python
+def plot_mean_std(m):
+    #figure(figsize=[15,10])
+    Mean=STAT[m]['Mean']
+    Var=STAT[m]['Var']
+    plot(Mean,label='Mean')
+    plot(Mean+sqrt(Var),label='Mean+std')
+    plot(Mean-sqrt(Var),label='Mean-std')
+    grid()
+    legend()
+    title(m)
+
+```
+
+```python
+plot_mean_std('TMAX')
+"""
+RETURNS ->
+
+[Plot/Image Output: Mean/STD for TMAX]
+"""
+
+```
+
+```python
+def plot_pair(meas,plot_function):
+    figure(figsize=(12,4))
+    subplot(1,2,1); plot_function(meas[0])
+    subplot(1,2,2); plot_function(meas[1])
+
+```
+
+```python
+plot_pair(['TMIN', 'TMAX'],plot_mean_std)
+"""
+RETURNS ->
+
+[Plot/Image Output: Pair plots for TMIN and TMAX]
+"""
+
+```
+
+```python
+plot_pair(['SNOW', 'SNWD'],plot_mean_std)
+"""
+RETURNS ->
+
+[Plot/Image Output: Pair plots for SNOW and SNWD]
+"""
+
+```
+
+---
+
+# Weather Analysis - MA Voc Quiz 4
+
+## Weather Data : Initial Visualization
+
+### Massachusetts
+
+```python
+state="MA"
+
+```
+
+```python
+#sc.stop()
+
+```
+
+```python
+import pandas as pd
+import numpy as np
+import sklearn as sk
+%pylab inline
+"""
+RETURNS ->
+
+%pylab is deprecated, use %matplotlib inline and import the required libraries.
+Populating the interactive namespace from numpy and matplotlib
+"""
+
+```
+
+```python
+%%time
+%run lib/startup-voc.py
+"""
+RETURNS ->
+
+172.17.0.2
+sparkContext= <SparkContext master=local[2] appName=pyspark-shell>
+
+    pandas as    pd 	version=2.0.3 	required version>=0.19.2
+
+     numpy as    np 	version=1.24.4 	required version>=1.12.0
+
+   sklearn as    sk 	version=1.3.1 	required version>=0.18.1
+
+module urllib has no version
+   pyspark as pyspark 	version=3.5.0 	required version>=2.1.0
+
+ipywidgets as ipywidgets 	version=8.1.1 	required version>=6.0.0
+
+version of ipwidgets= 8.1.1
+
+measurements is a Dataframe (and table) with 12720632 records
+stations is a Dataframe (and table) with 119503 records
+weather is a Dataframe (and table) which is a join of measurements and stations with 12720632 records
+CPU times: user 202 ms, sys: 16.9 ms, total: 219 ms
+Wall time: 5.71 s
+"""
+
+```
+
+```python
+sc
+"""
+RETURNS ->
+
+<SparkContext master=local[2] appName=pyspark-shell>
+"""
+
+```
+
+```python
+import warnings  # Suppress Warnings
+warnings.filterwarnings('ignore')
+
+_figsize=(10,7)
+
+```
+
+## Read Data
+
+### show 3 rows of joined weather+stations table
+
+```python
+### Total number of stations
+stations.count()
+"""
+RETURNS ->
+
+119503
+"""
+
+```
+
+```python
+%%time
+weather=measurements.join(stations,on='station')
+weather.show(3)
+"""
+RETURNS ->
+
++-----------+-----------+----+--------------------+--------+---------+---------+------------+-------------------+-----+-------+
+|    Station|Measurement|Year|              Values|latitude|longitude|elevation|  dist2coast|               name|state|country|
++-----------+-----------+----+--------------------+--------+---------+---------+------------+-------------------+-----+-------+
+|AG000060390|       TAVG|2022|[79 00 6C 00 66 0...| 36.7167|     3.25|     24.0|   8.0234375| ALGER-DAR EL BEIDA|     |Algeria|
+|AGE00147716|       TAVG|2022|[85 00 83 00 7C 0...|    35.1|    -1.85|     83.0|0.5224609375|NEMOURS (GHAZAOUET)|     |Algeria|
+|AGM00060360|       TMIN|2022|[5A 00 19 FC 4B 0...|  36.822|    7.809|      4.9|  3.16015625|             ANNABA|     |Algeria|
++-----------+-----------+----+--------------------+--------+---------+---------+------------+-------------------+-----+-------+
+only showing top 3 rows
+
+CPU times: user 2.15 ms, sys: 0 ns, total: 2.15 ms
+Wall time: 875 ms
+"""
+
+```
+
+```python
+sqlContext.registerDataFrameAsTable(weather,'weather')
+
+```
+
+```python
+ms=['TMAX', 'SNOW', 'SNWD', 'TMIN', 'PRCP', 'TOBS']
+# ms=['TMAX', 'TMIN', 'TOBS']
+cms='or\n'.join(['Measurement="%s" '%(m) for m in ms])
+
+##  read all data for state
+Query="""
+SELECT *
+FROM weather
+WHERE state="%s" and 
+(%s)
+"""%(state,cms)
+print(Query)
+"""
+RETURNS ->
+
+
+SELECT *
+FROM weather
+WHERE state="MA" and 
+(Measurement="TMAX" or
+Measurement="SNOW" or
+Measurement="SNWD" or
+Measurement="TMIN" or
+Measurement="PRCP" or
+Measurement="TOBS" )
+
+"""
+
+```
+
+```python
+%%time
+weather_df=sqlContext.sql(Query)
+print('number of rows in result=',weather_df.count())
+weather_df.show(2)
+"""
+RETURNS ->
+
+number of rows in result= 49710
++-----------+-----------+----+--------------------+--------+---------+---------+-------------+--------------------+-----+-------------+
+|    Station|Measurement|Year|              Values|latitude|longitude|elevation|   dist2coast|                name|state|      country|
++-----------+-----------+----+--------------------+--------+---------+---------+-------------+--------------------+-----+-------------+
+|US1MABA0017|       PRCP|2022|[00 00 77 00 00 0...| 41.5828| -70.5803|     12.8| 0.9072265625|EAST FALMOUTH 1.2...|   MA|United States|
+|US1MABA0018|       SNOW|2022|[00 00 00 00 19 F...| 41.5818| -70.5257|      9.8|0.94091796875|     WAQUOIT 0.6 SSW|   MA|United States|
++-----------+-----------+----+--------------------+--------+---------+---------+-------------+--------------------+-----+-------------+
+only showing top 2 rows
+
+CPU times: user 2.8 ms, sys: 0 ns, total: 2.8 ms
+Wall time: 1.5 s
+"""
+
+```
+
+### read or compute statistics information for state.
+
+```python
+%%time
+import os.path
+from lib.computeStatistics import computeStatistics
+from pickle import dump,load
+
+pkl_filename=parquet_root+'weather-statistics/'+state+'-'+','.join(ms)+'.pkl'
+print(pkl_filename)
+!ls $pkl_filename
+"""
+RETURNS ->
+
+../Data/Weather/weather/datasets/weather-statistics/MA-TMAX,SNOW,SNWD,TMIN,PRCP,TOBS.pkl
+../Data/Weather/weather/datasets/weather-statistics/MA-TMAX,SNOW,SNWD,TMIN,PRCP,TOBS.pkl
+CPU times: user 2.44 ms, sys: 5.91 ms, total: 8.36 ms
+Wall time: 217 ms
+"""
+
+```
+
+```python
+%%time
+if os.path.isfile(pkl_filename):   
+    print('precomputed statistics file exists')
+    with open(pkl_filename,'br') as pkl_file:
+        STAT=load(pkl_file)
+else:
+    print('computing statistics')
+    STAT=computeStatistics(sqlContext,weather_df,measurements=ms)
+    with open(pkl_filename,'bw') as pkl_file:
+        dump(STAT,pkl_file)
+
+STAT.keys()
+"""
+RETURNS ->
+
+precomputed statistics file exists
+CPU times: user 0 ns, sys: 27.7 ms, total: 27.7 ms
+Wall time: 38 ms
+dict_keys(['TMAX', 'SNOW', 'SNWD', 'TMIN', 'PRCP', 'TOBS'])
+"""
+
+```
+
+```python
+print("   Name  \t                 Description             \t  Size")
+print("-"*80)
+print('\n'.join(["%10s\t%40s\t%s"%(s[0],s[1],str(s[2])) for s in STAT_Descriptions]))
+"""
+RETURNS ->
+
+   Name  	                 Description             	  Size
+--------------------------------------------------------------------------------
+     UnDef	      sample of number of undefs per row	vector whose length varies between measurements
+        NE	         count of defined values per day	(366,)
+SortedVals	                        Sample of values	vector whose length varies between measurements
+      mean	                              mean value	()
+       std	                                     std	()
+    low100	                               bottom 1%	()
+   high100	                                  top 1%	()
+   low1000	                             bottom 0.1%	()
+  high1000	                                top 0.1%	()
+         E	                   Sum of values per day	(366,)
+      Mean	                                    E/NE	(366,)
+         O	                   Sum of outer products	(366, 366)
+        NO	               counts for outer products	(366, 366)
+       Cov	                                    O/NO	(366, 366)
+       Var	  The variance per day = diagonal of Cov	(366,)
+    eigval	                        PCA eigen-values	(366,)
+    eigvec	                       PCA eigen-vectors	(366, 366)
+"""
+
+```
+
+### print statistics for TOBS
+
+```python
+S=STAT['TOBS']
+for key in ['mean', 'std', 'low100', 'high100']:
+    element=S[key]
+    print(key,'=',end='')
+    if type(element)==numpy.float64 or type(element)==numpy.float16:
+        print('%6.2f'%element)
+    elif type(element)==numpy.ndarray:
+        print (element)
+    else:
+        print('unidentified type=',type(element))
+"""
+RETURNS ->
+
+mean =  8.31
+std = 10.31
+low100 =-11.70
+high100 = 30.59
+"""
+
+```
+
+```python
+%pylab inline
+measurement='TOBS'
+Sobs=STAT[measurement]['SortedVals']
+
+#figure(figsize=[15,10])
+n_obs=Sobs.shape[0]
+p=arange(0,1,1/n_obs)
+plot(Sobs,p)
+title('CDF of '+measurement)
+grid()
+"""
+RETURNS ->
+
+%pylab is deprecated, use %matplotlib inline and import the required libraries.
+Populating the interactive namespace from numpy and matplotlib
+[Plot/Image Output: CDF of TOBS]
+"""
+
+```
+
+### distribution of undefined elements in yearly measurements.
+
+```python
+for m in ms:
+    figure()
+    undef=STAT[m]['UnDef']
+    hist(undef,bins=arange(0,400,10))
+    title(m)
+    grid()
+"""
+RETURNS ->
+
+[Plot/Image Output: Histograms for TMAX, SNOW, SNWD, TMIN, PRCP, TOBS]
+"""
+
+```
+
+### Mean and STD of temperature
+
+```python
+def plot_mean_std(m):
+    #figure(figsize=[15,10])
+    Mean=STAT[m]['Mean']
+    Var=STAT[m]['Var']
+    plot(Mean,label='Mean')
+    plot(Mean+sqrt(Var),label='Mean+std')
+    plot(Mean-sqrt(Var),label='Mean-std')
+    grid()
+    legend()
+    title(m)
+
+```
+
+```python
+plot_mean_std('TMAX')
+"""
+RETURNS ->
+
+[Plot/Image Output: Mean/STD for TMAX]
+"""
+
+```
+
+```python
+def plot_pair(meas,plot_function):
+    figure(figsize=(12,4))
+    subplot(1,2,1); plot_function(meas[0])
+    subplot(1,2,2); plot_function(meas[1])
+
+```
+
+```python
+plot_pair(['TMIN', 'TMAX'],plot_mean_std)
+"""
+RETURNS ->
+
+[Plot/Image Output: Pair plots for TMIN and TMAX]
+"""
+
+```
+
+```python
+plot_pair(['SNOW', 'SNWD'],plot_mean_std)
+"""
+RETURNS ->
+
+[Plot/Image Output: Pair plots for SNOW and SNWD]
+"""
+
+```
+
+## Conclusion
+
+* We loaded the weather data from Parquet files.
+* We explored statistics for the data.
+* We explored where there are a lot of empty cells - limits the accuracy of the statistics.
+* We visualized different measurements as a function of the day of the year.
+* **next** Using PCA for more refined analysis.
+
+
+
+--- end {7.1_notebook.md} ---
+--- start{7.1_transcript.txt} ---
+(soft music) - [Instructor] Hi. So we did a little overview of PCA, principal component analysis, and so now you should have a rough idea about how it is used. We're going to now use it for a particular interesting and large
+dataset, the weather dataset. But before we start with that, we're just going to look at this dataset in a more simple way to get an idea of how things are laid out. So this is weather data for
+specifically Massachusetts. So we have a setting
+of this variable state to be Massachusetts. On the whole, I'm going
+to skip many of the cells, maybe most of the cells in this notebook. I'm just going to give
+you the high level cells that are important for the
+high level understanding. But it really would help you
+if you go into this notebook and run each cell and see the results in order to learn how
+to work with this data. So where does this data come from? It comes from NOAA, okay, so the National Oceanic and
+Atmospheric Administration in the United States, which collects various data sets about weather and the ocean. And this is one of the more simple ones that we can use to do our analysis. Now it's from NOAA. It's called GHCND. And you can get the details and downloads from this AWS S3 bucket. Okay, so it's in an S3 bucket, and the data in that
+bucket is in a raw form, in text form, in CSV file. And what we are doing in the background is we translate the raw
+data into parquet files that store this information, the information consists
+of weather and stations. Okay, so that's our starting
+point with this notebook is these two very large data frames. So let's see how we read this
+data from the parquet file. We, first of all, look at the
+data frame that is stations, see how many stations we have. We have about 120,503. And then we're looking at
+how, at a few of the rows in the measurements table, in the measurements table after we join it with the stations. Okay, so now we have the
+join based on the station ID. Okay, so here's a station ID. And the station ID, on the one hand, has measurement type, T average, year that it's measured, 2022, then here are values that
+I'll talk about in a minute. And then here are the
+latitude of the station, longitude of the station,
+elevation, distance to coast, and name of the station, and which country and state it comes from. So Algeria, Algeria doesn't
+have states, so state is empty. And what about this central piece? Okay, so these are vectors, vectors of 365 values, okay. And they're stored in what's called a blob in the database terminology. And basically it's a compressed version of the data that we want to use. And this data is really the center part. It basically gives for
+each day of the year, what is the value. Okay, so we want to, so this weather data frame holds all the information
+that we need to use, and in order to be able to
+use it inside SQL queries, we need to register it into the data, as a table. So that's this command, sqlContext.registerDataFrameTable, weather, that's this weather, and we are just going to give
+it the same name, weather. And that allows us to do, to create queries of the following form. So if we look here at the query, we say select all of the
+roads from the table weather, where the state is Massachusetts and the measurement is either TMAX, SNOW, SNOWD, TMIN, precipitation, or TOBS. Okay, what are all of these? We will talk about some of them later, but basically this is a query, a compact query that
+extracts from our data frame only those type of measurements for the state of Massachusetts. So the other part of the information that we have is statistics. Okay, so we have a statistics
+file which is a pkl file, which basically stores in
+it the information about, statistical information
+about Massachusetts. So those are various averages and distribution variables and so on. And we're going to look at them. What is written here is that first you check whether this exists, then it just reads the
+file, that's very quick. Or if it doesn't exist, then it runs this function
+called computeStatistics which basically computes
+all of these statistics, and that takes on the order of
+five to 10 minutes per state. So it's significant and we don't want to do it over and over. That's why we store it into a file that later we check about it. Okay, so here are the fields
+in this statistics data. Let's look at some simple ones. Mean is the mean value over all of the records in that file for each day of the year. So this is 366 entries. And then we have, then we have the, similarly
+to that, the covariants, covariants for each one of the 365 days. And then we have
+quantities that have to do with aggregating all of the days regardless of which day of the year. So we have the mean value
+and the standard deviation. So that gives us just overall distribution for this variable in Massachusetts. And then we have some information about the distribution itself. So the bottom one percentile,
+top one percentile, bottom 0.1 percentile, top 0.1 percentile. And then we have a sample of the values. So all of the values, that would be a pretty big data structure. We don't want to keep all of them. We just want to have a sample. So that's what we keep in here. And that would allow us to look at what's the overall distribution. Then we have interesting
+things that have to do with how many of the entries
+are actually defined. So one thing that you would
+find in large data set like this is that there are many rows
+and many columns defined, but many of them, maybe a large percentage is actually empty, so it doesn't have an actual value. So even though it's defined, it's not going to be very useful for us. So we'll see that in several ways. Here we're just saying how
+many undefs you have per row, so how many, in a typical year, how many undefined
+variables you have per row. So that's a sample of those. Then we have account of
+the defined values per day. So are some days more, having more defined
+values than other days? And then we have, and that's
+basically it at this point. So this is a collection of statistics that we can now visualize
+to have a better idea about what's going on in this data set. Okay. So here is some basic statistics. We are using TOBS. TOBS is temperature observed, and that's typically a temperature at 1:00 p.m. in the afternoon. Why is it important to have temperature at 1:00 p.m. in the afternoon? Because relatively that
+is a stable quantity. At 1:00 p.m. in the
+afternoon, you have quantity that doesn't change very
+much for our day-to-day. The other two quantities that we have are going to be TMAX and TMIN. Those are quantities that vary significantly more from day-to-day because they happen at
+different times of the day, and so there's more opportunity
+for TMAX to be large and for TMIN to be small. Okay, so if we just look at TOBS, the mean value is 8.31,
+standard deviation is 10.31, and the low 1% is minus 11, and high 1% is 30.59. Worthwhile saying at this
+point that this is in Celsius. And Celsius 30 degrees is pretty warm. So that shouldn't be too surprising. It would be surprising
+if it was Fahrenheit. Okay, the next we can look at how does this value of
+the T observed vary? So what we see here is the
+cumulative distribution function for T observed, and we see that it starts
+from around minus 10 and increases more or less
+linearly until it hits 30, which is consistent with what
+we just saw in our values. But now we have the whole distribution. Now let's look at a little
+bit at undefined values. As I said, in real data sets, many of the values that are declared are not really available. They were not available for measurement. So what we have here is the number of undefined entries in
+the sample of the years. Okay, so we see that
+there's a big peak at zero, meaning all of these are ones that the whole year is well-defined. There's no empty part. But then you see that there's
+little bits even up to 350. So at 350, you basically have something like 15 values that are defined. And the question then is do you really want to use
+a year with measurements where only 15 of the
+measurements are defined? Whether they're distributed throughout or whether they're bundled,
+bunched up in one place, they're not a good one to use anyway. Next, let's look at how many of the different
+measures we have. So it turns out that there
+are 64 types of measurements. Okay, so there's measurements
+like precipitation, snow, snow depth, that are very common, and we have a lot of measurements of those for Massachusetts. But then when we look at the bottom range, we see that there are
+a lot of measurements for which we have only
+one or two year stations that correspond to them. So those are probably not ones that we want to try to analyze, because we have too little data. Okay, so what are the definitions
+of these measurements? We can use a simple grip
+command to see what they are. So SNWD is snow depth, okay? And then WT and then two numbers is weather type where has one of the following values, and there's a continuation in the table of all of these different values. So this is weather type. It is a discrete
+description of the weather. Okay, let's see the
+number of measurements, the number of years for
+each station in the state. Okay, so here we use a little SQL query to find out for T observed, how many values we have, and that didn't work. This works better. Okay, let me make it a little smaller. Okay, so here we have these T observed, and we have basically extracted all of the queries that are for this, all of the, for a particular year. And this state, Massachusetts, we want to find all of
+the TOBS measurements. And so here we have the stations, and here we have all of the
+measurements that we got for these stations. So now let's plot them. And now we can see that here we have 35, five of the 35 measurements that we have and these are the temperatures. So you see that the
+temperatures across the state, they behave in a similar way, where not surprisingly
+July is the warmest month and then January is the coldest. If we look at all 35, then what we see is we have a much denser picture
+with all of the graphs. And the point that I'm
+making here is that, yes, if you have a million stations, you can plot them one on top of the other, but you won't be able
+to see very much, right? Because simply the data is so dense that you can't really
+see what is going on. But one way to see what's
+going on is to zoom in to basically look at one small
+piece of the measurements. That's what we have here. And what you see, these are like 25 days, and you see that in this range of dates, all of the temperatures
+were almost the same. And if you go a little bit back, you see that there's a cluster of places where the temperature went
+up and down like this. Okay, so there's several
+that this happened. And so what you can see is
+phenomenologically you see, as an example, you see
+that there are correlations between particular stations. And I would bet that if you look at where these stations are, they're probably close to each other, so their weather patterns
+are similar to each other, not identical, and sometimes
+they deviate quite a lot, but sometimes they are very similar. Okay, so let's start to look at how different measurements
+behave, relate to each other. Here we're taking the
+TMAX, TMIN, and TOBS, so the maximum temperature over the day, the minimum, and the
+observed at 1:00 p.m., and see how they look. And what you see is that the TMAX is at the top, it's the blue line. TMIN is at the bottom,
+it's the orange line. And TOBS is the middle is the
+green line, which makes sense. So here is just the type
+of script that we use in order to draw plots like
+this and an example of it. And now we're going to look
+at other types of statistics across the state of Massachusetts. Okay, so, so, first, what we're looking at is the number of valid measurements for each day of the year. So here you see the number
+of valid measurements, and here is the day of the year starting from January
+and ending in January. Okay, so what do we see? We see that an interesting thing is that there's more or less in the same amount, then it jumps here, more
+or less the same amount, and then it jumps down. That's a curious phenomena. What does it mean? Well, if you look, these switches are often right on the boundary between months. So what does that mean? That probably means that
+this has to do with people that are taking the measurements being changed for other people. And so these other people maybe didn't take the
+measurements as much or so on. And at the end of the day, the differences are not very big, right? So they look big because of the scaling, but they vary between five, seven, 500, 5,700 to 5,900. And here is another one for
+T observed and precipitation. And here is another one for snow depth. So for snow depth, the behavior
+is very extreme, right? You see that on the boundary of this month between April, between May and April, and then between April and
+June, and June and July, there are these jumps like I said before, and you get that during the winter months, you get more measurements from the people. So these are just the type
+of things that you want to do in order to make sure that
+your data is not corrupted, or if it's corrupted,
+it's not corrupted so much that you can't trust the statistics. Next, let's see what we see if we take the mean and standard deviation of the TMAX and TMIN. So we see that we have
+the mean is in the middle, and then you have the mean
+plus standard deviation, minus standard deviation. And it's similar for min and
+max, and they look similar, but notice that here it goes up to 30, and here it goes only up to 20, okay. So the minimum temperature goes in the summer months only up to 20. And here we have T observed. And here's the T observed that behaves in this
+picture quite similarly. It's just the value here is
+somewhere in the middle, 25. On the other hand, let's
+look at a plot pair for, let's look at the plots of the same kind of the mean plus minus standard deviation for precipitation and for snow. So for precipitation, what
+we see is that the mean is almost always the same. It's about four millimeter. But the standard deviation
+is very large around it. Of course, values of precipitation below zero are impossible, but if you just take the plus
+minus standard deviation, that's what you get. So what does that mean? It means that it's more or less on average rains the same amount throughout the year, but the reason that this looks so flat is because it rains in some days and it doesn't rain in the following days, and then another day it rains, another day, few days it doesn't rain. So when you average that over the years, you just get this very,
+very flat distribution. And similarly you get for
+snow, how much snow comes down. On the other hand, if
+you look at snow depth, you see that there is, this is snow depth, so this is the depth of
+the snow at every day measured across from the top of the snow to the earth underneath. You see that there is actually a very nice performance
+for the average, right? And that makes sense because
+from the months of April till the months of October, there is no snow. So basically you get a value that is very, very close to zero. And then in the days of the winter, you get an amount of snow and you get standard
+deviation around it, okay. Okay, so what did we do? We loaded data weather
+from the parquet files, we explored the statistics of the data, we explore where and when
+there are cells that are empty. Okay, so basically
+where is the data sparse and where is the data dense? We visualize different
+measurements of the year. And then next we're going to go and do principal
+component analysis of this in order to identify more of the structure of what is going on. Okay, I'll see you then.
+--- end {7.1_transcript.txt} ---
+--- start{8.1_notebook.md} ---
+### 8.1_notebook.md
+
+```markdown
+# Review of linear algebra
+
+This notebook is a quick review of the concepts and notation of linear algebra and their implementation in the python library `numpy`.
+
+It is not intended as a course in linear algebra. For an excellent elementary introduction to vectors and linear algebra, see [Gilbert Strang's course on linear algebra](http://web.mit.edu/18.06/www/videos.shtml)
+
+```python
+%pylab inline
+import numpy as np
+from scipy import *
+import warnings
+warnings.filterwarnings("ignore") #,category=matplotlib.cbook.mplDeprecation)
+"""
+RETURNS ->
+
+Populating the interactive namespace from numpy and matplotlib
+"""
+
+```
+
+## Vectors
+
+* arrows
+* velocity and direction
+* location in the plane or in 3D space.
+* many many other things.
+
+Vectors spaces are the at the basis of linear algebra. They can be used to describe many things: from points in the plane, to time series to the configuration of electrons in an atom. This notebook is a brief review of some of the main concepts regarding vectors in finite dimensional Euclidean space.
+
+### A 2D vector
+
+<img style="width:400px" src="images/vector.png">
+
+### A 3D vector
+
+<img style="width:300px" src="images/vectorGeom1.png">
+
+### Vector notation
+
+* We will denote vectors by letters with a little arrow on top: 
+* Vectors are grouped by **dimension **, the set of all  dimensional (euclidean) vectors is denoted .
+* A 2D vector is an element of  and **can** be described by a sequence of **two** real numbers:  or 
+* The description **is not unique**, it depends on the choice of coordinates,
+* A 3D vector is an element of 
+described by a sequence of **three** numbers:
+ or 
+* A  dimensional vector is an element of  and is described by a sequence of  real numbers: 
+
+### Lists vs Numpy Arrays
+
+The numpy library (we will reference it by np) is the workhorse library for linear algebra in python.  To creat a vector simply surround a python list () with the np.array function:
+
+```python
+x_vector = np.array([1,2,3])
+print(x_vector)
+"""
+RETURNS ->
+
+[1 2 3]
+"""
+
+```
+
+The function `np.array` converts a python list and converts it to an array:
+
+```python
+c_list = [1,2]
+print("The list:",c_list)
+print("Has length:", len(c_list))
+
+c_vector = np.array(c_list)
+print("The vector:", c_vector)
+print("Has shape:",c_vector.shape)
+"""
+RETURNS ->
+
+The list: [1, 2]
+Has length: 2
+The vector: [1 2]
+Has shape: (2,)
+"""
+
+```
+
+```python
+z = [5,6] # a list
+print("This is a list, not an array:",z)
+print(type(z))
+"""
+RETURNS ->
+
+This is a list, not an array: [5, 6]
+<class 'list'>
+"""
+
+```
+
+```python
+zarray = np.array(z)
+print("This is an array, not a list",zarray)
+print(type(zarray))
+"""
+RETURNS ->
+
+This is an array, not a list [5 6]
+<class 'numpy.ndarray'>
+"""
+
+```
+
+### Arrays as Vectors
+
+One way to define vectors in numpy is to use a one dimensional array.
+
+```python
+v1=np.array([1,2])
+v2=np.array([-1,1])
+print(v1,v2)
+"""
+RETURNS ->
+
+[1 2] [-1 1]
+"""
+
+```
+
+#### Vector dimension vs. Array dimension
+
+The word **dimension** has two different meanings in this context.
+
+* The array `np.array([1,2])` has **one** array dimension.
+* The vector `[1,2]` has **two** vector dimensions.
+
+We will try to use **dimension** for the vector dimension and **shape** or **index** for the array dimension.
+
+## Operations on vectors
+
+There are two basic operations on vectors:
+
+1. Multiplying a vector by a scalar (a number)
+2. Adding two vectors
+
+### 1. Multiplying a vector by a scalar
+
+Multiplying a vector  by a scalar  results in a vector in the same direction as  but of a different length.
+The length is multiplied by .
+If  the direction is reversed.
+
+```python
+print("v1=",v1)
+print("2*v1=",2*v1)
+"""
+RETURNS ->
+
+v1= [1 2]
+2*v1= [2 4]
+"""
+
+```
+
+### 2. Adding two vectors
+
+We add vectors by adding their components:
+
+
+```python
+print("v1=",v1)
+print("v2=",v2)
+print("v1+v2=",v1+v2)
+"""
+RETURNS ->
+
+v1= [1 2]
+v2= [-1  1]
+v1+v2= [0 3]
+"""
+
+```
+
+#### Geometry of vector addition
+
+Geometrically, adding  to  is equivalent to placing the tail of  on the head of . The sum is the vector from the tail of  to the head of .
+
+<img style="float: left;width:200px" src="images/Parallelogram.svg.png">
+
+## Linear Combinations
+
+Combining the two operations, we can form **linear combinations**:
+
+
+```python
+3*v1-2*v2
+"""
+RETURNS ->
+
+array([5, 4])
+"""
+
+```
+
+### Span
+
+The set of all linear combinations of a set of vectors  is called the **span** of the vectors.
+
+
+Usually, the span of  vectors in  is a -dimensional subspace of .
+However, if the vectors are **linearly dependent**, the dimension of the span is less than .
+
+## Norms and Dot Products
+
+### The Norm (Length) of a vector
+
+The Euclidean Norm (or length) of a vector  is defined as:
+
+
+```python
+from numpy.linalg import norm
+print("v1=",v1)
+print("norm(v1)=",norm(v1))
+print("sqrt(1^2+2^2)=",sqrt(1**2+2**2))
+"""
+RETURNS ->
+
+v1= [1 2]
+norm(v1)= 2.2360679775
+sqrt(1^2+2^2)= 2.2360679775
+"""
+
+```
+
+### The Dot Product (Inner Product)
+
+The dot product of two vectors  is defined as:
+
+
+```python
+print("v1=",v1)
+print("v2=",v2)
+print("v1.v2=",np.dot(v1,v2))
+"""
+RETURNS ->
+
+v1= [1 2]
+v2= [-1  1]
+v1.v2= 1
+"""
+
+```
+
+#### Geometric interpretation
+
+The dot product is related to the angle  between the vectors:
+
+
+This implies that if two vectors are **orthogonal** (perpendicular), their dot product is 0.
+
+```python
+v_orth = np.array([2,-1])
+print("v1=",v1)
+print("v_orth=",v_orth)
+print("dot(v1,v_orth)=",np.dot(v1,v_orth))
+"""
+RETURNS ->
+
+v1= [1 2]
+v_orth= [ 2 -1]
+dot(v1,v_orth)= 0
+"""
+
+```
+
+### Matrices
+
+A matrix is a 2D array of numbers.
+
+
+In numpy, we can create a matrix using `np.array` with a list of lists.
+
+```python
+A = np.array([[1,2],[3,4]])
+print(A)
+print("Shape:",A.shape)
+"""
+RETURNS ->
+
+[[1 2]
+ [3 4]]
+Shape: (2, 2)
+"""
+
+```
+
+#### Matrix-Vector Multiplication
+
+We can multiply a matrix  by a vector .
+
+
+This is equivalent to a linear combination of the columns of .
+
+```python
+x = np.array([1,2])
+print("A=",A)
+print("x=",x)
+print("Ax=",np.dot(A,x))
+"""
+RETURNS ->
+
+A= [[1 2]
+ [3 4]]
+x= [1 2]
+Ax= [ 5 11]
+"""
+
+```
+
+#### Matrix-Matrix Multiplication
+
+We can multiply two matrices  and .
+
+
+
+The element  is the dot product of the -th row of  and the -th column of .
+
+```python
+B = np.array([[1,0],[0,1]]) # Identity matrix
+print("A=",A)
+print("B=",B)
+print("AB=",np.dot(A,B))
+"""
+RETURNS ->
+
+A= [[1 2]
+ [3 4]]
+B= [[1 0]
+ [0 1]]
+AB= [[1 2]
+ [3 4]]
+"""
+
+```
+
+### Transpose
+
+The transpose of a matrix , denoted , is obtained by swapping rows and columns.
+
+```python
+print("A=",A)
+print("A^T=",A.T)
+"""
+RETURNS ->
+
+A= [[1 2]
+ [3 4]]
+A^T= [[1 3]
+ [2 4]]
+"""
+
+```
+
+### Solving Linear Equations
+
+We often want to solve the equation  for .
+If  is invertible, the solution is .
+
+```python
+from numpy.linalg import inv, solve
+b = np.array([5,11])
+print("A=",A)
+print("b=",b)
+x_sol = solve(A,b)
+print("solution x=",x_sol)
+print("Check Ax=",np.dot(A,x_sol))
+"""
+RETURNS ->
+
+A= [[1 2]
+ [3 4]]
+b= [ 5 11]
+solution x= [1. 2.]
+Check Ax= [ 5. 11.]
+"""
+
+```
+
+
+
+--- end {8.1_notebook.md} ---
+--- start{8.1_transcript.txt} ---
+(thoughtful music) - [Instructor] So in
+order to do the analysis we're going to do on weather data, we need some linear algebra. Specifically, we need to understand what is the principle
+component analysis like. So to help you review that,
+I have these few slides. This is not intended to be the full course in linear algebra. For that, I direct you to go
+to Gilbert Strang's course, but it's more of a refresh. So what are vectors? Vectors are the basic unit of
+analysis in linear algebra, and they can represent many things. They can represent arrows, they can represent velocity and direction, they can represent location
+in plane or 3D space, and many, many other things as well. So here is a representation
+of a 2D vector, simple 2D vector, and
+it's basically this arrow, and the arrow has a tail,
+that is, in general, in the origin at zero, and then it has a length and a direction. So that's one way of
+thinking about 2D vector. 3D vector is a similar thing, but now, we have three
+coordinates, one, two, three, and the vector represents a point in this three dimensional space. So let's talk a little bit about notation. So what we're going to describe
+vectors with is a letter, let's say a, with a little arrow above it. So a, b, v1, v2, and so on. Vectors are grouped in a dimension. So all d dimensional
+vectors are denoted by Rd. So that's the Euclidean
+space of dimension d. A 2D vector and element of R2, the plane, can be described as a
+sequence of two real numbers. So a can be, let's say one and pi, or b can be -1.56 and 1.2. So this is one way of describing, but that way of describing it depends on the choice of coordinates. So it's not a unique way. For the same vector, you can have many
+different representations. A 3D vector, similarly, is
+made out of three numbers, can be represented as three numbers. And again, it's not a
+unique representation. So with d dimensional vector in Rd, is represented by d numbers. Simple generalization. So numpy allows us to define vectors in a one dimensional array. So v1 is a vector with
+the coordinates 1 and 2, v2 is a vector with coordinate -1 and 1. And here, they're represented as an array, but more specifically, as
+a one dimensional array, where the number of
+elements is the dimension. So here, we have these
+two vectors represented. Note that the vector dimension is not the same as the array dimension. So this array is a one dimensional array, but it defines a vector in R4, it has a vector of dimension four. So keep in mind that the
+dimension of an array is different than the
+dimension of the vector that is represented by this array. On the other hand, this
+array is, of course, just a one dimensional array. So it's a list of numbers. The array 1, 2, and 3, 4,
+is a two-dimensional array, and it's a rectangle of numbers. And we have a special name for
+these rectangle of numbers, we call them matrix. So a matrix is basically
+a rectangle of numbers. So here is such an array, and Python knows how to write it nicely, as a two dimensional array. So in terms of visualizing 2D vectors, here are two vectors. 1, 2, -1, 1, and 0, -2. And this here is the
+representation of these vectors. So 0, -2, 1, 2, and -1, 1. So what this basically means is the first coordinate is the X direction, the second coordinate is the Y direction. So these numbers describe
+uniquely each vector in the plane. What operations can you do on vectors? You can do addition, inversion,
+multiplying by scalar. So here, we have the vectors
+from before, v1 and v2, that are 1, 2, and -1, 1. We can write the sum of the
+vectors, here's the sum. we can write four times the vector, and we can write minus a vector. And basically what that means is that we do it coordinate by coordinate. So 1, 2 plus -1, 1, 1 + -1 gives you 0, and 2 + 1 gives you 3. Similarly, if you
+multiply v2, -1, 1, by 4, you get -4 and 4. And if you take minus
+of v1, you get -1, -2. So this is just to show
+that you can add vectors, and you can multiply a
+vector by any number, including negative numbers. So what does this look like
+in the 2D representation? So what we have here is we have
+a vector v1 and a vector v2. So this is v1, this is v2,
+and when we want to add them, we simply take this vector, the v2, and we put its tail on the head of v1, and we see to where we get. So you can easily verify
+that that's equivalent to what we did in terms of adding and subtracting coordinates. So two vectors can only be summed if they have the same dimension, right? So here, basically, I'm
+trying to sum the array 1, 1, with the array 1, 1, 1,
+and it has an exception, and the exception is because they don't have the same dimension, you can't sum them together if they don't have the same dimension. So we said that you can
+multiply a vector by a number, positive or negative. Here, we're taking the vector
+v, so this vector, 1, 2, and we're multiplying it by -0.5. So we basically are taking the vector, and we're keeping the
+direction of the vector, but we're multiplying the length by -0.5. That's how we get this vector. So we talked about these operations that you can do between vectors. One more operation that
+is a very useful one is the inner product, or dot product. And the mathematical
+notation for it is a dot b. And here is a calculation of it. So basically, I'm doing the
+dot product of v1 and v2. And what I can see is that you can write it in different ways. You can basically take the product, v1, first coordinate and
+the second coordinate, the first coordinate of v1,
+the first coordinate of v2, then the second coordinate of v1 times the second coordinate
+of v2, and then sum them. So this is basically what's
+written here, v, 0, v, 1. And then the sum of those, that gives you the the dot product. So all of these different operations give you the same result. So basically, let me write it. If I write a dot product with b, that is equal to the sum, i
+equals one to the dimension of ai times bi. The numbers, I just
+multiply them pairwise, and then I add them all up. So that's basically the dot product. The norm of a vector is the dot product of
+the vector with itself. The square root of that, sorry. So the dot product of
+the vector with itself, taking the square root, that gives you basically
+the sum of the vi squared, and that gives you the norm of the vector. And basically, the norm is
+the same as the magnitude. So the length of the vector, that is the same thing as the norm. So here are two ways
+to calculate the norm, and you can basically see that they give you the same answer. So here is the dot
+product of v1 with itself, and you take the square root of two, square root of it, and then
+you just use the function norm, and it gives you the same number. So what are unit vectors? Particularly important are
+vectors whose norm is one, these are unit vectors, and basically, those are vectors such
+that their norm is one. So their length is one,
+and you can normalize them. So we can sum two vectors,
+but we cannot sum two vectors if they have different dimensions, they're just incompatible that way. So here, what happens is we
+try to sum the vector 1, 1, with a vector 1, 1, 1,
+and we get an exception. It is not possible to
+sum these two together. Here is what happens when
+we multiply the vector by a constant. Here, the vector is 1, 2,
+and the constant is -.5. So here is the vector 1, 2, and when we multiply it by -5, we multiply each component
+by -5, or you can say we keep the same direction,
+but we make the length be - .5 of the original length. So that basically gives us this vector. So multiplying by a scalar means you keep the direction as it
+is, but you change the length. Next, we'll talk about the inner product. So that's an operation
+between two vectors, and it takes two vectors
+from the same dimension, and it basically gives you
+back a number, a scalar. So that's a dot b. So there are three different ways to describe what a dot product is, at least two, and at least three ways. And here is the way as
+it is defined in numpy, you just say numpy dot,
+you take the dot product of v1 and v2, and the other ones are that you multiply v1,
+the first coordinate, by v2, the first coordinate, and multiply v1, the second coordinate, by v2, the second coordinate,
+and then you sum the result, or you can write it in this
+way if you want to be fancy. So in any case, when
+you do this dot product of 1, 2, and -1, 1, you get the answer 1. Next, let's talk about
+the norm of a vector. So the norm of a vector
+is simply the square root of the dot product of
+the vector with itself. We also think about the norm of the vector as the length of the vector,
+which we talked about. And so that was our example here. And so the magnitude is
+the norm of the vector. And it's computed exactly
+like regular dot product. You take the first component squared, plus the second component squared, plus the third component
+squared, and so on, and then you take the
+square root of the result. So here, we have these two ways to calculate the norm of a vector v1. So the vector is 1, 2, and we can either take the
+dot product of v1 with itself, and then take square root
+of two, square root of that, or we can just ask for the norm of v1. In any case, we get 2.23. So unit vector. Of particular importance is
+vectors whose norm is one. Those vectors are called unit vectors, and play an important
+role in linear algebra. So here is how we can get a unit vector. Let's say we have a vector v1, and its norm is 2.236, and
+we want to get a unit vector. So what should we do? We should multiply, which
+should divide the vector by the length of the vector, and that will give us a
+vector in the same direction, but of length one. So that's basically what we
+call here as normalizing. u1 is v1 divided by the norm of v1. And then what we get is
+that u1 is this vector, and its norm is 1, up to
+the accuracy of numpy. Projections. So projections are one of
+the operations that we do when we talk about coordinates. So taking the dot product
+of an arbitrary vector with a unit vector has a simple
+geometric interpretation. So here is our interpretation. We have a unit vector, that is u1. So u1 is a unit vector, and v2
+is just an arbitrary vector. So that's v2, that's u1, unit vector. And then, what is the dot product? The dot product is basically
+the result of taking v2 and projecting it on this direction, meaning having this 90 degree angle here. And then this vector now is the projection of v1, v2 onto u1. So in the sense it basically
+is the component of v2 that is in the direction of u1. So next, we're going to talk
+about orthogonal vectors. So two vectors are orthogonal
+if their dot product is zero. In other words, if their vectors are 90 degrees to each other. So that can be seen in this way. Here are two vectors that are orthogonal, meaning that their dot product is zero, or that the angle between
+them is 90 degrees. So now, we can talk about bases. So we say that vectors u1, u2, and ud, up to ud in Rd form a basis if you can write any vector, you can take any vector in Rd, and you can write it as a
+sum of a scalar coefficient times these basis vectors. So the coefficients here are
+the only thing that changes. And so you can think about
+the coefficients here as a representation of the vector x. Of course, the representation will change if the basis changes. Now, we have a very special kind of bases. These are bases that are particularly easy to compute and interpret. And those are bases where the u1s form an orthonormal basis,
+and that has two properties. The first is that the vectors
+themselves are unit vectors, and the second is that every
+pair of vectors is orthogonal. So you have orthonormal basis. So the vectors are
+orthogonal to each other, and they are of unit length. So now, we're talking
+about representing a vector using an orthonormal basis, and it's just like any
+other basis that we use. However, if it's an orthonormal basis, we have a particularly easy
+way to compute the coefficient, and that is that we take the dot product between the unit vector
+and the original vector, just like what we said before, where v2 was projected on the unit vector. So in other words, we can
+write an expression like this. Basically, these are the coefficients, and these are the basis vectors. So you see that the basis
+vector is used twice. First, we multiplied by the
+vector to get the coefficient, and then we multiply
+that by the vector itself to get a vector with that length. So there's a standard basis, which is what we think
+about when we think about usually about vectors, and that is that the basis is simply the one followed by all of these zeros, then 0, 1, then 0, 0, 1. So it's one in a single place,
+and all the rest are zero. You can easily check that
+they are an orthonormal basis, and the dot product
+using the standard basis is just taking the coordinate of v, the appropriate coordinate
+of v, which is vi, right? So that is a very simple operation where we have all of the vector
+coefficients given to us, and then each one of
+them can be represented as the dot product with
+a standard unit vector. So here is such an example. Here is the vector, 5, 6, 3, 4, and here is a unit vector, 0, 1, 0, 0. And taking the dot product
+of these two, we get six, which is exactly the second
+location in the vector. So that second location is
+picked up by the unit vector. Now, we can talk about reconstruction using an orthonormal basis. So an orthonormal basis is basically what we think about as coordinates, but coordinate systems are not unique. So you can have the same set of vectors described in a different
+coordinate system, has a different representation. So let's see what that means. So basically, the vector v is represented as this list of numbers,
+which are the coefficients. And if you want to reconstruct it, you use each one of these coefficient, and you multiply it by the
+corresponding unit vector, and now, you basically
+reconstructed the vector v. So you had the components, and then you combined these
+components to make the vector v. Now, in the standard unit vectors, this is kind of a very trivial operation. However, this works for
+any orthonormal basis, and that's the important thing. So representing a vector
+v using the standard basis is just the same representation as before, but we can represent v using
+a different representation, a different basis, and that's what is
+called a change of basis. So we wanna visualize
+what we mean by that, and we're going to look at that in R2. So here, we have a vector. The vector is v, this is the vector. And we have the standard
+coordinate system, which is this one, the black one. And then we have another
+coordinate system, which is this one, right? So they're both orthonormal basis systems, and they can both be used
+to represent the vector. So the standard
+representation we already know is basically using e1 and e2. It's basically taking the
+projection here, that is -2, and taking the projection
+here, that is -1, and so we get that representation. For the other direction, we basically project on this vector, and project on the u1 and u2, and we get a different way
+to represent the same vector. So that's the important
+thing is that when we do change of coordinates, we're
+not changing the vector. We're not just changing
+how we represent the vector using orthonormal coordinates. So this was the introduction, and next, we're going to talk about matrix notation.
+--- end {8.1_transcript.txt} ---
+--- start{8.2_notebook.md} ---
+### 8.2_notebook.md
+
+```markdown
+# Matrices  -----  Notation and Operations
+
+## Matrix notation
+<a href="https://en.wikipedia.org/wiki/Matrix_(mathematics)">Matrix Notation</a> is a notation system that allows succinct representation of complex operations, such as a change of basis. 
+<img style="float: left;width:500px;height:500px" src="images/Matrix.svg.png">
+
+* **Matlab** is based on Matrix Notation.
+
+* **Python**: similar functionality by using **numpy**
+
+Recall that a **vector** can be represented as a one dimensional array of numbers.
+
+A **matrix** can be represented as a two dimensional array of numbers.
+
+Typically:
+* **Vectors** are denoted by lower case letters: $x,y,a,b,\ldots$
+* **Matrices** are denoted by upper case letters: $X,Y,A,B,\ldots$
+* **Scalars** are denoted by greek letters: $\alpha, \sigma, \pi$
+
+### Indices
+* The $i$th element of a vector $x$ is denoted $x_i$
+* The element in row $i$ and column $j$ of matrix $A$ is denoted $A_{i,j}$
+
+### Shapes
+* A vector $x \in \mathbb{R}^d$ has $d$ elements (a.k.a. dimensions).
+* A matrix $A \in \mathbb{R}^{n,m}$ has $n$ rows and $m$ columns.
+
+### Transpose
+* The **transpose** of a vector $x$ is denoted $x^\top$ (or $x'$).
+* The transpose of a row vector is a column vector and vice versa.
+* The transpose of a matrix $A$ is denoted $A^\top$ and is defined by $(A^\top)_{i,j} = A_{j,i}$
+
+```python
+import numpy as np
+A=np.array([[1,2,3],[4,5,6]])
+print('A=\n',A)
+print('A.T=\n',A.T)
+"""
+RETURNS ->
+
+A=
+ [[1 2 3]
+ [4 5 6]]
+A.T=
+ [[1 4]
+ [2 5]
+ [3 6]]
+"""
+
+```
+
+### Dot Product
+
+The **dot product** (or **inner product**) of two vectors of the same dimension  is defined as
+
+
+```python
+x=np.array([1,2,3])
+y=np.array([-1,0,1])
+print('x=',x)
+print('y=',y)
+print('x.dot(y)=',x.dot(y))
+"""
+RETURNS ->
+
+x= [1 2 3]
+y= [-1  0  1]
+x.dot(y)= 2
+"""
+
+```
+
+### Matrix Product
+
+The product of a matrix  and a matrix  is a matrix  defined by
+
+
+
+Note that the number of columns of  must be equal to the number of rows of .
+
+In numpy `A.dot(B)` or `A @ B` computes the matrix product.
+
+```python
+A=np.array([[1,2],[3,4]])
+B=np.array([[1,0],[0,1]])
+print('A=\n',A)
+print('B=\n',B)
+print('A@B=\n',A@B)
+"""
+RETURNS ->
+
+A=
+ [[1 2]
+ [3 4]]
+B=
+ [[1 0]
+ [0 1]]
+A@B=
+ [[1 2]
+ [3 4]]
+"""
+
+```
+
+### Outer Product
+
+The **outer product** of two vectors  and  is the matrix .
+
+
+```python
+x=np.array([1,2])
+y=np.array([3,4,5])
+print('x=',x)
+print('y=',y)
+# We need to reshape x and y to be 2D arrays to compute outer product using matrix multiplication
+print('outer(x,y)=\n', np.outer(x,y))
+"""
+RETURNS ->
+
+x= [1 2]
+y= [3 4 5]
+outer(x,y)=
+ [[ 3  4  5]
+ [ 6  8 10]]
+"""
+
+```
+
+### Element-wise product
+
+Sometimes we want to multiply elements of two matrices (or vectors) of the same shape element by element.
+This is denoted by  or simply  in many programming languages.
+
+
+```python
+A=np.array([[1,2],[3,4]])
+B=np.array([[1,0],[0,1]])
+print('A=\n',A)
+print('B=\n',B)
+print('A*B=\n',A*B)
+"""
+RETURNS ->
+
+A=
+ [[1 2]
+ [3 4]]
+B=
+ [[1 0]
+ [0 1]]
+A*B=
+ [[1 0]
+ [0 4]]
+"""
+
+```
+
+### Norms
+
+The **Euclidean norm** (or  norm) of a vector  is defined as
+
+
+```python
+x=np.array([3,4])
+print('x=',x)
+print('norm(x)=',np.linalg.norm(x))
+"""
+RETURNS ->
+
+x= [3 4]
+norm(x)= 5.0
+"""
+
+```
+
+### Special Matrices
+
+* **Zero matrix**: Matrix of all zeros.
+* **Identity matrix** (): Square matrix with 1s on the diagonal and 0s elsewhere. .
+* **Diagonal matrix**: Square matrix with non-zero elements only on the diagonal.
+* **Symmetric matrix**: Square matrix equal to its transpose ().
+
+```python
+print('Zeros:\n',np.zeros((2,2)))
+print('Identity:\n',np.eye(2))
+print('Diagonal:\n',np.diag([1,2]))
+"""
+RETURNS ->
+
+Zeros:
+ [[0. 0.]
+ [0. 0.]]
+Identity:
+ [[1. 0.]
+ [0. 1.]]
+Diagonal:
+ [[1 0]
+ [0 2]]
+"""
+
+```
+
+
+--- end {8.2_notebook.md} ---
+--- start{8.2_transcript.txt} ---
+(gentle music) (air whooshing) - [Instructor] Hi. In the previous video,
+we talked about vectors; dot products between vectors, multiplying a vector by a scalar, and then ultimately bases
+and orthonormal bases. And then we ended with a simple expression for representing any vector
+using an orthonormal basis. Now we will do something similar, but we will do it in
+the way that you do it typically in a computer, and that is using matrix notation. So what is matrix notation? So a matrix is nothing
+but a rectangle of numbers with m rows and n columns, so we say an m by n matrix. And the elements in the
+matrix are indexed by, have two indices each, one is the row number and the
+second is the column number. So this is nothing but a convenient way of representing a rectangle of numbers. We use this in software. If people are familiar with MATLAB, MATLAB is based on this kind of notation. And in Python you can get similar notation and similar functionality
+when you use NumPy. Okay, so the first operation
+that we want to describe is basically the transposition. So transposing a matrix, that is denoted by T in the superscript, is basically replacing the rows by columns and the columns by rows. So a matrix that is three
+rows and two columns becomes a matrix of two
+rows by three columns just by replacing the indices, the index of the row with
+the index of the column. So here is how this looks in NumPy. We have here a matrix
+that is two by three, zero, one, two, and this is this B matrix. And then we show that
+if the original matrix has shape two by three, the transpose of B is this matrix here that has shape three by two. And all we needed to do in order to take the
+transpose is this dot T, okay? So it's a very standard operation. You use it a lot in order to
+get things in the right order. Now, by default, we represent vectors as what we call a column vector, where the values that are associated with the different coordinates are written in a column, okay? So this is a representation of a vector that is a column vector. And then this transposed is the corresponding row vector, okay? So these two vectors have
+exactly the same information, it just that one is a
+row and one is a column. And that will be important when we want to calculate
+things with them. So if we think about a vector as a matrix, then a column vector is a d by one matrix and a row vector is a
+one by d matrix, okay? So they're both matrices, just skinny matrices or flat matrices. Now, next is that you
+can think about a matrix as a collection of vectors, right? So here is a matrix that we have, a two by three matrix, and we can represent it
+as vectors in two ways. So one way is to
+basically take each column to be a vector, okay? And that way we have
+three vectors: c1, c2, c3, and these are their values, okay? So this is a completely
+legitimate representation of the matrix as three vectors. We can do it also another way. We can represent the
+same matrix as two rows. So here is a row number
+one, row number two, and this is what's in the row. So the row here has dimension three, because that's a number of columns, while the columns had dimension two, because that's the number of rows, okay? So you can either represent the matrix by row vectors or by column vectors. So here is a way to split
+A into columns, okay? So there is this operation, split, and it says that I want to
+split it into three parts on axis one. And then this is what we get, these little matrices, okay, that are two by one. We can also take the vectors and combine them into the original matrix, and basically we do that by concatenating. So we take the columns and we concatenate them along axis one so we get back the original
+matrix that we have. So we can break the
+matrix apart into vectors and we can put these vectors together. And this is just checking that what we got is the same as what we
+had in the original. Okay, now some operations
+between matrices. So we can add or subtract matrices. That is a very simple operation. The matrices have to have
+the same shape, okay? And then we take the elements,
+the first row, first column, and the first row, first column here and we take the difference, okay? So we do this element by element and we get the difference matrix. Next, we're going to do
+matrix-matrix products. Okay, so if you want to set
+a dot product of two vectors, well we already know how to do that. Let's say we want to take 1,
+2, 3, dot product in 1, 1, 0, then we multiply one by one,
+two by one and three by zero, and we get that sum that
+is equal to three, okay? So the dot product is equal to three, we know how to do that. When we do it in matrix notation, there is this extra
+bit of work that we do, which is, what is a row column? What is a row vector? And what is a column vector? So, by convention, when we have a row vector
+multiplied by a column vector, that means that we're taking
+the dot product, okay? So one times one, two times
+one, three times zero. That's kind of the standard operation, first with a first, second with a second, third with a third, okay? So we're going down on the second one and across on the first one, and that gives us, again, the same result. And that is indeed the dot product, which is sometimes
+called the inner product. As we will see, it is sometimes useful to have a different kind of product, which is the outer product. What is the outer product? Instead of multiplying the
+elements pairwise and summing so that at the end you get a scalar, you actually get a matrix that is, the number of elements
+in the column vector defines the number of rows, and the number of
+elements in the row vector defines the number of columns. And what we have is basically we, each element here is the product
+of the first element here, the first element here, and then the first element here
+and the second element here. So we get 1, 2, 3, 1, 2, 3, and then zero times 1, 2, 3, 0, 0, 0. Okay. Now let's go the next step and
+ask what is the dot product of a matrix and a vector, okay? So we want to multiply this matrix A with this column vector C, okay? So how is that defined? We basically think about A as
+consisting of two row vectors, so this row and this row, and then we basically take the dot product between this row vector
+and the column vector and this row vector and
+the column vector, okay? So these are the row vectors, and then we take row one times
+the column vector dot product and r2 two times the column
+vector, also dot product. And that gives us two numbers, first here is the dot product, and here is the second dot product, okay? Okay, so that's what a dot product between a matrix and a vector is, now for a dot product
+between two matrices, okay? So when you multiply two matrices, you basically have to have, the number of rows in the first one has to be the number of
+columns in the second one. So when we want to do this
+product, we take the matrix A and we think about it
+as three row vectors, and we take the matrix C and we think about it
+as three column vectors. And so now when we wanna
+take the product of A and C, we have these three row vectors and we multiply them by
+these three column vectors, and we get basically a
+three by three matrix where each element here is the dot product between the corresponding elements here. Okay? So this is the more
+explicit way to to write it. So we can basically start with the dot product between vectors, and using this convention
+of row times column, we can define dot products
+between a vector and a matrix and the dot product between
+a matrix and another matrix. Okay, so how is that useful? We're going to use now this
+mechanism that we developed of matrix notation,
+multiplication, and so on, to represent what we already talked about, which is a change of basis
+using an orthonormal basis. Okay. So suppose that we have
+an orthonormal basis, so a set of unit vectors that
+are orthogonal to each other, and we are thinking about these
+unit vectors as row vectors. So here is the row vector i,
+it's a d-dimensional space, and if we can collect all
+of these vectors together into a matrix by basically
+just piling them up, making each row one of
+the orthonormal vectors, so this gives us what is
+called an orthonormal matrix. And the way that you can check that it is really an orthonormal matrix is that you take the product
+of U and U transposed, and what you should
+get is the unit matrix. The unit matrix is simply the matrix that has ones on the
+diagonal and zero elsewhere. And that corresponds to
+basically the dot product between any two different vectors is zero and the dot product of any
+vector with itself is one, because the length of the vector, the norm of the vectors is one. So that gives you this simple relationship between this orthonormal matrix and what is called the unit matrix. So what is this unit matrix? The unit matrix is something that behaves like the number one in multiplication. It basically doesn't
+change anything, right? So if you have any matrix A and you take A times I or I
+times A, you get back A, okay? So it's the matrix that doesn't... It's basically the matrix
+that acts as a unit, as an identity matrix. It doesn't change the
+matrix it multiplies with. Okay, so what about changing
+the coordinate basis? So here is the standard basis, we wrote it here. And then suppose that we have some other orthonormal basis U, okay? So we have vectors that are given to us in the kind of standard basis, which is just the coordinates
+as they're given to us, and we have some other
+basis that we want to use to represent these vectors. So what did we say that we do? When we want to calculate the coefficients that are in front of the vectors, then we basically just take
+the dot product of the vector with each one of the basis vectors. And if we want to use the matrix U, then we take the dot product with the unit vectors in that matrix. Okay? So these are the
+two representations. Now that we have that,
+suppose that we have vs and vu that are represented as column vectors and we want to transform vs into vu. So we want to basically get the vector in its standard basis, like 1, 0, 0, 0, and then transform it into this other one. So how is that done? We basically take these
+products to get the coefficient. And then what we do is we multiply this, this vector... Oh this is... Sorry. We basically transform
+vs to vu is this way. And if we want to transform
+in the other direction, we basically have to do
+the opposite transform, which turns out to be
+just U transposed, okay? So U transposed transposes from, transforms the vector
+from the second basis back to the first. Now, as you might remember, this was the formula,
+using vector notation, that is how to re-represent
+v in this form. And so using the orthonormal basis U, and so we take the dot product, we multiply it by the first unit vector, the dot product multiplied
+by the second, and so on. And so we can write that in this notation. So this long thing we can write
+in a much more succinct way, which is to say U times
+U transposed of V, okay? So you can check that
+basically U transposed of V is simply this notation. And what does it do? It basically re-represents
+v in a different basis but essentially gives you the same vector. So that equivalent to that
+is that U U transposed is the identity matrix. Now, as we will see,
+sometimes we don't want to use all of the vectors, all
+of the basis vectors, we just want to use
+somehow the basis vectors that have most information
+about our vector v. So what we do is simply
+we take this product here and we just use the first
+k, let's say, basis vectors, and we leave outside the basis vectors that are beyond k, okay? So this doesn't give us
+an exact reconstruction but it gives us an
+approximate reconstruction. And the residual error, which is the difference
+between the actual vector and the reconstruction, is simply the norm of this
+difference vector, okay? So the norm square of
+the difference vector, which is some of ri squared, that's basically the part of the vector
+that is not explained by this reconstruction, or the leftover part, the residual part. So this gives us the basic tools for doing this change
+of basis using matrices. And next time, we will
+see how to apply that to principle component analysis, which is what we will use later on. See you then.
+--- end {8.2_transcript.txt} ---
+--- start{8.3_notebook.md} ---
+### 8.3_notebook.md
+
+```markdown
+# Principal components analysis
+
+```python
+%pylab inline
+import pandas as pd
+from numpy import arange,array,ones,linalg
+import warnings
+warnings.filterwarnings("ignore")
+"""
+RETURNS ->
+
+%pylab is deprecated, use %matplotlib inline and import the required libraries.
+Populating the interactive namespace from numpy and matplotlib
+"""
+
+```
+
+## Small example
+
+Suppose we have 9 points on the plane, defined by their  coordinates
+
+```python
+data = array([
+    [ 2.4,  0.7],
+    [ 2.9, -0.7],
+    [ 2.2, -1.6],
+    [ 3. ,  1.2],
+    [ 2.4, -0.2],
+    [ 4.6,  1.1],
+    [ 2.3, -2.1],
+    [ 0.7, -1.3],
+    [ 1.1, -0.2]])
+plt.scatter(data[:,0],data[:,1])
+plt.xlim(-10,10); plt.ylim(-10,10)
+plt.title('original data')
+grid()
+"""
+RETURNS ->
+
+[Plot/Image Output: Scatter plot of original data]
+"""
+
+```
+
+### PCA - step by step
+
+#### 1. Mean centering
+
+We first subtract the mean from each coordinate to center the data around the origin.
+
+```python
+mn=mean(data,axis=0)
+data-=mn
+plt.scatter(data[:,0],data[:,1])
+plt.xlim(-4,4); plt.ylim(-4,4)
+plt.title('Mean centered data')
+grid()
+"""
+RETURNS ->
+
+[Plot/Image Output: Scatter plot of mean centered data]
+"""
+
+```
+
+#### 2. Covariance matrix
+
+We calculate the covariance matrix of the data.
+
+
+
+where  is the data matrix (n samples x d features).
+
+```python
+C = cov(data.T)
+print(C)
+"""
+RETURNS ->
+
+[[1.26763889 0.73902778]
+ [0.73902778 1.41111111]]
+"""
+
+```
+
+#### 3. Eigen decomposition
+
+We compute the eigenvalues and eigenvectors of the covariance matrix.
+
+```python
+evals,evecs=linalg.eig(C)
+print("Eigenvalues:",evals)
+print("Eigenvectors:\n",evecs)
+"""
+RETURNS ->
+
+Eigenvalues: [0.59726978 2.08148022]
+Eigenvectors:
+ [[-0.74106918 -0.67142751]
+ [ 0.67142751 -0.74106918]]
+"""
+
+```
+
+#### 4. Projection
+
+The principal components are the eigenvectors corresponding to the largest eigenvalues.
+We can project the data onto the principal components to reduce dimensionality.
+
+```python
+# Sort by eigenvalue in descending order
+idx = argsort(evals)[::-1]
+evecs = evecs[:,idx]
+evals = evals[idx]
+
+print("Sorted Eigenvalues:",evals)
+print("Sorted Eigenvectors:\n",evecs)
+
+# Project data
+projected_data = dot(data, evecs)
+
+plt.scatter(projected_data[:,0],projected_data[:,1])
+plt.xlim(-4,4); plt.ylim(-4,4)
+plt.title('Data projected onto PC1 and PC2')
+grid()
+"""
+RETURNS ->
+
+Sorted Eigenvalues: [2.08148022 0.59726978]
+Sorted Eigenvectors:
+ [[-0.67142751 -0.74106918]
+ [-0.74106918  0.67142751]]
+[Plot/Image Output: Scatter plot of projected data]
+"""
+
+```
+
+### Explanation
+
+* The **first principal component** (PC1) corresponds to the direction of maximum variance in the data.
+* The **second principal component** (PC2) is orthogonal to PC1 and captures the remaining variance.
+* The **eigenvalues** indicate the amount of variance explained by each principal component.
+
+```python
+var_explained = evals / sum(evals)
+print("Variance explained by PC1:", var_explained[0])
+print("Variance explained by PC2:", var_explained[1])
+"""
+RETURNS ->
+
+Variance explained by PC1: 0.7770172605886616
+Variance explained by PC2: 0.2229827394113384
+"""
+
+```
+
+```
+
+```
+
+--- end {8.3_notebook.md} ---
+--- start{8.3_transcript.txt} ---
+(gentle tune plays) - [Instructor] Principle
+Component Analysis, Part one, Take six. So today we're going to talk about principle component analysis. This is one of the oldest and most useful methods
+in statistics, way earlier than neural networks or boosting
+or anything of that type. And indeed it is still a very
+powerful and useful method. And so it is worth our
+while to understand how to use it and what the results mean. So what is principle component analysis? The idea basically is that you have very high dimensional data let's say 1,000
+dimensions, and you want to represent the data using
+something much smaller let's say 10 dimensions. So sometimes you can do that, not always, but when you can do that this kind of representation
+can be found using PCA. So dimensionality reduction,
+we want to reduce the number of features or dimensions in the dataset. Why do we want to do that? First, because it reduces
+storage and computation. It gives us a more succinct
+way to store the data and therefore to process
+the data more quickly. And the high dimensional data
+often has strong dependencies, strong correlations
+between different features. And so we can hope to
+find a representation that would have less of that redundancy
+and therefore be smaller. Finally, if we have features
+that have no relation to other features, those
+are often if not always, features that are really just noise. So we would do better if we remove them and in
+a sense, clean the data. So here is an example of a situation where we
+might want to use PCA. We have images of digits. Each pixel here is a value
+between zero and 255. And together they represent the image of a particular digit, handwritten digit. And the dimension of this data point is the number of pixels
+that you have, which is, I believe 764 here. Okay? So the question is, are all
+of these pixels really equally informative or can we remove some of them and not encode them at all? So it is pretty clear that if
+we look close to the corners those pixels tend to be always black. So they vary very little
+from image to image and therefore maybe we can just throw them out and not incur much of
+a distortion of our image. Okay? So what we're going to try and do is remove those pixels
+that have small variance. So the data is a classical
+data set, it's called MNIS. And we want to know what
+fraction of the total variance over all of the pixels, what are the pixels that
+have the least variance? How many of them and so on. So what we can do is we
+can simply sort them, we can calculate the
+variance for each pixel, and then we can sort them from the least variance
+to the most variance. And this is the graph that we get. Okay? So we see that the
+smallest variance pixels up to like 300, they really
+have very, very small variance and maybe we can just remove these pixels and just have the pixels that
+are above like 300 to 764. Okay? So that is a legitimate way of going but as we'll see, we can
+do significantly better. And that is by not looking just at pixels but at linear combinations of pixels. So to understand how the
+redundancy or the correlation between data points
+gives us the ability to reduce the dimension, let's look at the simple
+two-dimensional example. So we have here two coordinates the horizontal and the vertical and the data points are
+the blue points, okay? So we see that the data
+points clearly have direction in which they tend to follow and their variation in the
+other direction is small. So this is this direction that
+has the largest variation. And what we can basically
+think of is let's take each one of these points and project
+it on this direction and use that as our approximation our approximate reconstruction
+of the data point. Okay? That's the basic idea. So if the distance between the points and their projection and
+the line, the distance between the point and the
+line is simply the distance between the point and the
+projection of the point. If those are all small, then we will have small
+distortion in our reconstruction. And the direction that
+gives us the smallest distortion is the direction
+that gives us maximum variance. Okay. So to just think a little bit about these reconstruction, let's think about this same data set and think about two possible directions on which we would like
+to project the data. So one direction is the green line it's a poor direction
+to project the data in. And the other direction is the red line which is the best direction
+to project the data. Okay, so what do we have? If we look at the red line and we look at the particular
+point that we're trying to reconstruct, we see that this is the vector that
+is the projection, right? So this is the point here
+that is the reconstruction of the point, and then
+this vector is the error. Okay? So the length of this one is the error in our reconstruction. So we see that it's pretty small. If we look at this line, on
+the other hand, the green line we see that the projection is this, but the error is very large, okay? So now of course some points
+will have larger error and some points have smaller error. But what we want is that on
+the average, the length square of these errors would be
+as small as possible, okay? So the errors will tend
+to be small and that can be shown to be exactly the direction that has the maximum variance. So when we talk about
+projection mathematically if you recall from the
+previous slide or video, you have two ways to think
+about the projection. So here's the line and
+here are the data points. So if we basically just
+take the dot product between the direction of
+the line, which is defined by some unit vector and the
+vector that defines the point then we just get a number, a scaler and that's here is the number. And if we take this number and we multiply it by the unit
+vector that defines the line then we get the projection
+on the line, right? So this is really the
+reconstruction, okay? This is just a number, this is in here, a point in two dimensional space. So again, just as a reminder,
+what is it that we're doing? We have vector X that we are projecting
+onto a unit vector U. And so here is U the unit
+vector and here is X. And X dot U gives us the
+length of this line segment. And if we multiply this X dot
+U by U again, so we take X and we multiply by U, we
+get actually this vector the vector that defines
+the point right here. Okay? So that point is the
+projection of X onto the line. Okay. So to remind you again, we're using when we do this kind of
+projection on unit vectors, we like to use an orthonormal basis which is basically a set of unit vectors that are each orthonormal to each other. And what we have is, if we write these vectors
+as a1 a2 and so on we can write it as a column
+vector of row vectors or as a row vector of column vectors. Okay? So this is A and
+this is A transposed and it's easy to check that A times A transposed is
+exactly the unit matrix, okay? The matrix that has ones along the diagonal and zeros elsewhere. And why does it have
+to be that unit vector? Because we know that for
+any I not equal to j ai times AI itself is one that means that it's a unit vector and AI dot times AJ is equal to zero. Meaning that each pair
+of vectors is orthogonal. Okay. So a set of n
+orthogonal unit vectors in our end defines an orthonormal basis and multiplying the vector by an orthonormal matrix corresponds to expressing it in terms
+of the orthonormal basis. Okay? We talked about a change of basis using an orthonormal matrix. So here is how this looks as a picture. Again, we've seen this
+before, but worth repeating. Suppose that we have a particular vector this red line here, that's
+the vector we're interested in and we have it expressed
+in the first basis. Okay? So the first basis is the black one and we have the two
+coordinates, this coordinate and this coordinate that
+are defining the vector in the basis one, and we
+want to move it to basis two. So basis two is now a different set of two
+unit vectors represented as a matrix that is a
+two by two matrix here. And by using this matrix
+we can re-represent the same vector using these unit vectors. Okay? The dotted blue lines
+describe the coordinate in the new basis. So this is a change of basis in R 2. Okay. So that's what we're shooting for. We're going to look for a
+basis, for our data such that the first, there is one coordinate. The first coordinate is going
+to have the largest variance and then the second one is going to have the largest variance, but
+so that it is orthogonal to the first and so on and so forth. So that would be what we're looking for. And now we're going to talk about some of the algebra
+that goes into that. Okay. So concept that is
+important here is the concept of an eigenvector. So a eigenvector of a matrix
+M with eigenvalue lambda is vector A such that if you take m times A, the matrix times A, that simply changes just the
+length of A, so it multiplies A by a scaler lambda and
+doesn't change its direction. Okay? That's basically what an
+eigenvector and eigenvalue are. And we have a general
+theorem that is called a spectral decomposition
+theorem, which says that if you have a matrix that is symmetric, symmetric matrix means that the coordinate that each cell is equal to
+the cell just across from it. So aij is equal aji for any Inj. If that is the case and it's a real value, we don't need to worry about this here. Then if you, then the
+matrix M can be written as A transposed times a
+diagonal matrix times A. And the diagonal matrix consists of the eigen values and the orthonormal matrix
+consists of the eigen vectors. Okay? So this is a general
+theorem that tells us here is a way that we can always
+change the coordinate of symmetric matrix so that in the new coordinate system,
+the matrix is just diagonal, okay? And the standard is to say
+that lambda one is the largest, lambda two is the second
+largest and so on. So this is just something that holds for symmetric matrices that
+are real value in general. Okay. So how can we think about this? What does it mean that this, what does this decomposition mean? It basically means that you are moving from one coordinate system to the other coordinate
+system and back again. So we have this operation ATDAa, right? So this ATDA is, M is our original matrix and it represented it the following way. First we take the matrix A
+and we multiply it by the, we take the vector A and we multiply it by the matrix A and we get the vector now in the a coordinate system,
+in the A orthonormal basis and then we multiply each
+coordinate just by lambda I. So we take each one of the coordinate and we multiply it by
+the appropriate scaler and then we transform it
+back to the original space. Okay? So start at the original space, move to the basis representing,
+represented by A, scale each one of the coordinates
+and then transpose back into the original coordinate system or the original basis. Okay. So that is the
+tool that we're going to use, this decomposition. But now what is our symmetric matrix? So our symmetric matrix is going
+to be the covariance matrix and I'm going to explain
+what it is right now. It's basically a generalization of the notion of covariance between two random variables
+to say that it's a covariance between any pair of
+coordinates in our vector. Okay? So here is what we will
+call our observation matrix. Okay? So each row here is one vector of observation and we
+have n observations, okay? So in general, this would
+be a skinny and long matrix but not so skinny because p
+is the number of coordinates. So maybe P would be 365 in our examples but n would be maybe 10,000 or 100,000. And now we want to
+calculate the covariance between every two coordinates. So we're going to calculate
+the covariance matrix and the covariance matrix
+is a symmetric matrix that captures the pairwise relationships or the pairwise correlations
+between pairs of coordinates. Okay? So here is how it is calculated. We start with our
+observation matrix, okay? And then we call each
+observation each two-dimensional observation, we call it o. So this is the o 1 is
+the first observation. Now we take the average
+observation vector, okay? So that's the vector
+that is simply the mean of all of these Os all
+of the observations. And it gives us the mean
+for the first coordinate the mean for the second
+coordinate and so on. Now we center our data, we basically subtract from each coordinate we subtract the mean for that coordinate and now we get oi O1 minus mu O2 minus mu up to ON minus mu. So this is the average
+corrected observation matrix. It has a zero vector as
+its mean vector, okay? So we subtracted the mean.
+So now it's the mean. Now the mean is zero. And now we take what we
+call the outer product. We talked about that before. The outer product is basically rather than taking the dot product A, so the inner product, A
+dot A is simply the sum of the dot ai but the outer dot product is
+where you take each coordinate of A and you multiply it by
+each other, coordinate of A and you get now an N by N
+matrix where each coordinate so where the dimension here, the the output is a
+matrix that has the square of the dimension of the vector A okay? So that's just multiplying
+all possible pairs. And you see here in the
+diagonal it's multiplying just the variable with itself. So that basically gives us the definition of the covariance matrix. So it means we take x i
+minus mu, do an outer product of that vector with itself and then we average
+the resulting matrices. Okay? So this gives us a matrix. Each one of these matrices
+in the sum is symmetric. It's easy to see. And so therefore, covariance
+X is also symmetric. Okay? So we have a symmetric
+matrix like we wanted and because of that we
+can apply the orthonormal decomposition, spectral decomposition, which means that we can
+write Cov X as ATDA. Okay? So we can write it in
+this kind of diagonal form and let's see what that means. Okay, so how do we interpret this? So the distribution of the random vector X
+defines the covariance matrix and the decomposition
+changes the coordinate system of x and defines a new
+coordinate system where Y is A of X. Okay? So we take the original
+features that we have or coordinates and we do a
+orthonormal transformation and we find what is a new representation. And this new representation is nice in the sense that the covariance of that new representation
+is simply a diagonal matrix. Okay? So that, that basically means what? It means that every pair of coordinates in the new basis are uncorrelated and the variance of each
+one, which is the elements in the diagonal that basically is equal to the eigen vectors to the lambda eye. Okay? So we have on the Lambda
+eyes we have a description of what is the variance of each vector and we know that the rest of
+the covariances are all zero. So using that, we can define the best K
+dimensional projection. So suppose that we have a P
+times P covariance matrix of X, it's eigendecomposition can
+be computed in order of P to the cubed. And what it gives us it gives us these lambda one to lambda P and it gives us the
+corresponding eigenvectors mu one to mu P. Okay? So each one of those
+is a unit vector length one and UI UJ is zero. So basically now we have a new basis for representing our data. Okay. So Ethereum says, that suppose we want to map
+data X to just K dimensions. So we don't want all of
+the original P dimensions we just want K and we
+want to capture as much as possible of the variance of X. Then the best projection is to
+take the K first coordinates in the order where lambda one
+is larger equal to lambda two and so on. Okay? So basically by doing
+this eigendecomposition we find the directions
+of maximum variance. And here is what happens
+if we look at the variance when we use PCA rather than using just the
+individual coordinates. So this is the blue line is
+the individual coordinate and we saw that after we
+pass about 400, 500 here then the rest are very small. But if we use the PCA, we see
+that it's even more extreme. So basically most of the variance is
+explained by the first 100 and then the rest is explained
+less and less and less. Okay? So this part of the distribution where we take a few coordinates and it explains most of the variance, that's exactly what
+we're after when we want to do dimensionality reduction. So here is an example of image
+reconstruction using PCA. So here is an image, this
+is the original image. And here we have different
+Ks, different approximations. So we see that if K's 50 then the approximation looks pretty poor. K is 100, it's already pretty good. It's good enough that we can
+say clearly that it's a two. Okay? And then when we go to
+150 and 200 it becomes better. And at 200 it's really quite
+hard to see a difference from the original image,
+even though it uses only 200 out of the 764. So what are these reconstructions? We talked about them in general earlier. It's basically a reconstruction
+where you use only the first K coordinates after doing the orthonormal
+transformation using the PCA. And they look something like this. This is just to kind of
+recap, here is our data. Here it's two-dimensional,
+so it's very simple and we use an ellipse to
+represent the covariance okay? So because the ellipse can
+represent the direction the and length of two
+orthogonal directions, we can use it to represent
+our covariance matrix. And what this, the
+eigendecomposition gives us are two orthogonal unit vectors, U1 and U2. And we are going to use U1 and
+U2 to reconstruct the data. Actually what is used here
+is slightly different. These are not unit vectors but the unit vector times the lambda I so this U1 has larger length than U2. This is a standard kind of
+way of representing the PCA. Okay? So to summarize, what
+we have is we have a model of our distribution and
+this model splits the data into the low dimensional part
+and the high dimensional part. And the high dimensional
+part has small variance per coordinate and we
+think about it as noise. And the low dimensional part
+is the part that contains most of the useful information. Now we can take that low dimensional part and use reconstruction to come up with a reconstruction
+of the original vector and it would be a good
+reconstruction if the distance between the reconstruction and
+the original vector is small.
+--- end {8.3_transcript.txt} ---

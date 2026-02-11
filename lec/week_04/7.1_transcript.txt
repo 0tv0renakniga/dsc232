@@ -1,0 +1,137 @@
+(soft music) - [Instructor] Hi. So we did a little overview of PCA, principal component analysis, and so now you should have a rough idea about how it is used. We're going to now use it for a particular interesting and large
+dataset, the weather dataset. But before we start with that, we're just going to look at this dataset in a more simple way to get an idea of how things are laid out. So this is weather data for
+specifically Massachusetts. So we have a setting
+of this variable state to be Massachusetts. On the whole, I'm going
+to skip many of the cells, maybe most of the cells in this notebook. I'm just going to give
+you the high level cells that are important for the
+high level understanding. But it really would help you
+if you go into this notebook and run each cell and see the results in order to learn how
+to work with this data. So where does this data come from? It comes from NOAA, okay, so the National Oceanic and
+Atmospheric Administration in the United States, which collects various data sets about weather and the ocean. And this is one of the more simple ones that we can use to do our analysis. Now it's from NOAA. It's called GHCND. And you can get the details and downloads from this AWS S3 bucket. Okay, so it's in an S3 bucket, and the data in that
+bucket is in a raw form, in text form, in CSV file. And what we are doing in the background is we translate the raw
+data into parquet files that store this information, the information consists
+of weather and stations. Okay, so that's our starting
+point with this notebook is these two very large data frames. So let's see how we read this
+data from the parquet file. We, first of all, look at the
+data frame that is stations, see how many stations we have. We have about 120,503. And then we're looking at
+how, at a few of the rows in the measurements table, in the measurements table after we join it with the stations. Okay, so now we have the
+join based on the station ID. Okay, so here's a station ID. And the station ID, on the one hand, has measurement type, T average, year that it's measured, 2022, then here are values that
+I'll talk about in a minute. And then here are the
+latitude of the station, longitude of the station,
+elevation, distance to coast, and name of the station, and which country and state it comes from. So Algeria, Algeria doesn't
+have states, so state is empty. And what about this central piece? Okay, so these are vectors, vectors of 365 values, okay. And they're stored in what's called a blob in the database terminology. And basically it's a compressed version of the data that we want to use. And this data is really the center part. It basically gives for
+each day of the year, what is the value. Okay, so we want to, so this weather data frame holds all the information
+that we need to use, and in order to be able to
+use it inside SQL queries, we need to register it into the data, as a table. So that's this command, sqlContext.registerDataFrameTable, weather, that's this weather, and we are just going to give
+it the same name, weather. And that allows us to do, to create queries of the following form. So if we look here at the query, we say select all of the
+roads from the table weather, where the state is Massachusetts and the measurement is either TMAX, SNOW, SNOWD, TMIN, precipitation, or TOBS. Okay, what are all of these? We will talk about some of them later, but basically this is a query, a compact query that
+extracts from our data frame only those type of measurements for the state of Massachusetts. So the other part of the information that we have is statistics. Okay, so we have a statistics
+file which is a pkl file, which basically stores in
+it the information about, statistical information
+about Massachusetts. So those are various averages and distribution variables and so on. And we're going to look at them. What is written here is that first you check whether this exists, then it just reads the
+file, that's very quick. Or if it doesn't exist, then it runs this function
+called computeStatistics which basically computes
+all of these statistics, and that takes on the order of
+five to 10 minutes per state. So it's significant and we don't want to do it over and over. That's why we store it into a file that later we check about it. Okay, so here are the fields
+in this statistics data. Let's look at some simple ones. Mean is the mean value over all of the records in that file for each day of the year. So this is 366 entries. And then we have, then we have the, similarly
+to that, the covariants, covariants for each one of the 365 days. And then we have
+quantities that have to do with aggregating all of the days regardless of which day of the year. So we have the mean value
+and the standard deviation. So that gives us just overall distribution for this variable in Massachusetts. And then we have some information about the distribution itself. So the bottom one percentile,
+top one percentile, bottom 0.1 percentile, top 0.1 percentile. And then we have a sample of the values. So all of the values, that would be a pretty big data structure. We don't want to keep all of them. We just want to have a sample. So that's what we keep in here. And that would allow us to look at what's the overall distribution. Then we have interesting
+things that have to do with how many of the entries
+are actually defined. So one thing that you would
+find in large data set like this is that there are many rows
+and many columns defined, but many of them, maybe a large percentage is actually empty, so it doesn't have an actual value. So even though it's defined, it's not going to be very useful for us. So we'll see that in several ways. Here we're just saying how
+many undefs you have per row, so how many, in a typical year, how many undefined
+variables you have per row. So that's a sample of those. Then we have account of
+the defined values per day. So are some days more, having more defined
+values than other days? And then we have, and that's
+basically it at this point. So this is a collection of statistics that we can now visualize
+to have a better idea about what's going on in this data set. Okay. So here is some basic statistics. We are using TOBS. TOBS is temperature observed, and that's typically a temperature at 1:00 p.m. in the afternoon. Why is it important to have temperature at 1:00 p.m. in the afternoon? Because relatively that
+is a stable quantity. At 1:00 p.m. in the
+afternoon, you have quantity that doesn't change very
+much for our day-to-day. The other two quantities that we have are going to be TMAX and TMIN. Those are quantities that vary significantly more from day-to-day because they happen at
+different times of the day, and so there's more opportunity
+for TMAX to be large and for TMIN to be small. Okay, so if we just look at TOBS, the mean value is 8.31,
+standard deviation is 10.31, and the low 1% is minus 11, and high 1% is 30.59. Worthwhile saying at this
+point that this is in Celsius. And Celsius 30 degrees is pretty warm. So that shouldn't be too surprising. It would be surprising
+if it was Fahrenheit. Okay, the next we can look at how does this value of
+the T observed vary? So what we see here is the
+cumulative distribution function for T observed, and we see that it starts
+from around minus 10 and increases more or less
+linearly until it hits 30, which is consistent with what
+we just saw in our values. But now we have the whole distribution. Now let's look at a little
+bit at undefined values. As I said, in real data sets, many of the values that are declared are not really available. They were not available for measurement. So what we have here is the number of undefined entries in
+the sample of the years. Okay, so we see that
+there's a big peak at zero, meaning all of these are ones that the whole year is well-defined. There's no empty part. But then you see that there's
+little bits even up to 350. So at 350, you basically have something like 15 values that are defined. And the question then is do you really want to use
+a year with measurements where only 15 of the
+measurements are defined? Whether they're distributed throughout or whether they're bundled,
+bunched up in one place, they're not a good one to use anyway. Next, let's look at how many of the different
+measures we have. So it turns out that there
+are 64 types of measurements. Okay, so there's measurements
+like precipitation, snow, snow depth, that are very common, and we have a lot of measurements of those for Massachusetts. But then when we look at the bottom range, we see that there are
+a lot of measurements for which we have only
+one or two year stations that correspond to them. So those are probably not ones that we want to try to analyze, because we have too little data. Okay, so what are the definitions
+of these measurements? We can use a simple grip
+command to see what they are. So SNWD is snow depth, okay? And then WT and then two numbers is weather type where has one of the following values, and there's a continuation in the table of all of these different values. So this is weather type. It is a discrete
+description of the weather. Okay, let's see the
+number of measurements, the number of years for
+each station in the state. Okay, so here we use a little SQL query to find out for T observed, how many values we have, and that didn't work. This works better. Okay, let me make it a little smaller. Okay, so here we have these T observed, and we have basically extracted all of the queries that are for this, all of the, for a particular year. And this state, Massachusetts, we want to find all of
+the TOBS measurements. And so here we have the stations, and here we have all of the
+measurements that we got for these stations. So now let's plot them. And now we can see that here we have 35, five of the 35 measurements that we have and these are the temperatures. So you see that the
+temperatures across the state, they behave in a similar way, where not surprisingly
+July is the warmest month and then January is the coldest. If we look at all 35, then what we see is we have a much denser picture
+with all of the graphs. And the point that I'm
+making here is that, yes, if you have a million stations, you can plot them one on top of the other, but you won't be able
+to see very much, right? Because simply the data is so dense that you can't really
+see what is going on. But one way to see what's
+going on is to zoom in to basically look at one small
+piece of the measurements. That's what we have here. And what you see, these are like 25 days, and you see that in this range of dates, all of the temperatures
+were almost the same. And if you go a little bit back, you see that there's a cluster of places where the temperature went
+up and down like this. Okay, so there's several
+that this happened. And so what you can see is
+phenomenologically you see, as an example, you see
+that there are correlations between particular stations. And I would bet that if you look at where these stations are, they're probably close to each other, so their weather patterns
+are similar to each other, not identical, and sometimes
+they deviate quite a lot, but sometimes they are very similar. Okay, so let's start to look at how different measurements
+behave, relate to each other. Here we're taking the
+TMAX, TMIN, and TOBS, so the maximum temperature over the day, the minimum, and the
+observed at 1:00 p.m., and see how they look. And what you see is that the TMAX is at the top, it's the blue line. TMIN is at the bottom,
+it's the orange line. And TOBS is the middle is the
+green line, which makes sense. So here is just the type
+of script that we use in order to draw plots like
+this and an example of it. And now we're going to look
+at other types of statistics across the state of Massachusetts. Okay, so, so, first, what we're looking at is the number of valid measurements for each day of the year. So here you see the number
+of valid measurements, and here is the day of the year starting from January
+and ending in January. Okay, so what do we see? We see that an interesting thing is that there's more or less in the same amount, then it jumps here, more
+or less the same amount, and then it jumps down. That's a curious phenomena. What does it mean? Well, if you look, these switches are often right on the boundary between months. So what does that mean? That probably means that
+this has to do with people that are taking the measurements being changed for other people. And so these other people maybe didn't take the
+measurements as much or so on. And at the end of the day, the differences are not very big, right? So they look big because of the scaling, but they vary between five, seven, 500, 5,700 to 5,900. And here is another one for
+T observed and precipitation. And here is another one for snow depth. So for snow depth, the behavior
+is very extreme, right? You see that on the boundary of this month between April, between May and April, and then between April and
+June, and June and July, there are these jumps like I said before, and you get that during the winter months, you get more measurements from the people. So these are just the type
+of things that you want to do in order to make sure that
+your data is not corrupted, or if it's corrupted,
+it's not corrupted so much that you can't trust the statistics. Next, let's see what we see if we take the mean and standard deviation of the TMAX and TMIN. So we see that we have
+the mean is in the middle, and then you have the mean
+plus standard deviation, minus standard deviation. And it's similar for min and
+max, and they look similar, but notice that here it goes up to 30, and here it goes only up to 20, okay. So the minimum temperature goes in the summer months only up to 20. And here we have T observed. And here's the T observed that behaves in this
+picture quite similarly. It's just the value here is
+somewhere in the middle, 25. On the other hand, let's
+look at a plot pair for, let's look at the plots of the same kind of the mean plus minus standard deviation for precipitation and for snow. So for precipitation, what
+we see is that the mean is almost always the same. It's about four millimeter. But the standard deviation
+is very large around it. Of course, values of precipitation below zero are impossible, but if you just take the plus
+minus standard deviation, that's what you get. So what does that mean? It means that it's more or less on average rains the same amount throughout the year, but the reason that this looks so flat is because it rains in some days and it doesn't rain in the following days, and then another day it rains, another day, few days it doesn't rain. So when you average that over the years, you just get this very,
+very flat distribution. And similarly you get for
+snow, how much snow comes down. On the other hand, if
+you look at snow depth, you see that there is, this is snow depth, so this is the depth of
+the snow at every day measured across from the top of the snow to the earth underneath. You see that there is actually a very nice performance
+for the average, right? And that makes sense because
+from the months of April till the months of October, there is no snow. So basically you get a value that is very, very close to zero. And then in the days of the winter, you get an amount of snow and you get standard
+deviation around it, okay. Okay, so what did we do? We loaded data weather
+from the parquet files, we explored the statistics of the data, we explore where and when
+there are cells that are empty. Okay, so basically
+where is the data sparse and where is the data dense? We visualize different
+measurements of the year. And then next we're going to go and do principal
+component analysis of this in order to identify more of the structure of what is going on. Okay, I'll see you then.

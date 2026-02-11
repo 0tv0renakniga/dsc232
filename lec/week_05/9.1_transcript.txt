@@ -1,0 +1,107 @@
+(mellow instrumental music) - [Instructor] Hi. So, we talked about PCA, and I showed you a little bit
+about the weather patterns. And now we're going to start putting these two things together, okay? So, how do you do weather patterns PCA? Use functions as vectors. Let me see, let me
+explain what that means. Suppose that we have this pattern of temperature as a function
+of the day of the year. So, simply put, January
+is the coldest month in Massachusetts and July and
+August are the hottest months. Okay, little surprise there, but there is much more pattern going on into the measurements of
+Tmax and Tmin and T observed. And we want to somehow capture
+what this pattern means. So, one way we can think about it is that we have a function
+from the day of the year, okay, to the particular temperature,
+let's say Tmax, okay? So, to the orange line. So, now we have a function, and now we want to see how we
+can represent this function. So, how can we visualize vectors that are higher dimension than three? Well, we can just think
+about it as a mapping from the numbers one, two, up to d, in our case up to 365, to a value. So, here is suppose that
+we have just four values, and so one, minus three, two, and zero. Then we can represent it as this function that has the value one on zero, the value minus three on one, the value two on two, and the
+value zero on three, okay? So, we basically forced
+this sequence of numbers to be represented as a function. So, this kind of mapping
+gives us something that is well defined and,
+in terms of vector space. So, it allows us to take
+sum of two functions, take function times some constant, takes even the dot
+product of two functions. So, in particular, it lets
+us do function approximation. So, we want to approximate
+a given function, of measurements let's say, using some kind of basis set of functions, an orthonormal basis of functions. Here we're going to use sinusoids
+as our orthonormal basis. And these are the functions that we have. We have nine functions. The first one is simply a constant. And this is sine is the next one, and then we have cosine, sine of two x, cosine of two x, and so on. They look something like this, okay? So, this is here is the constant, and then sine looks like
+this, the orange line, and cosine looks like
+this, the green line, okay? So, all of these functions, it turns out, form an orthonormal basis. So, you can take each function
+and measure its length or its dot product with itself,
+and that will give you one. And you can take any two functions, take the dot product and
+that will give you zero. So, we're going to check that here. We basically take for every pair, i and j, we take the dot product
+and we just print out the dot product just to one decimal point. And what we see is indeed that
+if you look at the diagonal, so the elements that are the
+vector dot product with itself, you get one, and if you
+look at, off the diagonal, you always get zero, okay? So, it is indeed an orthonormal basis. It's not a complete basis because our vectors have length 365. And so, for a complete
+basis we need 365 vectors, but we're just going to use these. Okay, so we are going
+to use matrix notation because that's easy to do
+when you're working in NumPy, and that's simply just stacking the nine vectors that we have. And we get a matrix that is
+365 rows by nine columns. Each column is one of the
+vectors, one of the sinusoids. And now we want to approximate
+an arbitrary function, okay? So, we're taking function
+that is not a sinusoid at all, this x minus four absolute value, and we're going to try to approximate it. Okay, so here is our
+function, x minus four, and you see that it is very
+far from any sinusoids. Nevertheless, you'll see
+that we can approximate it with sinusoids better and better as we increase the number of frequencies. Okay, so what are we talking about? We're talking about this
+reconstruction matrix, reconstruction formula, sorry, that says that if you want to
+approximate the function g using i basis vectors what you do you take the dot product of
+the function with itself, not with itself, with the basis function. And then that gives you the coefficient. And the coefficient you
+multiply again by the vector, by the unit vector, okay? And this sum is an approximation of the original function f, okay? So, we're going to do that
+first just in two dimensions. Oh, one thing I didn't mention is that what we're interested
+is that the difference, or the norm, between the
+approximation and the function will be as small as possible, okay? So, we're going to look first at a one-dimensional reconstruction. And in this reconstruction we
+have points in two dimension, and we have two candidate basis vectors. One is this red line, and the other is this green line. And intuitively the green line is a much worse approximation
+for our function. So, how do we see that? So, we're given this function, fx is x minus four absolute value, and we want to approximate
+it closer and closer using our sinusoidal basis functions. So, what does that look like? Well, basically the use
+of an orthonormal basis is always using this basic formula, which says you take any one of the ui's and you take the dot product
+of it with the function. And then you get the coefficient. And then you multiply
+this coefficient again by the same basis function, and you sum over the basis functions. Not over all of them, but
+over j from zero to i, okay? So, the larger that i is the
+better this approximation, gix, is to fx, okay? So, we get closer and closer by projecting and adding the terms of the
+orthonormal reconstruction. And the distance that we are
+interested in between f and gi is simply the norm of gi minus f, okay? So, specifically just to start, let's think about just reconstructing a two-dimensional vector
+with one unit vector, with one basis vector, okay? So, we have this function g one, that is our point in two dimensions, which is a simple thing here and our point in two dimensions. And then we multiply that by
+u one to get the coefficient, and then we multiply the
+results by u one again to get our approximation g one, okay? And the residual, the error that remains, is the point minus g one, okay? So, now that would be the
+part that we would try to minimize using let's
+say u two and so on. In this case the dimension is two, so if we have u one and u two we have perfect reconstruction. So, let's see how that actually looks. So, suppose that we're looking
+at this point here, okay? And we want to reconstruct it, and we want to reconstruct it considering one of two unit vectors. This is maybe u one, and then another one
+here that is u two, okay? Let's start with u two because
+it is significantly worse. And so, that kind of explains why the choice of u is important. Here we project the point that we have onto the direction u two
+to get the dot product, which is this length, okay? And when we multiply it by u two again we get this point here. So, the residual now is this,
+this is the residual, okay? And the residual is pretty large. On the other hand, had we
+used this vector, u one, then the reconstruction
+would've been this point, and then the residual would
+be, have this length, okay? So, you see that if we
+choose this vector, u one, then for most of the points that we see the distance between the
+point and the projection to the direction u one is
+small, and that's why u one would be a preferred basis vector, okay? Let's see how that works when
+we are doing the sinusoids. So, what we're going to
+show is these approximations where we have g one, g
+two, g three, and so on, where the approximation
+becomes better and better the residual becomes smaller and smaller. And this is how we see it right now, so let me get rid of that. Okay, so what we have here is worthwhile a little bit of explaining. So, we have nine, one, two, three, four, five, six, nine coefficients for the nine vectors, and the coefficients are
+initially all set to zero, okay? So, basically what we're starting with is the function zero, okay? You see down here, the green line, is the function zero, okay? And now as we start to,
+as we move these scales we are changing the coefficient for the basis function, okay? So, here we have changed the coefficient of the constant basis function, and we see that now the
+green line is much closer to the middle of the
+range of the function. And if we add more and more coefficient what we see is that the
+result is closer and closer to our function that we're approximating. Now, even if we have
+all of the coefficients we see that the approximation
+is far from perfect, right? So, if we look here the
+approximation is pretty good, but if we look here the
+approximation remains not so great. So, it's not a perfect approximation, but it is somewhat surprising how well we're approximating the original function using just these functions
+that look like sinusoids, okay? So, this is an example, and this kind of interactive widget we will use it later to do
+other kinds of reconstructions and understanding of what
+is going on with our data. So, one thing that doing
+this kind of reconstruction using sinusoids that is pretty powerful is that it is a good way
+to get rid of noise, okay? If you have data that is noisy, and here what we have is
+basically normal noise added to this function that is two v one minus four v five, okay? So, let's see what that looks like. It looks like something like this, okay? So, the blue is the original
+function without the noise, and added the noise we
+get the orange line. So, the question is can
+we recover the blue line when we're given only the orange line? So, we can think about
+various kinds of averaging, but a better way is to take into account that this function is just a combination of v one and v five. We don't know that these
+are the coefficients, but that we can infer from the data. So, here we have the data, let me zero it out again. So, we have that, we have this, okay, so right now we have the
+approximation just being zero, and the function that
+we see is very noisy. And we can see, we know
+how it was constructed so we can guess, but it's very hard to see how to actually extract this underlying, non-noisy structure. So, the way that we're going to do it is we're going to look at the coefficients that we added before,
+okay, so it's not this one. It's this one and this one. You see that these two are reconstructing the original data very accurately even though there is a
+large amount of noise. And if we look at the other coefficients their effect is actually pretty small. So, we can not only remove the noise, but we can find the coefficients
+of the underlying shape. To summarize, functions can be used, be thought of as vectors and vice versa. The Fourier basis is a basis
+of orthonormal functions that are made out of sines and cosines. And orthonormal functions
+can be used to remove noise added to underlying distribution, and this kind of noise
+removal is something that we will use extensively when we go to the weather application. So, I'll see you soon, bye.
